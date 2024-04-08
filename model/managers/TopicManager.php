@@ -10,6 +10,7 @@ class TopicManager extends Manager{
     protected $className = "Model\Entities\Topic";
     protected $tableName = "topic";
 
+    //connexion à la base de donnée (chez son parent Manager)
     public function __construct(){
         parent::connect();
     }
