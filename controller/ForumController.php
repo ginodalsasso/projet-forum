@@ -18,7 +18,7 @@ class ForumController extends AbstractController implements ControllerInterface{
 
         // le controller communique avec la vue "listCategories" (view) pour lui envoyer la liste des catégories (data)
         return [
-            "view" => VIEW_DIR."forum/listCategories.php",
+            "view" => VIEW_DIR."forum/listCategory.php",
             "meta_description" => "Liste des catégories du forum",
             "data" => [
                 "categories" => $categories
@@ -42,4 +42,23 @@ class ForumController extends AbstractController implements ControllerInterface{
             ]
         ];
     }
+
+    public function listPostsByTopics($id) {
+
+        $topicManager = new TopicManager();
+        var_dump($topicManager);
+        $postManager = new PostManager();
+        $topic = $topicManager->findOneById($id);
+        $posts = $postManager->findPostsByTopic($id);
+
+        return [
+            "view" => VIEW_DIR."forum/listPosts.php",
+            "meta_description" => "Liste des posts par topic : ".$topic,
+            "data" => [
+                "topic" => $topic,
+                "posts" => $posts
+            ]
+        ];
+    }
+
 }
