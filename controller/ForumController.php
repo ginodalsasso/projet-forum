@@ -6,6 +6,7 @@ use App\AbstractController;
 use App\ControllerInterface;
 use Model\Managers\CategoryManager;
 use Model\Managers\TopicManager;
+use Model\Managers\PostManager;
 
 class ForumController extends AbstractController implements ControllerInterface{
 
@@ -46,7 +47,6 @@ class ForumController extends AbstractController implements ControllerInterface{
     public function listPostsByTopics($id) {
 
         $topicManager = new TopicManager();
-        var_dump($topicManager);
         $postManager = new PostManager();
         $topic = $topicManager->findOneById($id);
         $posts = $postManager->findPostsByTopic($id);
