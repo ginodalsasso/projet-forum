@@ -10,7 +10,7 @@ use App\Entity;
 final class User extends Entity{
 
     private $id;
-    private $nickName;
+    private $pseudo;
     private $password;
     private $email;
     private $role;
@@ -37,19 +37,19 @@ final class User extends Entity{
     }
 
     /**
-     * Get the value of nickName
+     * Get the value of pseudo
      */ 
-    public function getNickName(){
-        return $this->nickName;
+    public function getpseudo(){
+        return $this->pseudo;
     }
 
     /**
-     * Set the value of nickName
+     * Set the value of pseudo
      *
      * @return  self
      */ 
-    public function setNickName($nickName){
-        $this->nickName = $nickName;
+    public function setpseudo($pseudo){
+        $this->pseudo = $pseudo;
 
         return $this;
     }
@@ -115,6 +115,6 @@ final class User extends Entity{
     }
 
     public function __toString() {
-        return $this->nickName;
+        return $this->pseudo;
     }
 }

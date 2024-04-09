@@ -11,6 +11,9 @@
         <title>FORUM</title>
     </head>
     <body>
+        <!--messages de succès ou d'erreur-->
+        <h3><?= App\Session::getFlash("error") ?></h3>
+        <h3><?= App\Session::getFlash("success") ?></h3>
         <div id="wrapper"> 
             <div id="mainpage">
                 <!-- c'est ici que les messages (erreur ou succès) s'affichent-->
@@ -39,7 +42,8 @@
                                 ?>
                                 <a href="index.php?ctrl=security&action=login">Connexion</a>
                                 <a href="index.php?ctrl=security&action=register">Inscription</a>
-                                <a href="index.php?ctrl=forum&action=listCategory">Liste des catégories</a>
+                                
+                                <a href="index.php?ctrl=forum&action=listCategory">Catégories</a>
                             <?php
                             }
                         ?>
