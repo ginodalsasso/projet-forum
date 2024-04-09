@@ -51,6 +51,9 @@
                     </nav>
                 </header>
                 
+                <?php 
+                // var_dump($_SESSION["user"]); die; 
+                ?>
                 <main id="forum">
                     <?= $page ?>
                 </main>
