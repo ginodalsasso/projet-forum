@@ -19,57 +19,58 @@
 CREATE DATABASE IF NOT EXISTS `forummvc_v2` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 USE `forummvc_v2`;
 
--- Listage de la structure de table forummvc_v2. categorie
-CREATE TABLE IF NOT EXISTS `categorie` (
-  `id_categorie` int NOT NULL AUTO_INCREMENT,
-  `nomCategorie` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-  PRIMARY KEY (`id_categorie`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+-- Listage de la structure de table forummvc_v2. category
+CREATE TABLE IF NOT EXISTS `category` (
+  `id_category` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  PRIMARY KEY (`id_category`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Les données exportées n'étaient pas sélectionnées.
 
--- Listage de la structure de table forummvc_v2. membre
-CREATE TABLE IF NOT EXISTS `membre` (
-  `id_membre` int NOT NULL AUTO_INCREMENT,
-  `pseudo` varchar(50) NOT NULL,
-  `password` varchar(255) NOT NULL,
-  `email` varchar(255) NOT NULL,
-  `role` varchar(50) NOT NULL,
-  PRIMARY KEY (`id_membre`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
--- Les données exportées n'étaient pas sélectionnées.
-
--- Listage de la structure de table forummvc_v2. message
-CREATE TABLE IF NOT EXISTS `message` (
-  `id_message` int NOT NULL AUTO_INCREMENT,
-  `contenuMessage` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-  `parutionMessage` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `membre_id` int NOT NULL,
+-- Listage de la structure de table forummvc_v2. post
+CREATE TABLE IF NOT EXISTS `post` (
+  `id_post` int NOT NULL AUTO_INCREMENT,
+  `text` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `creationDate` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `user_id` int NOT NULL,
   `topic_id` int NOT NULL,
-  PRIMARY KEY (`id_message`),
-  KEY `membre_id` (`membre_id`),
+  PRIMARY KEY (`id_post`) USING BTREE,
   KEY `topic_id` (`topic_id`),
-  CONSTRAINT `FK_message_membre` FOREIGN KEY (`membre_id`) REFERENCES `membre` (`id_membre`),
+  KEY `membre_id` (`user_id`) USING BTREE,
+  CONSTRAINT `FK_message_membre` FOREIGN KEY (`user_id`) REFERENCES `user` (`id_user`),
   CONSTRAINT `FK_message_topic` FOREIGN KEY (`topic_id`) REFERENCES `topic` (`id_topic`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Les données exportées n'étaient pas sélectionnées.
 
 -- Listage de la structure de table forummvc_v2. topic
 CREATE TABLE IF NOT EXISTS `topic` (
   `id_topic` int NOT NULL AUTO_INCREMENT,
-  `titreTopic` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-  `parutionTopic` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `verouillerTopic` tinyint NOT NULL,
-  `membre_id` int NOT NULL,
-  `categorie_id` int NOT NULL,
+  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `creationDate` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `closed` tinyint NOT NULL,
+  `user_id` int NOT NULL,
+  `category_id` int NOT NULL,
   PRIMARY KEY (`id_topic`),
-  KEY `membre_id` (`membre_id`),
-  KEY `categorie_id` (`categorie_id`),
-  CONSTRAINT `FK_topic_categorie` FOREIGN KEY (`categorie_id`) REFERENCES `categorie` (`id_categorie`),
-  CONSTRAINT `FK_topic_membre` FOREIGN KEY (`membre_id`) REFERENCES `membre` (`id_membre`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  KEY `membre_id` (`user_id`) USING BTREE,
+  KEY `categorie_id` (`category_id`) USING BTREE,
+  CONSTRAINT `FK_topic_categorie` FOREIGN KEY (`category_id`) REFERENCES `category` (`id_category`),
+  CONSTRAINT `FK_topic_membre` FOREIGN KEY (`user_id`) REFERENCES `user` (`id_user`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- Les données exportées n'étaient pas sélectionnées.
+
+-- Listage de la structure de table forummvc_v2. user
+CREATE TABLE IF NOT EXISTS `user` (
+  `id_user` int NOT NULL AUTO_INCREMENT,
+  `pseudo` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `role` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `creationDate` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id_user`)
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Les données exportées n'étaient pas sélectionnées.
 
