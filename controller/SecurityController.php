@@ -33,6 +33,8 @@ class SecurityController extends AbstractController{
                 // vérifie si le mail n'éxiste pas dans la BDD sinon false est assigné
                 $verifyEmail = $userManager->findOneByEmail($email) ?? false;
                 $verifyPseudo = $userManager->findOneByPseudo($pseudo) ?? false;
+                // éxige au minimum: 8 caractères, une minuscule, une majuscule, un chiffre, un caractère spécial dans le mot de passe
+                $regexPassword = preg_match("/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/", $pass1);
                 //si l'utilisateur existe (email et pseudo) alors
                 if($verifyEmail && $verifyPseudo){
                     //redirection et traitement des messages
@@ -41,18 +43,15 @@ class SecurityController extends AbstractController{
                     $this -> redirectTo("security", "register"); exit;
                 } else{
                     //insertion de l'utilisateur en BDD si les deux mdp match
-                    if($pass1 == $pass2 && strlen($pass1) >= 6) {//ici je vérifie si les deux mdp sont identiques et donne les conditions du mdp (regex ...)
+                    if($pass1 == $pass2 && $regexPassword) {//ici je vérifie si les deux mdp sont identiques et donne les conditions du mdp (regex ...)
                         //tableau attendu par la fonction dans app\Manager add($data)
                         //$data = ['username' => 'Squalli', 'password' => 'dfsyfshfbzeifbqefbq', 'email' => 'sql@gmail.com'];
                         $data = ['pseudo' => $pseudo, 'email' => $email, 'password' => password_hash($pass1, PASSWORD_DEFAULT), "role" => "ROLE_USER"];
                         $userManager->add($data);
-                        // var_dump($userManager);die;
-                        //stocke l'utilisateur en session
-                        // $_SESSION["user"] = $user; 
                         $this -> redirectTo("security", "login"); exit;
                     }
                     //si mauvaise saison de mot de pas alors message et redirection
-                    Session::addFlash("error", "Mauvaise saisie de mot de passe !");
+                    Session::addFlash("error", "Mauvaise saisie de mot de passe ! Votre mot de passe doit contenir au minimum 8 caractères, une minuscule, une majuscule, un chiffre, un caractère spécial.");
                     $this -> redirectTo("security", "register"); exit;
                 }
             }
@@ -71,13 +70,6 @@ class SecurityController extends AbstractController{
     public function addLogin () {
 
         $userManager = new UserManager();
-        // -- on filtre les champs du formulaire 
-        // -- si les filtres passent, on retrouve le password correspondant au mail entré dans le formulaire ----condition if else erreur
-        // -- si on le trouve, on récupère le hash de la base de données
-        // -- on retrouve l'utilisateur correspondant ----mettre l'utilisateur en session, $_SESSION["user"] = $user;
-        // -- on vérifie le mot de passe (password_verify)
-        // -- si on arrive à se connecte, on fait passer le user en session
-        // -- si aucune des conditions ne passent (mauvais mot de passe, utilisateur inexistant, etc) --> message d'erreur
         if($_POST['submit']){
             $pseudo = filter_input(INPUT_POST, "pseudo", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
             $password = filter_input(INPUT_POST, "password", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
@@ -107,9 +99,8 @@ class SecurityController extends AbstractController{
     }
 
     public function logout () {
-        // $_SESSION["user"] = $user;
         //unset supprime une partie d'un tableau ou un tableau complet
         unset($_SESSION["user"]);
-        $this -> redirectTo("security", "register"); exit;
+        $this -> redirectTo("home", "index"); exit;
     }
 }

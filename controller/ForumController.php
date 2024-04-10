@@ -2,11 +2,13 @@
 namespace Controller;
 
 use App\Session;
+use App\DAO;
 use App\AbstractController;
 use App\ControllerInterface;
 use Model\Managers\CategoryManager;
 use Model\Managers\TopicManager;
 use Model\Managers\PostManager;
+use Model\Managers\UserManager;
 
 class ForumController extends AbstractController implements ControllerInterface{
 
@@ -61,4 +63,82 @@ class ForumController extends AbstractController implements ControllerInterface{
         ];
     }
 
+    //ajout d'un post dans un topic($id)
+    public function addPost($id){
+        //si l'utilisateur est connecté
+        if($_POST['submit']){
+            //si l'utilisateur est connecté
+            if(Session::getUser()){ 
+                $text = filter_input(INPUT_POST, "text", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+                if($text){
+                    $postManager = new PostManager();
+                    // récupère l'id de l'user ayant créé le post
+                    $idUser = Session::getUser() -> getId();
+                    //tableau attendu par la fonction dans app\Manager add($data) pour l'ajout des données en BDD
+                    //$data = ['username' => 'Squalli', 'password' => 'dfsyfshfbzeifbqefbq', 'email' => 'sql@gmail.com'];
+                    $data = ['text' => $text, 'user_id' => $idUser, 'topic_id' => $id];
+                    $postManager->add($data);
+                    $this -> redirectTo("forum", "listPostsByTopics", $id); exit;
+                } else {
+                    Session::addFlash("error", "Une erreur est survenue, réessayez.");
+                    $this -> redirectTo("forum", "listPostsByTopics", $id); exit;
+                }
+            } else{
+                Session::addFlash("error", "Veuillez vous inscrire ou vous connecter pour écrire un message.");
+                $this -> redirectTo("forum", "listPostsByTopics", $id); exit;
+            }
+        }
+    }
+
+    //vérouillage d'un topic($id) par l'utilisateur créateur ou l'admin
+    public function lockedTopics($id){
+        $topicManager = new TopicManager();
+        $topic = $topicManager->findOneById($id);
+
+        //si l'utilisateur est connecté et le topic éxiste alors
+        if(Session::getUser() && $topic){ 
+            // si l'user associé au topic est identique à l'user actuellement connecté à la session ou si l'admin est connecté alors
+            if(($topic->getUser() && $topic->getUser() === Session::getUser()) || Session::isAdmin()){
+                // "SET verouillage=1" dans le l'entité Topic
+                $data = ['closed' => 1];
+                // var_dump ($id);
+                $topicManager->updateTopic($data, $id);
+                Session::addFlash("success", "Le topic est vérouillé !");
+                $this -> redirectTo("forum", "listPostsByTopics", $id); exit;
+
+            } else {
+                Session::addFlash("error", "Une erreur est survenue, réessayez ou assurez vous d'avoir les droits.");
+                $this -> redirectTo("forum", "listCategory"); exit;
+            }
+        } else{
+            Session::addFlash("error", "Veuillez vous inscrire ou vous connecter pour vérouiller un topic.");
+            $this -> redirectTo("forum", "listPostsByTopics", $id); exit;
+        }    
+    }
+
+    // dévérouillage d'un topic par l'utilisateur créateur ou l'admin($id)
+    public function unlockedTopics($id){
+        $topicManager = new TopicManager();
+        $topic = $topicManager->findOneById($id);
+
+        //si l'utilisateur est connecté et le topic éxiste alors
+        if(Session::getUser() && $topic){ 
+            // si l'user associé au topic est identique à l'user actuellement connecté à la session ou si l'admin est connecté alors
+            if(($topic->getUser() && $topic->getUser() === Session::getUser()) || Session::isAdmin()){
+                // "SET verouillage=1" dans le l'entité Topic
+                $data = ['closed' => 0];
+                $topicManager = update($data, $id);
+                Session::addFlash("success", "Le topic est vérouillé !");
+                $this -> redirectTo("forum", "listPostsByTopics", $id); exit;
+
+            } else {
+                Session::addFlash("error", "Une erreur est survenue, réessayez ou assurez vous d'avoir les droits.");
+                $this -> redirectTo("forum", "listCategory"); exit;
+            }
+        } else{
+            Session::addFlash("error", "Veuillez vous inscrire ou vous connecter pour vérouiller un topic.");
+            $this -> redirectTo("forum", "listPostsByTopics", $id); exit;
+        }   
+        
+    }
 }

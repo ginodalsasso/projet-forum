@@ -28,4 +28,25 @@ class TopicManager extends Manager{
             $this->className
         );
     }
+
+    //topic d'un utilisateur
+    public function findTopicsByUser($id){
+        $sql = "SELECT * from ".$this->tableName." t
+                WHERE t.user_id = :id";
+
+        return $this->getMultipleResults(
+            DAO::select($sql, ['id' => $id]),
+            $this->className
+        );
+    }
+
+    public function updateTopic($id){
+        $sql = "UPDATE topic SET locked = 1
+                WHERE id_topic = :id";
+
+        return  $this->getOneOrNullResult(
+            DAO::select($sql, ['id_topic' => $id], false), 
+            $this->className
+        );
+    }
 }

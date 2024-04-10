@@ -14,6 +14,7 @@ final class User extends Entity{
     private $password;
     private $email;
     private $role;
+    private $creationDate;
 
     public function __construct($data){         
         $this->hydrate($data);        
@@ -114,10 +115,6 @@ final class User extends Entity{
         return $this;
     }
 
-    public function __toString() {
-        return $this->pseudo;
-    }
-
     // check le rôle de l'utilisateur 
     public function hasRole($role){
         
@@ -126,5 +123,31 @@ final class User extends Entity{
         } else {
             return false;
         }
+    }
+    
+    
+    /**
+     * Get the value of creationDate
+     */ 
+    public function getCreationDate()
+    {
+        return $this->creationDate;
+    }
+    
+    /**
+     * Set the value of creationDate
+     *
+     * @return  self
+     */ 
+    public function setCreationDate($creationDate)
+    {
+        $this->creationDate = $creationDate;
+        
+        return $this;
+    }
+
+    
+    public function __toString() {
+        return $this->pseudo;
     }
 }
