@@ -117,4 +117,14 @@ final class User extends Entity{
     public function __toString() {
         return $this->pseudo;
     }
+
+    // check le rôle de l'utilisateur 
+    public function hasRole($role){
+        
+        if ($this->getRole() === $role){
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

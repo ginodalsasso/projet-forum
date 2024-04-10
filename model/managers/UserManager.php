@@ -22,12 +22,12 @@ class UserManager extends Manager{
        
         // la requête renvoie d'un enregistrement --> getOneOrNullResult
         return  $this->getOneOrNullResult(
-            DAO::select($sql, ['email' => $email]), 
+            DAO::select($sql, ['email' => $email], false), 
             $this->className
         );
     }
 
-    //méthode qui retrouve l'email qui a été renseigné 
+    //méthode qui retrouve le pseudo qui a été renseigné 
     public function findOneByPseudo($pseudo) {
         $sql = "SELECT * 
                 FROM ".$this->tableName." u 
@@ -35,7 +35,7 @@ class UserManager extends Manager{
        
         // la requête renvoie d'un enregistrement --> getOneOrNullResult
         return  $this->getOneOrNullResult(
-            DAO::select($sql, ['pseudo' => $pseudo]), 
+            DAO::select($sql, ['pseudo' => $pseudo], false), 
             $this->className
         );
     }

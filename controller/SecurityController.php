@@ -44,7 +44,7 @@ class SecurityController extends AbstractController{
                     if($pass1 == $pass2 && strlen($pass1) >= 6) {//ici je vérifie si les deux mdp sont identiques et donne les conditions du mdp (regex ...)
                         //tableau attendu par la fonction dans app\Manager add($data)
                         //$data = ['username' => 'Squalli', 'password' => 'dfsyfshfbzeifbqefbq', 'email' => 'sql@gmail.com'];
-                        $data = ['pseudo' => $pseudo, 'email' => $email, 'password' => password_hash($pass1, PASSWORD_DEFAULT)];
+                        $data = ['pseudo' => $pseudo, 'email' => $email, 'password' => password_hash($pass1, PASSWORD_DEFAULT), "role" => "ROLE_USER"];
                         $userManager->add($data);
                         // var_dump($userManager);die;
                         //stocke l'utilisateur en session
@@ -78,30 +78,32 @@ class SecurityController extends AbstractController{
         // -- on vérifie le mot de passe (password_verify)
         // -- si on arrive à se connecte, on fait passer le user en session
         // -- si aucune des conditions ne passent (mauvais mot de passe, utilisateur inexistant, etc) --> message d'erreur
-        $pseudo = filter_input(INPUT_POST, "pseudo", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-        $password = filter_input(INPUT_POST, "password", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-        //si les filtres sont valides
-        if($pseudo && $password){
-            // vérifie si le mail n'éxiste pas dans la BDD sinon false est assigné
-            $user = $userManager->findOneByPseudo($pseudo) ?? false;
-            //si le pseudo est faux alors
-            if($user){
-                //je récupère le mot de passe eb BDD suite à la requête précédente
-                $hash = $user["password"];
-                //compare le mot de passe saisi à  l'emprunte numérique en BDD
-                if(password_verify($password, $hash)){
-                    $_SESSION["user"] = $user; // stock en session l'intégralité de notre tableau $user (nous pourrions en stocker qu'une partie)
-                    //se servire de la méthode redirectTo ex: $this->redirectTo("security", "register");
-                    $this -> redirectTo("forum", "listCategory"); exit;
+        if($_POST['submit']){
+            $pseudo = filter_input(INPUT_POST, "pseudo", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+            $password = filter_input(INPUT_POST, "password", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+            //si les filtres sont valides
+            if($pseudo && $password){
+                // vérifie si le pseudo n'éxiste pas dans la BDD sinon false est assigné
+                $user = $userManager->findOneByPseudo($pseudo);
+                //si le pseudo est différent de NULL alors
+                if($user != NULL){
+                    //je récupère le mot de passe en BDD suite à la requête précédente
+                    $hash = $user->getPassword();
+
+                    //compare le mot de passe saisi à  l'emprunte numérique en BDD si ok alors
+                    if(password_verify($password, $hash)){
+                        $_SESSION["user"] = $user; // stock en session l'intégralité de notre tableau $user (nous pourrions en stocker qu'une partie)
+                    }else{
+                        Session::addFlash("error", "Pseudo ou mot de passe incorrect !");
+                        $this -> redirectTo("security", "login"); exit;
+                    }
                 }else{
                     Session::addFlash("error", "Utilisateur inconnu ou mot de passe incorrect !");
                     $this -> redirectTo("security", "login"); exit;
                 }
-            }else{
-                Session::addFlash("error", "Utilisateur inconnu ou mot de passe incorrect !");
-                $this -> redirectTo("security", "login"); exit;
+                $this -> redirectTo("forum", "listCategory"); exit;
             }
-        }
+        } 
     }
 
     public function logout () {
