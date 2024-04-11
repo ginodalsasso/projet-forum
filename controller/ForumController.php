@@ -67,34 +67,32 @@ class ForumController extends AbstractController implements ControllerInterface{
     }
 
     public function addTopic($id){
-
-        // créer une nouvelle instance de CategoryManager
-        $categoryManager = new CategoryManager();
-        // récupérer la liste de toutes les catégories grâce à la méthode findAll de Manager.php (triés par nom)
-        $categories = $categoryManager->findAll(["name", "DESC"]);
-
-        // le controller communique avec la vue "listCategories" (view) pour lui envoyer la liste des catégories (data)
-        return [
-            "view" => VIEW_DIR."forum/addTopic.php",
-            "meta_description" => "Ajout d'un topic",
-            "data" => [
-                "category" => $categories
-            ]
-        ];
-
         if($_POST['submit']){
             if(Session::getUser()){
-                $title = filter_input(INPUT_POST, "text", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+                $title = filter_input(INPUT_POST, "title", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
                 $text = filter_input(INPUT_POST, "text", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
                 if($title && $text){
+                    // récupère l'id de l'user ayant créé le topic et du coup le post aussi
+                    $idUser = Session::getUser() -> getId();
+                    $topicManager = new TopicManager();
+                    //tableau attendu par la fonction dans app\Manager add($data) pour l'ajout des données en BDD
+                    //$data = ['username' => 'Squalli', 'password' => 'dfsyfshfbzeifbqefbq', 'email' => 'sql@gmail.com'];
+                    $dataTopic = ['title' => $title, 'user_id' => $idUser, 'category_id' => $id];
+                    //initialisation de la variable pour récupérer l'id du nouveau topic
+                    $idTopic = $topicManager->add($dataTopic);
 
+                    $postManager = new PostManager();
+                    //insertion du nouveau poste en BDD
+                    $dataPost = ['text' => $text, 'user_id' => $idUser, 'topic_id' => $idTopic];
+                    $postManager->add($dataPost);
+                    $this -> redirectTo("forum", "listTopicsByCategory", $id); exit;
                 }else{
                     Session::addFlash("error", "Une erreur est survenue, réessayez.");
-                    $this -> redirectTo("forum", "listPostsByTopics", $id); exit;
+                    $this -> redirectTo("forum", "listTopicsByCategory", $id); exit;
                 }
             } else{
                 Session::addFlash("error", "Veuillez vous inscrire ou vous connecter pour écrire un message.");
-                $this -> redirectTo("forum", "listPostsByTopics", $id); exit;
+                $this -> redirectTo("forum", "listTopicsByCategory", $id); exit;
             }
         }
         $this -> redirectTo("forum", "addTopic"); exit;

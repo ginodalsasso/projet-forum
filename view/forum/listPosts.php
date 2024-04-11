@@ -9,11 +9,11 @@
 
 <h1><?= $topic->getTitle() ?></h1>
 <h2>Liste des posts</h2>
-<a href="index.php?ctrl=forum&action=listCategory">Catégories</a>><a href="index.php?ctrl=forum&action=listTopicsByCategory&id=<?=$category->getId()?>"><?=$category->getName()?></a>
+<a href="index.php?ctrl=forum&action=listCategory">Catégories</a>
+    ><a href="index.php?ctrl=forum&action=listTopicsByCategory&id=<?=$category->getId()?>"><?=$category->getName()?></a>
 
 <?php
 foreach($posts as $post ){ ?>
-
     <p><?=$post->getText() ?> par <?= $post->getUser()?> <?= $post->getCreationDate() ?></p>
 <?php } ?>
 
