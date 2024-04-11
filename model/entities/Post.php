@@ -86,7 +86,8 @@ final class Post extends Entity{
      */ 
     public function getCreationDate()
     {
-        return $this->creationDate;
+        $date = new \DateTime($this->creationDate);
+        return $date->format("d-m-Y H:i");
     }
 
     /**
@@ -97,8 +98,6 @@ final class Post extends Entity{
     public function setCreationDate($creationDate)
     {
         $this->creationDate = $creationDate;
-
-        return $this;
     }
 
     /**
