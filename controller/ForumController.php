@@ -95,50 +95,32 @@ class ForumController extends AbstractController implements ControllerInterface{
         $topicManager = new TopicManager();
         $topic = $topicManager->findOneById($id);
 
-        //si l'utilisateur est connecté et le topic éxiste alors
-        if(Session::getUser() && $topic){ 
             // si l'user associé au topic est identique à l'user actuellement connecté à la session ou si l'admin est connecté alors
-            if(($topic->getUser() && $topic->getUser() === Session::getUser()) || Session::isAdmin()){
-                // "SET verouillage=1" dans le l'entité Topic
-                $data = ['closed' => 1];
-                // var_dump ($id);
-                $topicManager->updateTopic($data, $id);
+            if(($topic->getUser()->getId() === Session::getUser()->getId()) || Session::isAdmin()){
+                $topicManager->lockedTopic($id);
                 Session::addFlash("success", "Le topic est vérouillé !");
-                $this -> redirectTo("forum", "listPostsByTopics", $id); exit;
+                $this -> redirectTo("forum", "listTopicsByCategory", $topic->getCategory()->getId()); exit;
 
             } else {
                 Session::addFlash("error", "Une erreur est survenue, réessayez ou assurez vous d'avoir les droits.");
                 $this -> redirectTo("forum", "listCategory"); exit;
             }
-        } else{
-            Session::addFlash("error", "Veuillez vous inscrire ou vous connecter pour vérouiller un topic.");
-            $this -> redirectTo("forum", "listPostsByTopics", $id); exit;
-        }    
     }
 
-    // dévérouillage d'un topic par l'utilisateur créateur ou l'admin($id)
+    //devérouillage d'un topic($id) par l'utilisateur créateur ou l'admin
     public function unlockedTopics($id){
         $topicManager = new TopicManager();
         $topic = $topicManager->findOneById($id);
 
-        //si l'utilisateur est connecté et le topic éxiste alors
-        if(Session::getUser() && $topic){ 
             // si l'user associé au topic est identique à l'user actuellement connecté à la session ou si l'admin est connecté alors
-            if(($topic->getUser() && $topic->getUser() === Session::getUser()) || Session::isAdmin()){
-                // "SET verouillage=1" dans le l'entité Topic
-                $data = ['closed' => 0];
-                $topicManager = update($data, $id);
-                Session::addFlash("success", "Le topic est vérouillé !");
-                $this -> redirectTo("forum", "listPostsByTopics", $id); exit;
+            if(($topic->getUser()->getId() === Session::getUser()->getId()) || Session::isAdmin()){
+                $topicManager->unlockedTopic($id);
+                Session::addFlash("success", "Le topic est devérouillé !");
+                $this -> redirectTo("forum", "listTopicsByCategory", $topic->getCategory()->getId()); exit;
 
             } else {
                 Session::addFlash("error", "Une erreur est survenue, réessayez ou assurez vous d'avoir les droits.");
                 $this -> redirectTo("forum", "listCategory"); exit;
             }
-        } else{
-            Session::addFlash("error", "Veuillez vous inscrire ou vous connecter pour vérouiller un topic.");
-            $this -> redirectTo("forum", "listPostsByTopics", $id); exit;
-        }   
-        
     }
 }

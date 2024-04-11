@@ -11,12 +11,12 @@ if($topics){
     //affichage des topics
     foreach($topics as $topic ){ 
         // closed = 0  sinon afficher qu'il est verouillé action pour le lien plus bas pour vérouiller
-        if($topic->getClosed() == 1){
+        if($topic->getClosed()){
             $statut= "<i class='fa-solid fa-unlock'></i>"; 
-            $action="<a href='index.php?ctrl=forum&action=lockedTopics&id=".$topic->getId()."' class='topic-update'><i class='fa-solid fa-lock'></i> Lock</a>";
+            $action="<a href='index.php?ctrl=forum&action=unlockedTopics&id=".$topic->getId()."' class='topic-update'><i class='fa-solid fa-unlock'></i> Unlock</a>";
         } else {
             $statut = "<i class='fa-solid fa-lock'></i>";
-            $action="<a href='index.php?ctrl=forum&action=unlockedTopics&id=".$topic->getId()."' class='topic-update'><i class='fa-solid fa-unlock'></i>  Unlock</a>";
+            $action="<a href='index.php?ctrl=forum&action=lockedTopics&id=".$topic->getId()."' class='topic-update'><i class='fa-solid fa-lock'></i>  Lock</a>";
         }
 
         ?> 
