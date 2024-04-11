@@ -66,6 +66,51 @@ class ForumController extends AbstractController implements ControllerInterface{
         ];
     }
 
+    public function addTopic($id){
+
+        // créer une nouvelle instance de CategoryManager
+        $categoryManager = new CategoryManager();
+        // récupérer la liste de toutes les catégories grâce à la méthode findAll de Manager.php (triés par nom)
+        $categories = $categoryManager->findAll(["name", "DESC"]);
+
+        // le controller communique avec la vue "listCategories" (view) pour lui envoyer la liste des catégories (data)
+        return [
+            "view" => VIEW_DIR."forum/addTopic.php",
+            "meta_description" => "Ajout d'un topic",
+            "data" => [
+                "category" => $categories
+            ]
+        ];
+
+        if($_POST['submit']){
+            if(Session::getUser()){
+                $title = filter_input(INPUT_POST, "text", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+                $text = filter_input(INPUT_POST, "text", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+                if($title && $text){
+
+                }else{
+                    Session::addFlash("error", "Une erreur est survenue, réessayez.");
+                    $this -> redirectTo("forum", "listPostsByTopics", $id); exit;
+                }
+            } else{
+                Session::addFlash("error", "Veuillez vous inscrire ou vous connecter pour écrire un message.");
+                $this -> redirectTo("forum", "listPostsByTopics", $id); exit;
+            }
+        }
+        $this -> redirectTo("forum", "addTopic"); exit;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
     //ajout d'un post dans un topic($id)
     public function addPost($id){
         //si l'utilisateur est connecté
