@@ -26,7 +26,11 @@ CREATE TABLE IF NOT EXISTS `category` (
   PRIMARY KEY (`id_category`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Les données exportées n'étaient pas sélectionnées.
+-- Listage des données de la table forummvc_v2.category : ~2 rows (environ)
+DELETE FROM `category`;
+INSERT INTO `category` (`id_category`, `name`) VALUES
+	(1, 'Le bar'),
+	(2, 'Les actualités');
 
 -- Listage de la structure de table forummvc_v2. post
 CREATE TABLE IF NOT EXISTS `post` (
@@ -42,7 +46,12 @@ CREATE TABLE IF NOT EXISTS `post` (
   CONSTRAINT `FK_message_topic` FOREIGN KEY (`topic_id`) REFERENCES `topic` (`id_topic`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Les données exportées n'étaient pas sélectionnées.
+-- Listage des données de la table forummvc_v2.post : ~3 rows (environ)
+DELETE FROM `post`;
+INSERT INTO `post` (`id_post`, `text`, `creationDate`, `user_id`, `topic_id`) VALUES
+	(1, 'Perdu dans le vide infini, un astronome scrutait l\'obscurité. Soudain, son regard captura l\'impensable : un trou noir, une porte vers l\'inconnu. Tremblant d\'émerveillement et de peur, il contempla cet abîme dévorant, sa propre existence suspendue entre les étoiles. Ce bref instant lui offrit une perspective vertigineuse sur la fragilité de l\'humanité face aux mystères de l\'univers.', '2024-04-08 15:04:59', 1, 1),
+	(2, 'It was a dark and stormy night...\r\n', '2024-04-10 14:21:03', 10, 1),
+	(4, 'It was a dark and stormy night...\r\n', '2024-04-10 14:21:55', 10, 1);
 
 -- Listage de la structure de table forummvc_v2. topic
 CREATE TABLE IF NOT EXISTS `topic` (
@@ -59,7 +68,11 @@ CREATE TABLE IF NOT EXISTS `topic` (
   CONSTRAINT `FK_topic_membre` FOREIGN KEY (`user_id`) REFERENCES `user` (`id_user`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Les données exportées n'étaient pas sélectionnées.
+-- Listage des données de la table forummvc_v2.topic : ~0 rows (environ)
+DELETE FROM `topic`;
+INSERT INTO `topic` (`id_topic`, `title`, `creationDate`, `closed`, `user_id`, `category_id`) VALUES
+	(1, 'Trou noir', '2024-04-08 15:02:35', 1, 1, 1),
+	(2, 'Ras-le-bol', '2024-04-08 16:25:56', 1, 1, 2);
 
 -- Listage de la structure de table forummvc_v2. user
 CREATE TABLE IF NOT EXISTS `user` (
@@ -72,7 +85,14 @@ CREATE TABLE IF NOT EXISTS `user` (
   PRIMARY KEY (`id_user`)
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Les données exportées n'étaient pas sélectionnées.
+-- Listage des données de la table forummvc_v2.user : ~5 rows (environ)
+DELETE FROM `user`;
+INSERT INTO `user` (`id_user`, `pseudo`, `password`, `email`, `role`, `creationDate`) VALUES
+	(1, 'gino', 'Gino67540//!', '1234@gmail.com', 'ROLE_ADMIN', '2024-04-10 11:03:20'),
+	(6, 'gary', '$2y$10$a/HHyNhM4wi9SE9SgGcnueWFR1oC0I57ec.NB1fgMfM0ioKtK9YTa', 'gary@gmail.com', 'ROLE_USER', '2024-04-10 11:03:20'),
+	(7, 'romane', '$2y$10$ji2XkXGlneufexANLYQ2AOCtfQ0FY7if0CYgnZgIoXstXl0mTbm/2', 'romane@gmail.com', 'ROLE_ADMIN', '2024-04-10 11:03:20'),
+	(8, 'bla', '$2y$10$9Ny4xuudFOhbTSzaZiceK.IJXSINfDrWmkvtOia4WMklnn72x.P.K', 'bla@gmail.com', 'ROLE_USER', '2024-04-10 11:25:08'),
+	(10, 'glad', '$2y$10$C.LElcGlGkotEUsaytNiFO256jfcv8SyPPod2w2LCjMiKFu66gzv6', 'glad@gmail.com', 'ROLE_ADMIN', '2024-04-10 11:33:56');
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
