@@ -31,7 +31,6 @@ class ForumController extends AbstractController implements ControllerInterface{
         ];
     }
 
-
     //affichage de la liste des topics avec catégorie ($id))----------------------------------------------------
     public function listTopicsByCategory($id) {
         $topicManager = new TopicManager();
@@ -57,11 +56,13 @@ class ForumController extends AbstractController implements ControllerInterface{
     //affichage de la liste des posts d'un topic($id))----------------------------------------------------
     public function listPostsByTopics($id) {
         $categoryManager = new CategoryManager();
-        $topicManager = new TopicManager();
         $postManager = new PostManager();
+        $topicManager = new TopicManager();
         $topic = $topicManager->findOneById($id);
-        $posts = $postManager->findPostsByTopic($id);
+        //appel un objet (entité Category)
         $category = $topic->getCategory();
+        //appel une méthode de postManager ($id topic)
+        $posts = $postManager->findPostsByTopic($id);
 
         if(Session::getUser()){
             return [
@@ -105,6 +106,24 @@ class ForumController extends AbstractController implements ControllerInterface{
             $this -> redirectTo("forum", "index"); exit;
     }
 
+    //suppression d'une catégorie($id)----------------------------------------------------
+    public function deleteCategory($id){
+        $categoryManager = new CategoryManager();
+        $category = $categoryManager->findOneById($id);
+
+        // si l'admin est connecté alors
+        if(Session::isAdmin()){
+
+            $categoryManager->delete($id);
+
+            Session::addFlash("success", "La catégorie est supprimée !");
+            $this -> redirectTo("forum", "index"); exit;
+        } else {
+            Session::addFlash("error", "Une erreur est survenue, réessayez ou assurez vous d'avoir les droits.");
+            $this -> redirectTo("forum", "index"); exit;
+        }
+    }
+
     //----------------------------------------------------Topic----------------------------------------------------
 
     //ajout d'un topic dans une catégorie($id))----------------------------------------------------
@@ -138,6 +157,30 @@ class ForumController extends AbstractController implements ControllerInterface{
         }
         $this -> redirectTo("forum", "index"); exit;
     }
+
+    //suppression d'un topic($id)----------------------------------------------------
+    public function deleteTopic($id){
+        $topicManager = new TopicManager();
+        $topic = $topicManager->findOneById($id);
+        $postManager = new postManager();
+        $posts = $postManager->findPostsByTopic($id);
+    
+        // si l'admin est connecté alors
+        if(Session::isAdmin()){  
+            //boucle sur chaque post du topic, récupère l'id du post puis le supprime (grace à l'action (lors d'un DELETE) sur heidiSQL en "Cascade" permet d'éviter de boucler comme suit)
+            foreach($posts as $post) {
+                $idPost = $post->getId();
+                $postManager->delete($idPost); 
+            }
+            $topicManager->delete($id);
+            Session::addFlash("success", "Le topic est supprimé !");
+            //récupère getCategory de l'entité Topic et son ID
+            $this -> redirectTo("forum", "listTopicsByCategory", $topic->getCategory()->getId()); exit;
+        } else {
+            Session::addFlash("error", "Une erreur est survenue, réessayez ou assurez vous d'avoir les droits.");
+            $this -> redirectTo("forum", "index"); exit;
+        }
+    }
     
     
     //vérouillage d'un topic($id) par l'utilisateur créateur ou l'admin)----------------------------------------------------
@@ -160,7 +203,7 @@ class ForumController extends AbstractController implements ControllerInterface{
         //devérouillage d'un topic($id) par l'utilisateur créateur ou l'admin)----------------------------------------------------
         public function unlockedTopics($id){
             $topicManager = new TopicManager();
-        $topic = $topicManager->findOneById($id);
+            $topic = $topicManager->findOneById($id);
         
             // si l'user associé au topic est identique à l'user actuellement connecté à la session ou si l'admin est connecté alors
             if(($topic->getUser()->getId() === Session::getUser()->getId()) || Session::isAdmin()){
@@ -172,6 +215,7 @@ class ForumController extends AbstractController implements ControllerInterface{
                 $this -> redirectTo("forum", "index"); exit;
             }
         }
+
         //----------------------------------------------------Post----------------------------------------------------
     
         //ajout d'un post dans un topic($id)----------------------------------------------------
@@ -200,5 +244,29 @@ class ForumController extends AbstractController implements ControllerInterface{
                 }
             }
         }
+
+        //suppression d'un post($id)----------------------------------------------------
+        public function deletePost($id){
+            $postManager = new postManager();
+            $post = $postManager->findOneById($id);
+        
+            // si l'user associé au topic est identique à l'user actuellement connecté à la session ou si l'admin est connecté alors
+            if(($post->getUser()->getId() === Session::getUser()->getId()) || Session::isAdmin()){
+                $postManager->delete($id);
+                Session::addFlash("success", "Le message est supprimé !");
+                //récupère getTopic de l'entité Post et son ID
+                $this -> redirectTo("forum", "listPostsByTopics", $post->getTopic()->getId()); exit;
+            } else {
+                Session::addFlash("error", "Une erreur est survenue, réessayez ou assurez vous d'avoir les droits.");
+                $this -> redirectTo("forum", "index"); exit;
+            }
+        }
+
+
+
+
+
+
+
     }
 

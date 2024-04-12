@@ -60,15 +60,15 @@ class TopicManager extends Manager{
         );
     }
 
-    // public function findTopicByTitle($titre){
+    public function findTopicByTitle($titre){
 
-    //     $sql = "SELECT *
-    //             FROM ".$this->tableName." t
-    //             WHERE t.title = :title ";
+        $sql = "SELECT *
+                FROM ".$this->tableName." t
+                WHERE t.title = :title ";
 
-    //     return $this->getOneOrNullResult(
-    //         DAO::select($sql, ['id' => $id], false), 
-    //         $this->className
-    //     );
-    // }
+        return $this->getOneOrNullResult(
+            DAO::select($sql, ['id' => $id], false), 
+            $this->className
+        );
+    }
 }
