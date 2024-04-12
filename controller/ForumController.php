@@ -12,8 +12,8 @@ use Model\Managers\UserManager;
 
 class ForumController extends AbstractController implements ControllerInterface{
 
+    //affichage de l'index soit la liste des catégories)----------------------------------------------------
     public function index() {
-        
         // créer une nouvelle instance de CategoryManager
         $categoryManager = new CategoryManager();
         // récupérer la liste de toutes les catégories grâce à la méthode findAll de Manager.php (triés par nom)
@@ -29,25 +29,32 @@ class ForumController extends AbstractController implements ControllerInterface{
         ];
     }
 
-    public function listTopicsByCategory($id) {
 
+    //affichage de la liste des topics avec catégorie ($id))----------------------------------------------------
+    public function listTopicsByCategory($id) {
         $topicManager = new TopicManager();
         $categoryManager = new CategoryManager();
         $category = $categoryManager->findOneById($id);
         $topics = $topicManager->findTopicsByCategory($id);
 
-        return [
-            "view" => VIEW_DIR."forum/listTopics.php",
-            "meta_description" => "Liste des topics par catégorie : ".$category,
-            "data" => [
-                "category" => $category,
-                "topics" => $topics
-            ]
-        ];
+        if(Session::getUser()){
+            return [
+                "view" => VIEW_DIR."forum/listTopics.php",
+                "meta_description" => "Liste des topics par catégorie : ".$category,
+                "data" => [
+                    "category" => $category,
+                    "topics" => $topics
+                ]
+            ];
+        }else{
+            Session::addFlash("error", "Veuillez vous inscrire ou vous connecter pour accéder au contenu du forum !");
+            $this -> redirectTo("forum", "index"); exit;
+        }
     }
 
-    public function listPostsByTopics($id) {
 
+    //affichage de la liste des posts d'un topic($id))----------------------------------------------------
+    public function listPostsByTopics($id) {
         $categoryManager = new CategoryManager();
         $topicManager = new TopicManager();
         $postManager = new PostManager();
@@ -55,17 +62,24 @@ class ForumController extends AbstractController implements ControllerInterface{
         $topic = $topicManager->findOneById($id);
         $posts = $postManager->findPostsByTopic($id);
 
-        return [
-            "view" => VIEW_DIR."forum/listPosts.php",
-            "meta_description" => "Liste des posts par topic : ".$topic,
-            "data" => [
-                "category" => $category,
-                "topic" => $topic,
-                "posts" => $posts
-            ]
-        ];
+        if(Session::getUser()){
+            return [
+                "view" => VIEW_DIR."forum/listPosts.php",
+                "meta_description" => "Liste des posts par topic : ".$topic,
+                "data" => [
+                    "category" => $category,
+                    "topic" => $topic,
+                    "posts" => $posts
+                ]
+            ];
+        }else{
+            Session::addFlash("error", "Veuillez vous inscrire ou vous connecter pour accéder au contenu du forum !");
+            $this -> redirectTo("forum", "index"); exit;
+        }
     }
 
+
+    //ajout d'un topic dans une catégorie($id))----------------------------------------------------
     public function addTopic($id){
         if($_POST['submit']){
             if(Session::getUser()){
@@ -80,7 +94,6 @@ class ForumController extends AbstractController implements ControllerInterface{
                     $dataTopic = ['title' => $title, 'user_id' => $idUser, 'category_id' => $id];
                     //initialisation de la variable pour récupérer l'id du nouveau topic
                     $idTopic = $topicManager->add($dataTopic);
-
                     $postManager = new PostManager();
                     //insertion du nouveau poste en BDD
                     $dataPost = ['text' => $text, 'user_id' => $idUser, 'topic_id' => $idTopic];
@@ -95,21 +108,11 @@ class ForumController extends AbstractController implements ControllerInterface{
                 $this -> redirectTo("forum", "listTopicsByCategory", $id); exit;
             }
         }
-        $this -> redirectTo("forum", "addTopic"); exit;
+        $this -> redirectTo("forum", "index"); exit;
     }
 
 
-
-
-
-
-
-
-
-
-
-
-    //ajout d'un post dans un topic($id)
+    //ajout d'un post dans un topic($id)----------------------------------------------------
     public function addPost($id){
         //si l'utilisateur est connecté
         if($_POST['submit']){
@@ -131,12 +134,13 @@ class ForumController extends AbstractController implements ControllerInterface{
                 }
             } else{
                 Session::addFlash("error", "Veuillez vous inscrire ou vous connecter pour écrire un message.");
-                $this -> redirectTo("forum", "listPostsByTopics", $id); exit;
+                $this -> redirectTo("forum", "index"); exit;
             }
         }
     }
 
-    //vérouillage d'un topic($id) par l'utilisateur créateur ou l'admin
+
+    //vérouillage d'un topic($id) par l'utilisateur créateur ou l'admin)----------------------------------------------------
     public function lockedTopics($id){
         $topicManager = new TopicManager();
         $topic = $topicManager->findOneById($id);
@@ -146,14 +150,14 @@ class ForumController extends AbstractController implements ControllerInterface{
                 $topicManager->lockedTopic($id);
                 Session::addFlash("success", "Le topic est vérouillé !");
                 $this -> redirectTo("forum", "listTopicsByCategory", $topic->getCategory()->getId()); exit;
-
             } else {
                 Session::addFlash("error", "Une erreur est survenue, réessayez ou assurez vous d'avoir les droits.");
-                $this -> redirectTo("forum", "listCategory"); exit;
+                $this -> redirectTo("forum", "index"); exit;
             }
     }
 
-    //devérouillage d'un topic($id) par l'utilisateur créateur ou l'admin
+
+    //devérouillage d'un topic($id) par l'utilisateur créateur ou l'admin)----------------------------------------------------
     public function unlockedTopics($id){
         $topicManager = new TopicManager();
         $topic = $topicManager->findOneById($id);
@@ -163,10 +167,9 @@ class ForumController extends AbstractController implements ControllerInterface{
                 $topicManager->unlockedTopic($id);
                 Session::addFlash("success", "Le topic est devérouillé !");
                 $this -> redirectTo("forum", "listTopicsByCategory", $topic->getCategory()->getId()); exit;
-
             } else {
                 Session::addFlash("error", "Une erreur est survenue, réessayez ou assurez vous d'avoir les droits.");
-                $this -> redirectTo("forum", "listCategory"); exit;
+                $this -> redirectTo("forum", "index"); exit;
             }
     }
 }
