@@ -12,6 +12,7 @@
         <title>FORUM</title>
     </head>
     <body>
+        <div class="content">
         <!--messages de succès ou d'erreur-->
         <h3><?= App\Session::getFlash("error") ?></h3>
         <h3><?= App\Session::getFlash("success") ?></h3>
@@ -20,48 +21,76 @@
                 <!-- c'est ici que les messages (erreur ou succès) s'affichent-->
                 <h3 class="message" style="color: red"><?= App\Session::getFlash("error") ?></h3>
                 <h3 class="message" style="color: green"><?= App\Session::getFlash("success") ?></h3>
-                <header>
+                <header class="header" id="header">
                     <nav>
-                        <div id="nav-left">
-                            <a href="/">Accueil</a>
-                            <?php
-                            if(App\Session::isAdmin()){
-                                ?>
-                                <a href="index.php?ctrl=home&action=users">Voir la liste des gens</a>
-                            <?php } ?>
-                        </div>
-                        <div id="nav-right">
-                        <?php
-                            // si l'utilisateur est connecté 
-                            if(App\Session::getUser()){
-                                ?>
-                                <a href="index.php?ctrl=security&action=profile"><span class="fas fa-user"></span>&nbsp;<?= App\Session::getUser()?></a>
-                                <a href="index.php?ctrl=security&action=logout">Déconnexion</a>
-                                <?php
-                            }
-                            else{
-                                ?>
-                                <a href="index.php?ctrl=security&action=login">Connexion</a>
-                                <a href="index.php?ctrl=security&action=register">Inscription</a>
-                                
-                                <a href="index.php?ctrl=forum&action=listCategory">Catégories</a>
-                            <?php
-                            }
-                        ?>
-                        </div>
+                        <ul class="nav_list">
+                            <span class="menu">
+                                <li>
+                                    <a href="index.php?ctrl=forum&action=index">Accueil</a>
+                                </li>
+                                <li>
+                                    <a href="index.php?ctrl=forum&action=listCategory">Catégories</a>
+                                </li>
+                                <li>
+                                    <?php if(App\Session::isAdmin()){ ?>
+                                        <a href="index.php?ctrl=home&action=users">Voir la liste des gens</a>
+                                    <?php } ?>
+                                </li>
+                                <div class="nav_list_right">
+                                    <li>
+                                        <?php 
+                                        if(App\Session::getUser()){ ?>
+                                            <a href="index.php?ctrl=security&action=profile"><span class="fas fa-user"></span>&nbsp;<?= App\Session::getUser()?></a>
+                                    </li>
+                                    <li >
+                                        <a href="index.php?ctrl=security&action=logout">Déconnexion</a>
+                                    </li>
+                                        <?php
+                                    }
+                                    else{ ?>
+                                        <li>
+                                            <a href="index.php?ctrl=security&action=login">Connexion</a>
+                                        </li>
+                                        <li>
+                                            <a href="index.php?ctrl=security&action=register">Inscription</a>
+                                        </li>
+                                    <?php } ?>
+                                </div>
+                            </span>
+                        </ul>
                     </nav>
                 </header>
-                
-                <?php 
-                // var_dump($_SESSION["user"]); die; 
-                ?>
                 <main id="forum">
                     <?= $page ?>
                 </main>
             </div>
             <footer>
-                <p>&copy; Gino <?= date_create("now")->format("Y") ?> - <a href="#">Règlement du forum</a> - <a href="#">Mentions légales</a></p>
+                <div class="footer_effect">
+                    <ul class="footer_list">
+                        <li>
+                            <a href="#" class="footer_link">Politique de Confidentialité</a>
+                        </li>
+                        <li>
+                            <a href="#" class="footer_link">Mentions Légales</a>
+                        </li>
+                        <li>
+                            <a href="#" class="footer_link">Contact</a>
+                        </li>
+                        <li>
+                            <a href="#" class="footer_link">Aide</a>
+                        </li>
+                    </ul>
+                    <ul>
+                        <li class="footer_social_list">
+                            <a class="footer_social" href="#"><i class="fa-brands fa-x-twitter"></i></a>
+                            <a class="foote_social" href="#"><i class="fa-brands fa-facebook"></i></a>
+                            <a class="footer_social" href="#"><i class="fa-brands fa-instagram"></i></a>
+                        </li>
+                        <p id="copy">&copy; Gino <?= date_create("now")->format("Y") ?></p>
+                    </ul>
+                </div>
             </footer>
+        </div>
         </div>
         <script
             src="https://code.jquery.com/jquery-3.4.1.min.js"
