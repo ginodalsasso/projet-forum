@@ -12,6 +12,8 @@ use Model\Managers\UserManager;
 
 class ForumController extends AbstractController implements ControllerInterface{
 
+    //----------------------------------------------------Affichage----------------------------------------------------
+
     //affichage de l'index soit la liste des catégories)----------------------------------------------------
     public function index() {
         // créer une nouvelle instance de CategoryManager
@@ -52,15 +54,14 @@ class ForumController extends AbstractController implements ControllerInterface{
         }
     }
 
-
     //affichage de la liste des posts d'un topic($id))----------------------------------------------------
     public function listPostsByTopics($id) {
         $categoryManager = new CategoryManager();
         $topicManager = new TopicManager();
         $postManager = new PostManager();
-        $category = $categoryManager->findOneById($id);
         $topic = $topicManager->findOneById($id);
         $posts = $postManager->findPostsByTopic($id);
+        $category = $topic->getCategory();
 
         if(Session::getUser()){
             return [
@@ -78,6 +79,33 @@ class ForumController extends AbstractController implements ControllerInterface{
         }
     }
 
+    //----------------------------------------------------Category----------------------------------------------------
+
+    //ajout d'une catégorie----------------------------------------------------
+    public function addCategory(){
+        if(Session::isAdmin()){
+            if($_POST['submit']){
+                    $name = filter_input(INPUT_POST, "name", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+                    if($name){
+                        $categoryManager = new CategoryManager();
+                        //tableau attendu par la fonction dans app\Manager add($data) pour l'ajout des données en BDD
+                        //$data = ['username' => 'Squalli', 'password' => 'dfsyfshfbzeifbqefbq', 'email' => 'sql@gmail.com'];
+                        $data = ['name' => $name];
+                        $categoryManager->add($data);
+                        $this -> redirectTo("forum", "index"); exit;
+                    }else{
+                        Session::addFlash("error", "Une erreur est survenue, réessayez.");
+                        $this -> redirectTo("forum", "index"); exit;
+                    }
+                } else{
+                    Session::addFlash("error", "Veuillez vous inscrire ou vous connecter pour accéder au contenu du forum !");
+                    $this -> redirectTo("forum", "index"); exit;
+                }
+            }
+            $this -> redirectTo("forum", "index"); exit;
+    }
+
+    //----------------------------------------------------Topic----------------------------------------------------
 
     //ajout d'un topic dans une catégorie($id))----------------------------------------------------
     public function addTopic($id){
@@ -104,49 +132,21 @@ class ForumController extends AbstractController implements ControllerInterface{
                     $this -> redirectTo("forum", "listTopicsByCategory", $id); exit;
                 }
             } else{
-                Session::addFlash("error", "Veuillez vous inscrire ou vous connecter pour écrire un message.");
+                Session::addFlash("error", "Veuillez vous inscrire ou vous connecter pour accéder au contenu du forum !");
                 $this -> redirectTo("forum", "listTopicsByCategory", $id); exit;
             }
         }
         $this -> redirectTo("forum", "index"); exit;
     }
-
-
-    //ajout d'un post dans un topic($id)----------------------------------------------------
-    public function addPost($id){
-        //si l'utilisateur est connecté
-        if($_POST['submit']){
-            //si l'utilisateur est connecté
-            if(Session::getUser()){ 
-                $text = filter_input(INPUT_POST, "text", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-                if($text){
-                    $postManager = new PostManager();
-                    // récupère l'id de l'user ayant créé le post
-                    $idUser = Session::getUser() -> getId();
-                    //tableau attendu par la fonction dans app\Manager add($data) pour l'ajout des données en BDD
-                    //$data = ['username' => 'Squalli', 'password' => 'dfsyfshfbzeifbqefbq', 'email' => 'sql@gmail.com'];
-                    $data = ['text' => $text, 'user_id' => $idUser, 'topic_id' => $id];
-                    $postManager->add($data);
-                    $this -> redirectTo("forum", "listPostsByTopics", $id); exit;
-                } else {
-                    Session::addFlash("error", "Une erreur est survenue, réessayez.");
-                    $this -> redirectTo("forum", "listPostsByTopics", $id); exit;
-                }
-            } else{
-                Session::addFlash("error", "Veuillez vous inscrire ou vous connecter pour écrire un message.");
-                $this -> redirectTo("forum", "index"); exit;
-            }
-        }
-    }
-
-
+    
+    
     //vérouillage d'un topic($id) par l'utilisateur créateur ou l'admin)----------------------------------------------------
     public function lockedTopics($id){
         $topicManager = new TopicManager();
         $topic = $topicManager->findOneById($id);
-
-            // si l'user associé au topic est identique à l'user actuellement connecté à la session ou si l'admin est connecté alors
-            if(($topic->getUser()->getId() === Session::getUser()->getId()) || Session::isAdmin()){
+        
+        // si l'user associé au topic est identique à l'user actuellement connecté à la session ou si l'admin est connecté alors
+        if(($topic->getUser()->getId() === Session::getUser()->getId()) || Session::isAdmin()){
                 $topicManager->lockedTopic($id);
                 Session::addFlash("success", "Le topic est vérouillé !");
                 $this -> redirectTo("forum", "listTopicsByCategory", $topic->getCategory()->getId()); exit;
@@ -154,14 +154,14 @@ class ForumController extends AbstractController implements ControllerInterface{
                 Session::addFlash("error", "Une erreur est survenue, réessayez ou assurez vous d'avoir les droits.");
                 $this -> redirectTo("forum", "index"); exit;
             }
-    }
+        }
 
-
-    //devérouillage d'un topic($id) par l'utilisateur créateur ou l'admin)----------------------------------------------------
-    public function unlockedTopics($id){
-        $topicManager = new TopicManager();
+        
+        //devérouillage d'un topic($id) par l'utilisateur créateur ou l'admin)----------------------------------------------------
+        public function unlockedTopics($id){
+            $topicManager = new TopicManager();
         $topic = $topicManager->findOneById($id);
-
+        
             // si l'user associé au topic est identique à l'user actuellement connecté à la session ou si l'admin est connecté alors
             if(($topic->getUser()->getId() === Session::getUser()->getId()) || Session::isAdmin()){
                 $topicManager->unlockedTopic($id);
@@ -171,5 +171,34 @@ class ForumController extends AbstractController implements ControllerInterface{
                 Session::addFlash("error", "Une erreur est survenue, réessayez ou assurez vous d'avoir les droits.");
                 $this -> redirectTo("forum", "index"); exit;
             }
+        }
+        //----------------------------------------------------Post----------------------------------------------------
+    
+        //ajout d'un post dans un topic($id)----------------------------------------------------
+        public function addPost($id){
+            //si l'utilisateur est connecté
+            if($_POST['submit']){
+                //si l'utilisateur est connecté
+                if(Session::getUser()){ 
+                    $text = filter_input(INPUT_POST, "text", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+                    if($text){
+                        $postManager = new PostManager();
+                        // récupère l'id de l'user ayant créé le post
+                        $idUser = Session::getUser() -> getId();
+                        //tableau attendu par la fonction dans app\Manager add($data) pour l'ajout des données en BDD
+                        //$data = ['username' => 'Squalli', 'password' => 'dfsyfshfbzeifbqefbq', 'email' => 'sql@gmail.com'];
+                        $data = ['text' => $text, 'user_id' => $idUser, 'topic_id' => $id];
+                        $postManager->add($data);
+                        $this -> redirectTo("forum", "listPostsByTopics", $id); exit;
+                    } else {
+                        Session::addFlash("error", "Une erreur est survenue, réessayez.");
+                        $this -> redirectTo("forum", "listPostsByTopics", $id); exit;
+                    }
+                } else{
+                    Session::addFlash("error", "Veuillez vous inscrire ou vous connecter pour écrire un message.");
+                    $this -> redirectTo("forum", "index"); exit;
+                }
+            }
+        }
     }
-}
+
