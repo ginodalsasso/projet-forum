@@ -24,7 +24,7 @@
                 <header class="header" id="header">
                     <nav>
                         <ul class="nav_list">
-                            <span class="menu">
+                            <div class="menu">
                                 <li>
                                     <a href="index.php?ctrl=forum&action=index">Accueil</a>
                                 </li>
@@ -43,7 +43,7 @@
                                             <a href="index.php?ctrl=security&action=profile"><span class="fas fa-user"></span>&nbsp;<?= App\Session::getUser()?></a>
                                     </li>
                                     <li >
-                                        <a href="index.php?ctrl=security&action=logout">Déconnexion</a>
+                                        <a class="button" href="index.php?ctrl=security&action=logout">Déconnexion</a>
                                     </li>
                                         <?php
                                     }
@@ -56,7 +56,7 @@
                                         </li>
                                     <?php } ?>
                                 </div>
-                            </span>
+                            </div>
                         </ul>
                     </nav>
                 </header>

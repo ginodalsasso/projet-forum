@@ -42,40 +42,46 @@ body{
 h1 {
     color: var(--font-color)
 }
-
+/* ---------------------------navbar--------------------------- */
 .nav_list{
-    width: 100%;
     display: flex;
     justify-content: center;
-    align-items: center;
+    width: 100%;
     list-style: none;
     position: relative;
     padding: 24px 20px;
 } 
 
-.nav_list_right{
-    display: flex;
-    justify-content: flex-end;
-} 
-
 .menu{
     display: flex;
-    justify-content: center;
-    width: 100%;
 }
 
-.menu li{padding-left: 30px;}
+.nav_list_right{
+    display: flex;
+} 
 
 .menu li a, .footer_list a{
-    display: inline-block;
+    margin: 30px 20px;
     text-decoration: none;
     color: var(--font-color);
     font-weight: 500;
-    text-align: center;
     position: relative;
+    text-shadow: 0 0 10px #5454C5;
 }
 
+.button{
+    background:linear-gradient(to right, #130208, #5454C5);
+    padding: 8px 16px;
+    border-radius: 4px;
+    filter: drop-shadow(0 0 10px #342056);
+    transition: 0.5s;
+}
+.button:hover{
+    background:linear-gradient(to left, #130208, #5454C5);
+    filter: drop-shadow(0 0 30px #342056);
+}
 
+/* ---------------------------footer--------------------------- */
 footer{
     width: 100%;
     position: absolute;
@@ -88,11 +94,17 @@ footer{
 .footer_list{
     width: 100%;
     display: flex;
-    justify-content: space-evenly;
+    justify-content: center;
+    padding-top: 40px;
     align-items: center;
     list-style: none;
     position: relative;
-    padding: 60px 0 20px 0;
+    
+}
+
+.footer_list li a{
+    padding: 60px 20px 20px 20px;
+    text-shadow: 0 0 10px #5454C5;
 }
 
 .footer_social_list{
@@ -100,10 +112,11 @@ footer{
     display: flex;
     justify-content: center;
     font-size: 1.4rem;
+    text-shadow: 0 0 10px #5454C5;
 }
 
 .footer_social_list a{
-    padding: 40px 20px;
+    padding: 40px 10px;
     color: var(--font-color);
 }
 
