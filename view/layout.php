@@ -49,10 +49,10 @@
                                     }
                                     else{ ?>
                                         <li>
-                                            <a href="index.php?ctrl=security&action=login">Connexion</a>
+                                            <a class="button" href="index.php?ctrl=security&action=login">Connexion</a>
                                         </li>
                                         <li>
-                                            <a href="index.php?ctrl=security&action=register">Inscription</a>
+                                            <a class="button" href="index.php?ctrl=security&action=register">Inscription</a>
                                         </li>
                                     <?php } ?>
                                 </div>

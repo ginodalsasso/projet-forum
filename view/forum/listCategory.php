@@ -2,7 +2,7 @@
     $categories = $result["data"]['categories']; 
 ?>
 
-<h1>Liste des catégories</h1>
+<h1>Welcome to the <br> Afterwork <br>Community <br>Forum</h1>
 
 <!----------------- Liste des catégories ----------------->
 <?php

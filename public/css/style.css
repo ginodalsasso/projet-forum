@@ -39,9 +39,7 @@ body{
     min-height: 100%;
     position: relative;
 }
-h1 {
-    color: var(--font-color)
-}
+
 /* ---------------------------navbar--------------------------- */
 .nav_list{
     display: flex;
@@ -74,13 +72,21 @@ h1 {
     padding: 8px 16px;
     border-radius: 4px;
     filter: drop-shadow(0 0 10px #342056);
-    transition: 0.5s;
+    transition:  background 1.5s, filter 1.5s;;
 }
 .button:hover{
     background:linear-gradient(to left, #130208, #5454C5);
     filter: drop-shadow(0 0 30px #342056);
 }
 
+h1 {
+    color: var(--font-color);
+    font-size: var(--title-fontsize);
+    font-weight: 300;
+    text-align: center;
+    text-shadow: 0 0 20px #5454C5;
+    margin: 150px 0;
+}
 /* ---------------------------footer--------------------------- */
 footer{
     width: 100%;
