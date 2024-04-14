@@ -41,24 +41,36 @@ body{
 }
 
 /* ---------------------------navbar--------------------------- */
-.nav_list{
+
+.header{
     display: flex;
-    justify-content: center;
-    width: 100%;
+    justify-content: space-between;
+    align-items: center;
     list-style: none;
     position: relative;
-    padding: 24px 20px;
-} 
-
-.menu{
-    display: flex;
+    margin: 24px 24px;
 }
+
+.logo{
+    font-family: "Lexend Zetta";
+    font-size: 32px;
+    cursor: pointer;
+    text-shadow: 0 0 10px #5454C5;
+}
+.nav_list, .nav_list_right{
+    display: flex;
+    list-style: none;
+} 
 
 .nav_list_right{
     display: flex;
 } 
 
-.menu li a, .footer_list a{
+.nav_list_right li{
+    padding: 0 10px;
+} 
+
+.nav_list li a, .footer_list li a{
     margin: 30px 20px;
     text-decoration: none;
     color: var(--font-color);
@@ -67,12 +79,15 @@ body{
     text-shadow: 0 0 10px #5454C5;
 }
 
-.button{
-    background:linear-gradient(to right, #130208, #5454C5);
+.button{   
+    text-decoration: none;
+    color: var(--font-color);
+    font-weight: 500;
     padding: 8px 16px;
+    background:linear-gradient(to right, #130208, #5454C5);
     border-radius: 4px;
     filter: drop-shadow(0 0 10px #342056);
-    transition:  background 1.5s, filter 1.5s;;
+    transition:  0.5s;;
 }
 .button:hover{
     background:linear-gradient(to left, #130208, #5454C5);

@@ -22,43 +22,44 @@
                 <h3 class="message" style="color: red"><?= App\Session::getFlash("error") ?></h3>
                 <h3 class="message" style="color: green"><?= App\Session::getFlash("success") ?></h3>
                 <header class="header" id="header">
-                    <nav>
+                    <span><p class="logo">ZINO</p></span>
+                        <nav>
                         <ul class="nav_list">
-                            <div class="menu">
-                                <li>
-                                    <a href="index.php?ctrl=forum&action=index">Accueil</a>
-                                </li>
-                                <li>
-                                    <a href="index.php?ctrl=forum&action=listCategory">Catégories</a>
-                                </li>
-                                <li>
-                                    <?php if(App\Session::isAdmin()){ ?>
-                                        <a href="index.php?ctrl=home&action=users">Voir la liste des gens</a>
-                                    <?php } ?>
-                                </li>
-                                <div class="nav_list_right">
-                                    <li>
-                                        <?php 
-                                        if(App\Session::getUser()){ ?>
-                                            <a href="index.php?ctrl=security&action=profile"><span class="fas fa-user"></span>&nbsp;<?= App\Session::getUser()?></a>
-                                    </li>
-                                    <li >
-                                        <a class="button" href="index.php?ctrl=security&action=logout">Déconnexion</a>
-                                    </li>
-                                        <?php
-                                    }
-                                    else{ ?>
-                                        <li>
-                                            <a class="button" href="index.php?ctrl=security&action=login">Connexion</a>
-                                        </li>
-                                        <li>
-                                            <a class="button" href="index.php?ctrl=security&action=register">Inscription</a>
-                                        </li>
-                                    <?php } ?>
-                                </div>
-                            </div>
+                            <li>
+                                <a href="index.php?ctrl=forum&action=index">Accueil</a>
+                            </li>
+                            <li>
+                                <a href="index.php?ctrl=forum&action=listCategory">Catégories</a>
+                            </li>
+                            <li>
+                                <?php if(App\Session::isAdmin()){ ?>
+                                    <a href="index.php?ctrl=home&action=users">Voir la liste des gens</a>
+                                <?php } ?>
+                            </li>                       
                         </ul>
-                    </nav>
+                        </nav>
+                        <ul class="nav_list_right">
+                            <li>
+                                <?php 
+                                if(App\Session::getUser()){ ?>
+                                    <a href="index.php?ctrl=security&action=profile"><span class="fas fa-user"></span>&nbsp;<?= App\Session::getUser()?></a>
+                            </li>
+                            <li >
+                                <a class="button" href="index.php?ctrl=security&action=logout">Déconnexion</a>
+                            </li>
+                                    <?php
+                                }
+                                else{ ?>
+                            <li>
+                                <a class="button" href="index.php?ctrl=security&action=login">Connexion</a>
+                            </li>
+                            <li>
+                                <a class="button" href="index.php?ctrl=security&action=register">Inscription</a>
+                            </li>
+                                <?php } ?>
+                        </ul>
+                                
+
                 </header>
                 <main id="forum">
                     <?= $page ?>
