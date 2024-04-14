@@ -8,18 +8,22 @@
 ?>
 
 <h1><?= $topic->getTitle() ?></h1>
-<h2>Liste des posts</h2>
 
 <a href="index.php?ctrl=forum&action=listCategory">Catégories</a>
 ><a href="index.php?ctrl=forum&action=listTopicsByCategory&id=<?=$category->getId()?>"><?=$category->getName()?></a>
 
 <!----------------- Liste des posts ----------------->
-<?php
-foreach($posts as $post ){ ?>
-    <p><?=$post->getText() ?> par <?= $post->getUser()?> <?= $post->getCreationDate() ?>
-    <a href="index.php?ctrl=forum&action=deletePost&id=<?= $post->getId() ?>"><i class="fa-solid fa-trash"></i></a></p>
-<?php } ?>
 
+<section class="card_container_container">
+    <div class="card_list">
+       <h2>Liste des posts</h2> 
+        <?php
+            foreach($posts as $post ){ ?>
+                <p><?=$post->getText() ?> par <?= $post->getUser()?> <?= $post->getCreationDate() ?>
+                <a href="index.php?ctrl=forum&action=deletePost&id=<?= $post->getId() ?>"><i class="fa-solid fa-trash"></i></a></p>
+        <?php } ?>
+    </div>
+</section>
 
 <!----------------- Ajouter un post ----------------->
 <?php 
