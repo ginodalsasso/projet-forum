@@ -25,13 +25,10 @@
                 <h3 class="message" style="color: green"><?= App\Session::getFlash("success") ?></h3>
                 <header class="header" id="header">
                     <span>
-                        <p class="logo">ZINO</p>
+                        <a href="index.php?ctrl=forum&action=index" class="logo">ZINO</a>
                     </span>
                     <nav>
                         <ul class="nav_list">
-                            <li>
-                                <a class="nav_link" href="index.php?ctrl=forum&action=index">Accueil</a>
-                            </li>
                             <li>
                                 <a class="nav_link" href="index.php?ctrl=forum&action=listCategory">Catégories</a>
                             </li>

@@ -51,6 +51,8 @@ body{
 }
 
 .logo{
+    text-decoration: none;
+    color: var(--font-color);
     font-family: "Lexend Zetta";
     font-size: 32px;
     cursor: pointer;
