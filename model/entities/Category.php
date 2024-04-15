@@ -11,6 +11,7 @@ final class Category extends Entity{
 
     private $id;
     private $name;
+    private $lastPost;
 
     // chaque entité aura le même constructeur grâce à la méthode hydrate (issue de App\Entity)
     public function __construct($data){         
@@ -51,6 +52,23 @@ final class Category extends Entity{
      */ 
     public function setName($name){
         $this->name = $name;
+        return $this;
+    }
+
+    /**
+     * Get the value of name
+     */ 
+    public function getLastPost(){
+        return $this->lastPost;
+    }
+
+    /**
+     * Set the value of name
+     *
+     * @return  self
+     */ 
+    public function setLastPost($lastPost){
+        $this->lastPost = $lastPost;
         return $this;
     }
 

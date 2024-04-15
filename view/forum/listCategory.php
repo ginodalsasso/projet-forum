@@ -10,7 +10,7 @@
        <h2>Catégories</h2> 
         <?php
         foreach($categories as $category ){ ?>
-            <p><a href="index.php?ctrl=forum&action=listTopicsByCategory&id=<?= $category->getId() ?>"><?= $category->getName() ?></a>
+            <p><a href="index.php?ctrl=forum&action=listTopicsByCategory&id=<?= $category->getId() ?>"><?= $category->getName() ?><?= $category->getLastPost() ?></a>
                 <a href="index.php?ctrl=forum&action=deleteCategory&id=<?= $category->getId() ?>"><i class="fa-solid fa-trash"></i><hr></a>
             </p>
         <?php } ?>

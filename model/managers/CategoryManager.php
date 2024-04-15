@@ -25,20 +25,30 @@ class CategoryManager extends Manager{
     }
 
     //récupère le dernier post de la catégorie($id)
-    public function lastPost($id){
-        $sql = "SELECT u.pseudo, p.creationDate
-                FROM ".$this->tableName." p
+    // public function lastPost($id){
+    //     $sql = "SELECT u.pseudo, p.creationDate
+    //             FROM ".$this->tableName." p
+    //             INNER JOIN user u ON p.user_id = u.id_user
+    //             INNER JOIN topic t ON p.topic_id = t.id_topic
+    //             INNER JOIN category c ON t.category_id = c.id_category
+    //             WHERE c.id_".$this->tableName." = :id
+    //             ORDER BY p.creationDate DESC
+    //             LIMIT 1
+    //             ";
+
+    //     return $this->getOneOrNullResult(
+    //         DAO::select($sql, ['id' => $id], false), 
+    //         $this->className
+    //     );
+    // }
+
+    public function lastPost(){
+        $sql = "SELECT u.pseudo, p.creationDate, c.name, c.id_category
+                FROM post p
                 INNER JOIN user u ON p.user_id = u.id_user
                 INNER JOIN topic t ON p.topic_id = t.id_topic
                 INNER JOIN category c ON t.category_id = c.id_category
-                WHERE c.id_".$this->tableName." = :id
                 ORDER BY p.creationDate DESC
-                LIMIT 1
                 ";
-
-        return $this->getOneOrNullResult(
-            DAO::select($sql, ['id' => $id], false), 
-            $this->className
-        );
     }
 }

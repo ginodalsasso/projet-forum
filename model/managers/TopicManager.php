@@ -21,7 +21,7 @@ class TopicManager extends Manager{
         $sql = "SELECT * 
                 FROM ".$this->tableName." t 
                 WHERE t.category_id = :id";
-       
+
         // la requête renvoie plusieurs enregistrements --> getMultipleResults
         return  $this->getMultipleResults(
             DAO::select($sql, ['id' => $id]), 
@@ -67,9 +67,19 @@ class TopicManager extends Manager{
                 WHERE t.title = :title ";
 
         return $this->getOneOrNullResult(
-            DAO::select($sql, ['id' => $id], false), 
+            DAO::select($sql, ['title' => $titre], false), 
             $this->className
         );
+    }
+
+    public function updateTopic($idTopic, $title, $idPost, $text){
+
+        $sql = "UPDATE topic t
+                INNER JOIN post p ON p.topic_id = t.id_topic
+                SET title = '.$title.', text = '.$text.'
+                WHERE t.id_topic = :idTopic
+                ORDER BY p.creationDate DESC 
+                LIMIT 1 ";
     }
 
 

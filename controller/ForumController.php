@@ -99,6 +99,29 @@ class ForumController extends AbstractController implements ControllerInterface{
             Session::addFlash("error", "Une erreur est survenue, réessayez ou assurez vous d'avoir les droits.");
             $this -> redirectTo("forum", "index"); exit;
         }
+    }  
+
+    //affichage de la vue update d'un topic($id))----------------------------------------------------
+    public function viewUpdateTopic($id){
+        $topicManager = new TopicManager();
+        $topic = $topicManager->findOneById($id);
+        // var_dump($topic); die;
+        $postManager = new PostManager();   
+        $posts = $postManager->findPostsByTopic($id);
+
+        if(($topic->getUser()->getId() === Session::getUser()->getId()) || Session::isAdmin()){
+            return [
+                "view" => VIEW_DIR."forum/update/updateTopic.php",
+                "meta_description" => "Modifier un topic",
+                "data" => [
+                    "topic" => $topic,
+                    "posts" => $posts
+                ]
+            ];
+        } else {
+            Session::addFlash("error", "Une erreur est survenue, réessayez ou assurez vous d'avoir les droits.");
+            $this -> redirectTo("forum", "index"); exit;
+        }
     }       
     
 
@@ -240,6 +263,36 @@ class ForumController extends AbstractController implements ControllerInterface{
             }
         }
 
+        // modification d'un topic($id)----------------------------------------------------
+        public function updateTopic($idTopic){
+            $categoryManager = new CategoryManager();
+            $topicManager = new TopicManager();
+            $topic = $topicManager->findOneById($idTopic);  
+            $topic->getCategory();
+            $postManager = new PostManager();
+            $post = $postManager->findOneById($idPost);   
+        
+            // si l'user associé au topic est identique à l'user actuellement connecté à la session ou si l'admin est connecté alors
+            if(($topic->getUser()->getId() === Session::getUser()->getId()) || Session::isAdmin()){
+                $title = filter_input(INPUT_POST, "title", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+                $text = filter_input(INPUT_POST, "text", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+
+                if($title && $text){
+                    //tableau attendu par la fonction dans app\Manager add($data) pour l'ajout des données en BDD
+                    //update prend les valeurs à modifier($data) et l'id du post à modifier
+                    $data = ['id_topic' => $idTopic, 'title' => $title, 'id_post' => $idPost,'text' => $text, ];
+                    $topicManager->updateTopic($idTopic, $title, $idPost, $text);
+                    // var_dump($id);die;
+                    
+                    Session::addFlash("success", "Le topic est modifié !");
+                    $this -> redirectTo("forum", "listPostsByTopics", $id); exit;
+                } else {
+                    Session::addFlash("error", "Une erreur est survenue, réessayez ou assurez vous d'avoir les droits.");
+                    $this -> redirectTo("forum", "index"); exit;
+                }
+            }
+        }
+
         //----------------------------------------------------Post----------------------------------------------------
     
         //ajout d'un post dans un topic($id)----------------------------------------------------
@@ -247,8 +300,7 @@ class ForumController extends AbstractController implements ControllerInterface{
             //si l'utilisateur est connecté
             if($_POST['submit']){
                 //si l'utilisateur est connecté
-                if(Session::getUser()){ 
-                   
+                if(Session::getUser()){          
                     $text = filter_input(INPUT_POST, "text", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
                     
                     if($text){
