@@ -105,17 +105,32 @@ class ForumController extends AbstractController implements ControllerInterface{
     public function viewUpdateTopic($id){
         $topicManager = new TopicManager();
         $topic = $topicManager->findOneById($id);
-        // var_dump($topic); die;
-        $postManager = new PostManager();   
-        $posts = $postManager->findPostsByTopic($id);
 
         if(($topic->getUser()->getId() === Session::getUser()->getId()) || Session::isAdmin()){
             return [
                 "view" => VIEW_DIR."forum/update/updateTopic.php",
                 "meta_description" => "Modifier un topic",
                 "data" => [
-                    "topic" => $topic,
-                    "posts" => $posts
+                    "topic" => $topic
+                ]
+            ];
+        } else {
+            Session::addFlash("error", "Une erreur est survenue, réessayez ou assurez vous d'avoir les droits.");
+            $this -> redirectTo("forum", "index"); exit;
+        }
+    }    
+
+    //affichage de la vue update d'une categorie($id))----------------------------------------------------
+    public function viewUpdateCategory($id){
+        $categoryManager = new CategoryManager();
+        $category = $categoryManager->findOneById($id);
+
+        if(Session::isAdmin()){
+            return [
+                "view" => VIEW_DIR."forum/update/updateCategory.php",
+                "meta_description" => "Modifier un topic",
+                "data" => [
+                    "category" => $category
                 ]
             ];
         } else {
@@ -124,8 +139,6 @@ class ForumController extends AbstractController implements ControllerInterface{
         }
     }       
     
-
-
 
     //----------------------------------------------------Category----------------------------------------------------
 
@@ -171,6 +184,28 @@ class ForumController extends AbstractController implements ControllerInterface{
         }
     }
 
+    // modification d'une catégorie($id)----------------------------------------------------
+    public function updateCategory($id){
+        $categoryManager = new CategoryManager();
+        $category = $categoryManager->findOneById($id);  
+    
+        // si l'user associé au topic est identique à l'user actuellement connecté à la session ou si l'admin est connecté alors
+        if(Session::isAdmin()){
+            $name = filter_input(INPUT_POST, "name", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+
+            if($name){
+
+                $data = "name = '". $name ."'";
+                $categoryManager->updateCategory($data, $id);
+
+                Session::addFlash("success", "La catégorie est modifiée !");
+                $this -> redirectTo("forum", "index"); exit;
+            } else {
+                Session::addFlash("error", "Une erreur est survenue, réessayez ou assurez vous d'avoir les droits.");
+                $this -> redirectTo("forum", "index"); exit;
+            }
+        }
+    }
     //----------------------------------------------------Topic----------------------------------------------------
 
     //ajout d'un topic dans une catégorie($id))----------------------------------------------------
@@ -264,26 +299,20 @@ class ForumController extends AbstractController implements ControllerInterface{
         }
 
         // modification d'un topic($id)----------------------------------------------------
-        public function updateTopic($idTopic){
-            $categoryManager = new CategoryManager();
+        public function updateTopic($id){
             $topicManager = new TopicManager();
-            $topic = $topicManager->findOneById($idTopic);  
-            $topic->getCategory();
-            $postManager = new PostManager();
-            $post = $postManager->findOneById($idPost);   
+            $topic = $topicManager->findOneById($id);  
         
             // si l'user associé au topic est identique à l'user actuellement connecté à la session ou si l'admin est connecté alors
             if(($topic->getUser()->getId() === Session::getUser()->getId()) || Session::isAdmin()){
                 $title = filter_input(INPUT_POST, "title", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-                $text = filter_input(INPUT_POST, "text", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
-                if($title && $text){
-                    //tableau attendu par la fonction dans app\Manager add($data) pour l'ajout des données en BDD
-                    //update prend les valeurs à modifier($data) et l'id du post à modifier
-                    $data = ['id_topic' => $idTopic, 'title' => $title, 'id_post' => $idPost,'text' => $text, ];
-                    $topicManager->updateTopic($idTopic, $title, $idPost, $text);
-                    // var_dump($id);die;
-                    
+                if($title){
+
+                    $data = "title = '". $title ."'";
+                    // var_dump($data);die;
+                    $topicManager->updateTopic($data, $id);
+
                     Session::addFlash("success", "Le topic est modifié !");
                     $this -> redirectTo("forum", "listPostsByTopics", $id); exit;
                 } else {
@@ -334,15 +363,10 @@ class ForumController extends AbstractController implements ControllerInterface{
                 $text = filter_input(INPUT_POST, "text", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
                 
                 if($text){
-                    //tableau attendu par la fonction dans app\Manager add($data) pour l'ajout des données en BDD
-                    //$data = ['username' => 'Squalli', 'password' => 'dfsyfshfbzeifbqefbq', 'email' => 'sql@gmail.com'];
-                    //update prend les valeurs à modifier($data) et l'id du post à modifier
-                    $data = ['text' => $text];
-                    $postManager->update($data, $id);
+
+                    $data = "text = '". $text ."'";
+                    $postManager->updatePost($data, $id);
                     // var_dump($postManager);die;
-
-
-
                     Session::addFlash("success", "Le message est modifié !");
                     //récupère getTopic de l'entité Post et son ID
                     $this -> redirectTo("forum", "listPostsByTopics", $post->getTopic()->getId()); exit;

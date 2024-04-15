@@ -1,37 +1,42 @@
 <?php
+
 namespace Model\Managers;
 
 use App\Manager;
 use App\DAO;
 
-class TopicManager extends Manager{
+class TopicManager extends Manager
+{
 
     // on indique la classe POO et la table correspondante en BDD pour le manager concerné
     protected $className = "Model\Entities\Topic";
     protected $tableName = "topic";
 
     //connexion à la base de donnée (chez son parent Manager)
-    public function __construct(){
+    public function __construct()
+    {
         parent::connect();
     }
 
     // récupérer tous les topics d'une catégorie spécifique (par son id)
-    public function findTopicsByCategory($id) {
+    public function findTopicsByCategory($id)
+    {
 
         $sql = "SELECT * 
-                FROM ".$this->tableName." t 
+                FROM " . $this->tableName . " t 
                 WHERE t.category_id = :id";
 
         // la requête renvoie plusieurs enregistrements --> getMultipleResults
         return  $this->getMultipleResults(
-            DAO::select($sql, ['id' => $id]), 
+            DAO::select($sql, ['id' => $id]),
             $this->className
         );
     }
 
     //topic d'un utilisateur
-    public function findTopicsByUser($id){
-        $sql = "SELECT * from ".$this->tableName." t
+    public function findTopicsByUser($id)
+    {
+        $sql = "SELECT * from " . $this->tableName . " t
                 WHERE t.user_id = :id";
 
         return $this->getMultipleResults(
@@ -40,7 +45,8 @@ class TopicManager extends Manager{
         );
     }
 
-    public function lockedTopic($id){
+    public function lockedTopic($id)
+    {
         $sql = "UPDATE topic SET closed = 1
                 WHERE id_topic = :id";
 
@@ -50,7 +56,8 @@ class TopicManager extends Manager{
         );
     }
 
-    public function unlockedTopic($id){
+    public function unlockedTopic($id)
+    {
         $sql = "UPDATE topic SET closed = 0
                 WHERE id_topic = :id";
 
@@ -60,27 +67,26 @@ class TopicManager extends Manager{
         );
     }
 
-    public function findTopicByTitle($titre){
+    public function findTopicByTitle($titre)
+    {
 
         $sql = "SELECT *
-                FROM ".$this->tableName." t
+                FROM " . $this->tableName . " t
                 WHERE t.title = :title ";
 
         return $this->getOneOrNullResult(
-            DAO::select($sql, ['title' => $titre], false), 
+            DAO::select($sql, ['title' => $titre], false),
             $this->className
         );
     }
 
-    public function updateTopic($idTopic, $title, $idPost, $text){
+    public function updateTopic($data, $id)
+    {
 
-        $sql = "UPDATE topic t
-                INNER JOIN post p ON p.topic_id = t.id_topic
-                SET title = '.$title.', text = '.$text.'
-                WHERE t.id_topic = :idTopic
-                ORDER BY p.creationDate DESC 
-                LIMIT 1 ";
+        $sql = "UPDATE topic
+                SET ". $data ."
+                WHERE id_topic = :id
+        ";
+        return DAO::update($sql, ['id' => $id]);
     }
-
-
 }

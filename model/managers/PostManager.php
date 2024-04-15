@@ -43,6 +43,16 @@ class PostManager extends Manager{
         );
     }
 
+    public function updatePost($data, $id)
+    {
+
+        $sql = "UPDATE post
+                SET ". $data ."
+                WHERE id_post = :id
+        ";
+        return DAO::update($sql, ['id' => $id]);
+    }
+
     // //dernier post écris de la catégorie ($id)
     // public function lastPost($id){
     //     $sql = "SELECT u.pseudo, p.creationDate
