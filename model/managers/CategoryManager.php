@@ -24,6 +24,7 @@ class CategoryManager extends Manager{
                 return DAO::delete($sql, ['id' => $id]); 
     }
 
+    //récupère le dernier post de la catégorie($id)
     public function lastPost($id){
         $sql = "SELECT u.pseudo, p.creationDate
                 FROM ".$this->tableName." p

@@ -34,7 +34,7 @@ body{
     flex-direction: column;
 }
 
-#content{
+#wrapper{
     min-height: 100%;
     position: relative;
 }
@@ -122,19 +122,20 @@ h2{
     padding: 10px;
     background: linear-gradient(to right, rgba(18, 2, 8, 0.7), #5454c5);
     font-weight: 300;
-    border-radius: 4px 4px 0 0;
+    border-radius: 8px 8px 0 0;
 }
 
 .card_container_container{
     display:flex;
     justify-content: center;
     filter: drop-shadow(0 0 10px #342056);
+    margin: 100px;
 }
 
 .card_list{
     width: 80vw;
     background-color: var(--card-colour);
-    border-radius: 4px;
+    border-radius: 8px;
 }
 
 .card_list p{

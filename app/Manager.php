@@ -67,6 +67,36 @@ abstract class Manager{
         }
     }
     
+
+    public function update($data, $id){
+
+        // tableau qui récupère $id et $data
+        $setStatements = [];
+
+        // récupère tout les éléments
+        foreach ($data as $key => $value) {
+            $setStatements[] = "$key = :$key";
+        }
+    
+        // suppression des virgules du tableau
+        $setClause = implode(', ', $setStatements);
+        
+        // requête SQL de modification
+        $sql = "UPDATE ".$this->tableName."
+                SET " .$setClause."
+                WHERE id_".$this->tableName." = :id";
+
+        try{
+            $data['id'] = $id;
+            return DAO::update($sql, $data);
+        }
+        catch(\PDOException $e){
+            echo $e->getMessage();
+            die();
+        }
+    }
+
+
     public function delete($id){
         $sql = "DELETE FROM ".$this->tableName."
                 WHERE id_".$this->tableName." = :id

@@ -19,8 +19,11 @@
        <h2>Liste des posts</h2> 
         <?php
             foreach($posts as $post ){ ?>
-                <p><?=$post->getText() ?> par <?= $post->getUser()?> <?= $post->getCreationDate() ?>
-                <a href="index.php?ctrl=forum&action=deletePost&id=<?= $post->getId() ?>"><i class="fa-solid fa-trash"></i></a></p>
+                <p>
+                    <a href="index.php?ctrl=forum&action=viewUpdatePost&id=<?= $post->getId() ?>"><i class="fa-solid fa-pen-to-square"></i></a>
+                    <?=$post->getText() ?> par <?= $post->getUser()?> <?= $post->getCreationDate() ?>
+                    <a href="index.php?ctrl=forum&action=deletePost&id=<?= $post->getId() ?>"><i class="fa-solid fa-trash"></i></a>
+                </p>
         <?php } ?>
     </div>
 </section>

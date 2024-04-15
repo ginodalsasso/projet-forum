@@ -18,15 +18,17 @@ class ForumController extends AbstractController implements ControllerInterface{
     public function index() {
         // créer une nouvelle instance de CategoryManager
         $categoryManager = new CategoryManager();
+        $postManager = new PostManager();
         // récupérer la liste de toutes les catégories grâce à la méthode findAll de Manager.php (triés par nom)
         $categories = $categoryManager->findAll(["name", "DESC"]);
+        // $categories->findOneById($id);
 
         // le controller communique avec la vue "listCategories" (view) pour lui envoyer la liste des catégories (data)
         return [
             "view" => VIEW_DIR."forum/listCategory.php",
             "meta_description" => "Liste des catégories du forum",
             "data" => [
-                "categories" => $categories
+                "categories" => $categories,
             ]
         ];
     }
@@ -79,6 +81,28 @@ class ForumController extends AbstractController implements ControllerInterface{
             $this -> redirectTo("forum", "index"); exit;
         }
     }
+
+    //affichage de la vue update d'un post($id))----------------------------------------------------
+    public function viewUpdatePost($id){
+        $postManager = new PostManager();
+        $post = $postManager->findOneById($id);
+
+        if(($post->getUser()->getId() === Session::getUser()->getId()) || Session::isAdmin()){
+            return [
+                "view" => VIEW_DIR."forum/update/updatePost.php",
+                "meta_description" => "Modifier un post",
+                "data" => [
+                    "post" => $post
+                ]
+            ];
+        } else {
+            Session::addFlash("error", "Une erreur est survenue, réessayez ou assurez vous d'avoir les droits.");
+            $this -> redirectTo("forum", "index"); exit;
+        }
+    }       
+    
+
+
 
     //----------------------------------------------------Category----------------------------------------------------
 
@@ -224,7 +248,9 @@ class ForumController extends AbstractController implements ControllerInterface{
             if($_POST['submit']){
                 //si l'utilisateur est connecté
                 if(Session::getUser()){ 
+                   
                     $text = filter_input(INPUT_POST, "text", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+                    
                     if($text){
                         $postManager = new PostManager();
                         // récupère l'id de l'user ayant créé le post
@@ -240,6 +266,36 @@ class ForumController extends AbstractController implements ControllerInterface{
                     }
                 } else{
                     Session::addFlash("error", "Veuillez vous inscrire ou vous connecter pour écrire un message.");
+                    $this -> redirectTo("forum", "index"); exit;
+                }
+            }
+        }
+
+        // modification d'un post($id)----------------------------------------------------
+        public function updatePost($id){
+            $postManager = new postManager();
+            $post = $postManager->findOneById($id);
+        
+            // si l'user associé au topic est identique à l'user actuellement connecté à la session ou si l'admin est connecté alors
+            if(($post->getUser()->getId() === Session::getUser()->getId()) || Session::isAdmin()){
+                
+                $text = filter_input(INPUT_POST, "text", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+                
+                if($text){
+                    //tableau attendu par la fonction dans app\Manager add($data) pour l'ajout des données en BDD
+                    //$data = ['username' => 'Squalli', 'password' => 'dfsyfshfbzeifbqefbq', 'email' => 'sql@gmail.com'];
+                    //update prend les valeurs à modifier($data) et l'id du post à modifier
+                    $data = ['text' => $text];
+                    $postManager->update($data, $id);
+                    // var_dump($postManager);die;
+
+
+
+                    Session::addFlash("success", "Le message est modifié !");
+                    //récupère getTopic de l'entité Post et son ID
+                    $this -> redirectTo("forum", "listPostsByTopics", $post->getTopic()->getId()); exit;
+                } else {
+                    Session::addFlash("error", "Une erreur est survenue, réessayez ou assurez vous d'avoir les droits.");
                     $this -> redirectTo("forum", "index"); exit;
                 }
             }
@@ -261,9 +317,6 @@ class ForumController extends AbstractController implements ControllerInterface{
                 $this -> redirectTo("forum", "index"); exit;
             }
         }
-
-
-
 
 
 
