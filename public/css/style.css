@@ -154,6 +154,10 @@ h2{
     border-radius: 8px 8px 0 0;
 }
 
+.user_post{
+    font-size: var(--normal-fontsize);
+}
+
 .card_container_container{
     display:flex;
     justify-content: center;

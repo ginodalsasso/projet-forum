@@ -14,25 +14,23 @@ $posts = $result["data"]['posts'];
 
 <!----------------- Liste des posts ----------------->
 
-<section class="card_container_container">
-    <div class="card_list">
-        <h2>Liste des posts</h2>
-        <?php
-        foreach ($posts as $post) { ?>
+<?php
+foreach ($posts as $post) { ?>
+    <section class="card_container_container">
+        <div class="card_list">
+            <h2 class="user_post"><?= $post->getUser() ?><br><?= $post->getCreationDate() ?></h2> 
             <div class="titles_container">
                 <div class="titles_container_left">
                     <a href="index.php?ctrl=forum&action=viewUpdatePost&id=<?= $post->getId() ?>"><i class="fa-solid fa-pen-to-square"></i></a>
-                    <?= $post->getText() ?> 
-                    <br>par <?= $post->getUser() ?> <?= $post->getCreationDate() ?>
+                    <?= $post->getText() ?>
                 </div>
                 <div class="titles_container_right">
                     <a href="index.php?ctrl=forum&action=deletePost&id=<?= $post->getId() ?>"><i class="fa-solid fa-trash"></i></a>
                 </div>
             </div>
-            <hr>
-        <?php } ?>
-    </div>
-</section>
+        </div>
+    </section>
+<?php } ?>
 
 <!----------------- Ajouter un post ----------------->
 <?php
