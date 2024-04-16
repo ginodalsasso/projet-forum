@@ -34,8 +34,20 @@ class SecurityController extends AbstractController{
 
             if($pseudo && $email && $pass1 && $pass2){
                 // vérifie si le mail n'éxiste pas dans la BDD sinon false est assigné
-                $verifyEmail = $userManager->findOneByEmail($email) ?? false;
-                $verifyPseudo = $userManager->findOneByPseudo($pseudo) ?? false;
+                $verifyEmail = $userManager->findOneByEmail($email);
+                $verifyPseudo = $userManager->findOneByPseudo($pseudo);
+
+                if($verifyEmail){
+                    Session::addFlash("error", "L'adresse e-mail est déjà utilisée par un autre utilisateur.");
+                    $this->redirectTo("forum", "viewProfil");
+                    exit;
+                }
+    
+                if($verifyPseudo){
+                    Session::addFlash("error", "Le pseudo est déjà utilisé par un autre utilisateur.");
+                    $this->redirectTo("forum", "viewProfil");
+                    exit;
+                }
                 // éxige au minimum: 8 caractères, une minuscule, une majuscule, un chiffre, un caractère spécial dans le mot de passe
                 $regexPassword = preg_match("/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/", $pass1);
                 //si l'utilisateur existe (email et pseudo) alors
@@ -114,7 +126,6 @@ class SecurityController extends AbstractController{
     //affichage de la vue de profil d'un utilisateur($id))----------------------------------------------------
     public function viewProfil(){
         $userManager = new UserManager();
-        // var_dump($userManager); die;
         $user = Session::getUser();
         
         if(Session::getUser()->getId() || Session::isAdmin()){
@@ -129,6 +140,80 @@ class SecurityController extends AbstractController{
             Session::addFlash("error", "Une erreur est survenue, réessayez ou assurez vous d'avoir les droits.");
             $this -> redirectTo("forum", "index"); exit;
         }
-    }      
+    }             
+
+    //affichage de la vue de profil d'un utilisateur($id))----------------------------------------------------
+    public function viewUpdateProfil(){
+        $userManager = new UserManager();
+        $user = Session::getUser();
         
+        if(Session::getUser()->getId() || Session::isAdmin()){
+            return [
+                "view" => VIEW_DIR."forum/update/updateProfil.php",
+                "meta_description" => "Modifier mon profil",
+                "data" => [
+                    "user" => $user
+                ]
+            ];
+        } else {
+            Session::addFlash("error", "Une erreur est survenue, réessayez ou assurez vous d'avoir les droits.");
+            $this -> redirectTo("forum", "index"); exit;
+        }
+    }             
+    
+    //modifier le profil($id)----------------------------------------------------
+    public function updateAccount($id){
+        $userManager = new UserManager();
+        // Si l'utilisateur connecté = à l'user en session ou si l'admin est connecté alors
+        if((Session::getUser()->getId()) || Session::isAdmin()){
+            $pseudo = filter_input(INPUT_POST, "pseudo", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+            $email = filter_input(INPUT_POST, "email", FILTER_SANITIZE_FULL_SPECIAL_CHARS, FILTER_VALIDATE_EMAIL);
+            
+            if($pseudo && $email){
+                $verifyPseudo = $userManager->findOneByPseudo($pseudo);
+                $verifyEmail = $userManager->findOneByEmail($email);
+
+                if($verifyEmail && $verifyEmail->getId() !== $id){
+                    Session::addFlash("error", "L'adresse e-mail est déjà utilisée par un autre utilisateur.");
+                    $this->redirectTo("forum", "viewProfil");
+                    exit;
+                }
+    
+                if($verifyPseudo && $verifyPseudo->getId() !== $id){
+                    Session::addFlash("error", "Le pseudo est déjà utilisé par un autre utilisateur.");
+                    $this->redirectTo("forum", "viewProfil");
+                    exit;
+                }
+                
+                $data = "pseudo = '". $pseudo ."',email = '". $email ."'";
+                $userManager->updateUser($data, $id); 
+                unset($_SESSION['user']);
+                
+                Session::addFlash("success", "Votre compte à été modifié !");
+                $this -> redirectTo("forum", "update", "updateProfil", $id); exit;
+            
+            } else {
+                Session::addFlash("error", "Une erreur est survenue, réessayez ou assurez vous d'avoir les droits.");
+                $this -> redirectTo("forum", "index"); exit;
+            }
+        }
+    }
+
+    //suppression d'une catégorie($id)----------------------------------------------------
+    public function deleteAccount($id){
+        $userManager = new UserManager();
+
+        // Si l'utilisateur connecté = à l'user en session ou si l'admin est connecté alors
+        if((Session::getUser()->getId()) || Session::isAdmin()){
+            $userManager->delete($id);
+            unset($_SESSION['user']);
+
+            Session::addFlash("success", "Votre compte  à été supprimé !");
+            $this -> redirectTo("forum", "index"); exit;
+        } else {
+            Session::addFlash("error", "Une erreur est survenue, réessayez ou assurez vous d'avoir les droits.");
+            $this -> redirectTo("forum", "index"); exit;
+        }
+    }
+    
 }

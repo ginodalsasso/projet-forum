@@ -52,4 +52,14 @@ class UserManager extends Manager{
             $this->className
         );
     }
+
+    public function updateUser($data, $id)
+    {
+        $sql = "UPDATE user u
+                SET ". $data ."
+                WHERE u.id_user = :id
+        ";
+        return DAO::update($sql, ['id' => $id]);
+    }
+
 }
