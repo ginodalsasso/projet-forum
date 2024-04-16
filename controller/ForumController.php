@@ -20,8 +20,7 @@ class ForumController extends AbstractController implements ControllerInterface{
         $categoryManager = new CategoryManager();
         $postManager = new PostManager();
         // récupérer la liste de toutes les catégories grâce à la méthode findAll de Manager.php (triés par nom)
-        $categories = $categoryManager->findAll(["name", "DESC"]);
-        // $categories->findOneById($id);
+        $categories = $categoryManager->findAllCategories();
 
         // le controller communique avec la vue "listCategories" (view) pour lui envoyer la liste des catégories (data)
         return [
@@ -249,7 +248,7 @@ class ForumController extends AbstractController implements ControllerInterface{
         $posts = $postManager->findPostsByTopic($id);
     
         // si l'admin est connecté alors
-        if(Session::isAdmin()){  
+        if(($topic->getUser()->getId() === Session::getUser()->getId()) || Session::isAdmin()){  
             //boucle sur chaque post du topic, récupère l'id du post puis le supprime (grace à l'action (lors d'un DELETE) sur heidiSQL en "Cascade" permet d'éviter de boucler comme suit)
             foreach($posts as $post) {
                 $idPost = $post->getId();

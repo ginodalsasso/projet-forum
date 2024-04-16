@@ -21,8 +21,8 @@ class SecurityController extends AbstractController{
 
     //----------------------------------------------------Registration / Connexion----------------------------------------------------
 
-    public function addRegister () { 
 
+    public function addRegister () { 
         $userManager = new UserManager();
         // vérifie si le form est submit
         if($_POST['submit']){
@@ -33,16 +33,17 @@ class SecurityController extends AbstractController{
             $pass2 = filter_input(INPUT_POST, "pass2", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
             if($pseudo && $email && $pass1 && $pass2){
-                // vérifie si le mail n'éxiste pas dans la BDD sinon false est assigné
+                // vérifie si l'email ou le pseudo n'éxiste pas dans la BDD
                 $verifyEmail = $userManager->findOneByEmail($email);
                 $verifyPseudo = $userManager->findOneByPseudo($pseudo);
-
+                //si l'email existe en BDD aors
                 if($verifyEmail){
                     Session::addFlash("error", "L'adresse e-mail est déjà utilisée par un autre utilisateur.");
                     $this->redirectTo("forum", "viewProfil");
                     exit;
                 }
-    
+
+                //si le pseudo existe en BDD aors
                 if($verifyPseudo){
                     Session::addFlash("error", "Le pseudo est déjà utilisé par un autre utilisateur.");
                     $this->redirectTo("forum", "viewProfil");
@@ -82,8 +83,9 @@ class SecurityController extends AbstractController{
         ]; 
     }
 
+    
+    // login----------------------------------------------------
     public function addLogin () {
-
         $userManager = new UserManager();
         if($_POST['submit']){
             $pseudo = filter_input(INPUT_POST, "pseudo", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
@@ -169,10 +171,12 @@ class SecurityController extends AbstractController{
             $pseudo = filter_input(INPUT_POST, "pseudo", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
             $email = filter_input(INPUT_POST, "email", FILTER_SANITIZE_FULL_SPECIAL_CHARS, FILTER_VALIDATE_EMAIL);
             
+            // vérifie si l'email ou le pseudo n'éxiste pas dans la BDD
             if($pseudo && $email){
                 $verifyPseudo = $userManager->findOneByPseudo($pseudo);
                 $verifyEmail = $userManager->findOneByEmail($email);
 
+                // vérifie si un utilisateur avec cet e-mail existe en BDD et si l'ID de l'utilisateur trouvé n'est pas égal à l'ID de l'utilisateur actuel en cours de modification
                 if($verifyEmail && $verifyEmail->getId() !== $id){
                     Session::addFlash("error", "L'adresse e-mail est déjà utilisée par un autre utilisateur.");
                     $this->redirectTo("forum", "viewProfil");

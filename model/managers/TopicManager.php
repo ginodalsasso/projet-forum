@@ -22,9 +22,11 @@ class TopicManager extends Manager
     public function findTopicsByCategory($id)
     {
 
-        $sql = "SELECT * 
+        $sql = "SELECT t.*, COUNT(p.id_post) AS nbPosts
                 FROM " . $this->tableName . " t 
-                WHERE t.category_id = :id";
+                INNER JOIN post p ON t.id_topic = p.topic_id
+                WHERE t.category_id = :id
+                GROUP BY t.id_topic";
 
         // la requête renvoie plusieurs enregistrements --> getMultipleResults
         return  $this->getMultipleResults(

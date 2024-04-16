@@ -9,14 +9,14 @@ $categories = $result["data"]['categories'];
     <div class="card_list">
         <h2>Catégories</h2>
         <?php
-        foreach ($categories as $category) { ?>
-            <p>
+        foreach ($categories as $category) { 
+            ?>
                 <a href="index.php?ctrl=forum&action=viewUpdateCategory&id=<?= $category->getId() ?>"><i class="fa-solid fa-pen-to-square"></i></a>
-                <a href="index.php?ctrl=forum&action=listTopicsByCategory&id=<?= $category->getId() ?>"><?= $category->getName() ?><?= $category->getLastPost() ?></a>
-                <a href="index.php?ctrl=forum&action=deleteCategory&id=<?= $category->getId() ?>"><i class="fa-solid fa-trash"></i>
-                    <hr>
-                </a>
-            </p>
+                <a href="index.php?ctrl=forum&action=listTopicsByCategory&id=<?= $category->getId() ?>"><?= $category->getName() ?></a>
+                <p><?= $category->getNbTopics() ?></p>
+                <p><?= $category->getLastPost() ?></p>
+                <hr>
+            
         <?php } ?>
     </div>
 </section>
