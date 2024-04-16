@@ -137,7 +137,8 @@ class ForumController extends AbstractController implements ControllerInterface{
             Session::addFlash("error", "Une erreur est survenue, réessayez ou assurez vous d'avoir les droits.");
             $this -> redirectTo("forum", "index"); exit;
         }
-    }       
+    }   
+    
     
 
     //----------------------------------------------------Category----------------------------------------------------

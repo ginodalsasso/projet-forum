@@ -103,4 +103,26 @@ class SecurityController extends AbstractController{
         unset($_SESSION["user"]);
         $this -> redirectTo("home", "index"); exit;
     }
+
+
+    //affichage de la vue de profil d'un utilisateur($id))----------------------------------------------------
+    public function viewProfil(){
+        $userManager = new UserManager();
+        // var_dump($userManager); die;
+        $user = Session::getUser();
+        
+        if(Session::getUser()->getId() || Session::isAdmin()){
+            return [
+                "view" => VIEW_DIR."forum/profil.php",
+                "meta_description" => "Mon profil",
+                "data" => [
+                    "user" => $user
+                ]
+            ];
+        } else {
+            Session::addFlash("error", "Une erreur est survenue, réessayez ou assurez vous d'avoir les droits.");
+            $this -> redirectTo("forum", "index"); exit;
+        }
+    }      
+        
 }

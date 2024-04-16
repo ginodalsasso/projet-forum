@@ -40,7 +40,7 @@
                             <li>
                                 <?php
                                 if (App\Session::getUser()) { ?>
-                                    <a class="nav_link" href="index.php?ctrl=security&action=profile"><span class="fas fa-user"></span>&nbsp;<?= App\Session::getUser() ?></a>
+                                    <a class="nav_link" href="index.php?ctrl=security&action=viewProfil"><span class="fas fa-user"></span>&nbsp;<?= App\Session::getUser() ?></a>
                             </li>
                             <li>
                                 <a class="button" href="index.php?ctrl=security&action=logout">Déconnexion</a>

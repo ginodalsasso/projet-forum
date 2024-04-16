@@ -40,7 +40,7 @@ final class User extends Entity{
     /**
      * Get the value of pseudo
      */ 
-    public function getpseudo(){
+    public function getPseudo(){
         return $this->pseudo;
     }
 
@@ -49,7 +49,7 @@ final class User extends Entity{
      *
      * @return  self
      */ 
-    public function setpseudo($pseudo){
+    public function setPseudo($pseudo){
         $this->pseudo = $pseudo;
 
         return $this;
@@ -131,7 +131,8 @@ final class User extends Entity{
      */ 
     public function getCreationDate()
     {
-        return $this->creationDate;
+        $date = new \DateTime($this->creationDate);
+        return $date->format("d-m-Y");    
     }
     
     /**
