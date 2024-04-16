@@ -93,6 +93,19 @@ body{
     filter: drop-shadow(0 0 10px #342056);
     transition:  0.5s;
 }
+
+.button_delete{   
+    text-decoration: none;
+    color: var(--font-color);
+    font-weight: 500;
+    padding: 8px 16px;
+    margin: 0 10px;
+    background:linear-gradient(to left, #130208, #6B0000);
+    border-radius: 4px;
+    filter: drop-shadow(0 0 10px #342056);
+    transition:  0.5s;
+}
+
 .button_deco{   
     text-decoration: none;
     color: var(--font-color);
@@ -106,6 +119,11 @@ body{
 }
 .button:hover, .button_deco:hover{
     filter: drop-shadow(0 0 30px #5454C5);
+    padding: 8px 20px;;
+}
+
+.button_delete:hover{
+    filter: drop-shadow(0 0 30px #a50000);
     padding: 8px 20px;;
 }
 
@@ -132,6 +150,16 @@ h2{
     justify-content: center;
     filter: drop-shadow(0 0 10px #342056);
     margin: 100px;
+}
+
+.card_container_profil{
+    display:flex;
+    justify-content: center;
+    filter: drop-shadow(0 0 10px #342056);
+    margin: 100px;
+    width: 80vw;
+    background-color: var(--card-colour);
+    border-radius: 8px;
 }
 
 .card_list{

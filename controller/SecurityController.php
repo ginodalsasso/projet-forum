@@ -18,6 +18,9 @@ class SecurityController extends AbstractController{
         ]; 
     }
     
+
+    //----------------------------------------------------Registration / Connexion----------------------------------------------------
+
     public function addRegister () { 
 
         $userManager = new UserManager();
@@ -103,6 +106,9 @@ class SecurityController extends AbstractController{
         unset($_SESSION["user"]);
         $this -> redirectTo("home", "index"); exit;
     }
+
+
+    //----------------------------------------------------Profil----------------------------------------------------
 
 
     //affichage de la vue de profil d'un utilisateur($id))----------------------------------------------------
