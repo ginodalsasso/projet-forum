@@ -178,7 +178,7 @@ h2{
 }
 
 .card_list p{
-    padding: 10px 10px 5px 10px;
+    /* padding: 10px 10px 5px 10px; */
 }
 
 .card_list a{
@@ -187,6 +187,15 @@ h2{
     text-decoration: none;
 
 }
+
+.titles_container{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 15px 15px 10px;
+}
+
+
 
 hr{
     color: rgba(38, 26, 58, 0.2);

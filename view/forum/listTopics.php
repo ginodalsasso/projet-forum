@@ -14,22 +14,31 @@ $topics = $result["data"]['topics'];
         //si un ou plusieurs topics de la catégorie éxiste alors
         if ($topics) {
             //affichage des topics
-            foreach ($topics as $topic) {
-                // si le topic est closed alors propose de l'unlock
-                if ($topic->getClosed()) {
-                    $statut = "<i class='fa-solid fa-unlock'></i>";
-                    $action = "<a href='index.php?ctrl=forum&action=unlockedTopics&id=" . $topic->getId() . "' class='topic-update'><i class='fa-solid fa-lock'></i></a>";
-                } else {
-                    $statut = "<i class='fa-solid fa-lock'></i>";
-                    $action = "<a href='index.php?ctrl=forum&action=lockedTopics&id=" . $topic->getId() . "' class='topic-update'><i class='fa-solid fa-unlock'></i></a>";
-                } ?>
-                <!-- $action récupère la méthode à appliquer si le topic doit être lock ou unlock -->
-                <p><?= $action ?>
-                    <a href="index.php?ctrl=forum&action=viewUpdateTopic&id=<?= $topic->getId() ?>"><i class="fa-solid fa-pen-to-square"></i></a>
-                    <a href="index.php?ctrl=forum&action=listPostsByTopics&id=<?= $topic->getId() ?>"><?= $topic ?></a> par <?= $topic->getUser() ?> le <?= $topic->getCreationDate() ?>
-                    <a href="index.php?ctrl=forum&action=deleteTopic&id=<?= $topic->getId() ?>"><i class="fa-solid fa-trash"></i></a>
-                    <p><?= $topic->getNbPosts() ?></p>
-                </p>
+            foreach ($topics as $topic) { ?>
+                <div class="titles_container">
+                    <div class="titles_container_left">
+                        <?php
+                        // si le topic est closed alors propose de l'unlock
+                        if ($topic->getClosed()) {
+                            $statut = "<i class='fa-solid fa-unlock'></i>";
+                            $action = "<a href='index.php?ctrl=forum&action=unlockedTopics&id=" . $topic->getId() . "' class='topic-update'><i class='fa-solid fa-lock'></i></a>";
+                        } else {
+                            $statut = "<i class='fa-solid fa-lock'></i>";
+                            $action = "<a href='index.php?ctrl=forum&action=lockedTopics&id=" . $topic->getId() . "' class='topic-update'><i class='fa-solid fa-unlock'></i></a>";
+                        } ?>
+                        <!-- $action récupère la méthode à appliquer si le topic doit être lock ou unlock -->
+                        <?= $action ?>
+                        <a href="index.php?ctrl=forum&action=viewUpdateTopic&id=<?= $topic->getId() ?>"><i class="fa-solid fa-pen-to-square"></i></a>
+                        <a href="index.php?ctrl=forum&action=listPostsByTopics&id=<?= $topic->getId() ?>"><?= $topic ?></a>
+                        <a href="index.php?ctrl=forum&action=deleteTopic&id=<?= $topic->getId() ?>"><i class="fa-solid fa-trash"></i></a>
+                        <br>par <?= $topic->getUser() ?> le <?= $topic->getCreationDate() ?>
+                    </div>
+
+                    <div class="titles_container_right">
+                        <p><?= $topic->getNbPosts() ?></p>
+                    </div>
+                </div>
+                <hr>
         <?php }
         } ?>
     </div>
