@@ -29,9 +29,9 @@ $categories = $result["data"]['categories'];
 
 <!----------------- Ajouter une catégorie ----------------->
 <div class="form_display">
-<form class="form" action="index.php?ctrl=forum&action=addCategory" method="POST">
-        <!-- <label for="title">Titre de la catégorie</label> -->
-        <input type="text" name="name" id="title" placeholder="Titre de la catégorie" required><br>
-        <input class="button" type="submit" name="submit" value="Envoyer">
-    </form>
+    <form class="form" action="index.php?ctrl=forum&action=addCategory" method="POST">
+            <!-- <label for="title">Titre de la catégorie</label> -->
+            <input type="text" name="name" id="title" placeholder="Titre de la catégorie" required><br>
+            <input class="button" type="submit" name="submit" value="Envoyer">
+        </form>
 </div>

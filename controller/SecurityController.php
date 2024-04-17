@@ -136,15 +136,20 @@ class SecurityController extends AbstractController{
         $userManager = new UserManager();
         $user = Session::getUser();
         
-        if(Session::getUser()->getId() || Session::isAdmin()){
-            return [
-                "view" => VIEW_DIR."forum/profil.php",
-                "meta_description" => "Mon profil",
-                "data" => [
-                    "user" => $user
-                ]
-            ];
-        } else {
+        if($user){
+            if(Session::getUser()->getId() || Session::isAdmin()){
+                return [
+                    "view" => VIEW_DIR."forum/profil.php",
+                    "meta_description" => "Mon profil",
+                    "data" => [
+                        "user" => $user
+                    ]
+                ];
+            } else {
+                Session::addFlash("error", "Une erreur est survenue, réessayez ou assurez vous d'avoir les droits.");
+                $this -> redirectTo("forum", "index"); exit;
+            }
+        }else {
             Session::addFlash("error", "Une erreur est survenue, réessayez ou assurez vous d'avoir les droits.");
             $this -> redirectTo("forum", "index"); exit;
         }
@@ -155,15 +160,20 @@ class SecurityController extends AbstractController{
         $userManager = new UserManager();
         $user = Session::getUser();
         
-        if(Session::getUser()->getId() || Session::isAdmin()){
-            return [
-                "view" => VIEW_DIR."forum/update/updateProfil.php",
-                "meta_description" => "Modifier mon profil",
-                "data" => [
-                    "user" => $user
-                ]
-            ];
-        } else {
+        if($user) {
+            if(Session::getUser()->getId() || Session::isAdmin()){
+                return [
+                    "view" => VIEW_DIR."forum/update/updateProfil.php",
+                    "meta_description" => "Modifier mon profil",
+                    "data" => [
+                        "user" => $user
+                    ]
+                ];
+            } else {
+                Session::addFlash("error", "Une erreur est survenue, réessayez ou assurez vous d'avoir les droits.");
+                $this -> redirectTo("forum", "index"); exit;
+            }
+        }else {
             Session::addFlash("error", "Une erreur est survenue, réessayez ou assurez vous d'avoir les droits.");
             $this -> redirectTo("forum", "index"); exit;
         }
@@ -174,15 +184,20 @@ class SecurityController extends AbstractController{
         $userManager = new UserManager();
         $user = Session::getUser();
         
-        if(Session::getUser()->getId() || Session::isAdmin()){
-            return [
-                "view" => VIEW_DIR."forum/update/updatePassword.php",
-                "meta_description" => "Modifier mon mot de passe",
-                "data" => [
-                    "user" => $user
-                ]
-            ];
-        } else {
+        if($user){
+            if(Session::getUser()->getId() || Session::isAdmin()){
+                return [
+                    "view" => VIEW_DIR."forum/update/updatePassword.php",
+                    "meta_description" => "Modifier mon mot de passe",
+                    "data" => [
+                        "user" => $user
+                    ]
+                ];
+            } else {
+                Session::addFlash("error", "Une erreur est survenue, réessayez ou assurez vous d'avoir les droits.");
+                $this -> redirectTo("forum", "index"); exit;
+            }
+        }else {
             Session::addFlash("error", "Une erreur est survenue, réessayez ou assurez vous d'avoir les droits.");
             $this -> redirectTo("forum", "index"); exit;
         }
@@ -190,98 +205,139 @@ class SecurityController extends AbstractController{
     
     //modifier le profil($id)----------------------------------------------------
     public function updateAccount($id){
+
+        //permet de le pas injecter autre chose qu'un entier dans l'url
+        $id = filter_input(INPUT_GET, "id", FILTER_VALIDATE_INT);
+        //si l'id dans l'url n'éxiste pas alors
+        if(!$id) {
+            Session::addFlash("error", "Erreur");
+            $this -> redirectTo("forum", "index"); exit;
+        }
+
         $userManager = new UserManager();
-        // Si l'utilisateur connecté = à l'user en session ou si l'admin est connecté alors
-        if((Session::getUser()->getId()) || Session::isAdmin()){
-            $pseudo = filter_input(INPUT_POST, "pseudo", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-            $email = filter_input(INPUT_POST, "email", FILTER_SANITIZE_FULL_SPECIAL_CHARS, FILTER_VALIDATE_EMAIL);
-            
-            // vérifie si l'email ou le pseudo n'éxiste pas dans la BDD
-            if($pseudo && $email){
-                $verifyPseudo = $userManager->findOneByPseudo($pseudo);
-                $verifyEmail = $userManager->findOneByEmail($email);
-
-                // vérifie si un utilisateur avec cet e-mail existe en BDD et si l'ID de l'utilisateur trouvé n'est pas égal à l'ID de l'utilisateur actuel en cours de modification
-                if($verifyEmail && $verifyEmail->getId() !== $id){
-                    Session::addFlash("error", "L'adresse e-mail est déjà utilisée par un autre utilisateur.");
-                    $this->redirectTo("forum", "viewProfil");
-                    exit;
-                }
-    
-                if($verifyPseudo && $verifyPseudo->getId() !== $id){
-                    Session::addFlash("error", "Le pseudo est déjà utilisé par un autre utilisateur.");
-                    $this->redirectTo("forum", "viewProfil");
-                    exit;
-                }
+        if($user){
+            // Si l'utilisateur connecté = à l'user en session ou si l'admin est connecté alors
+            if((Session::getUser()->getId()) || Session::isAdmin()){
+                $pseudo = filter_input(INPUT_POST, "pseudo", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+                $email = filter_input(INPUT_POST, "email", FILTER_SANITIZE_FULL_SPECIAL_CHARS, FILTER_VALIDATE_EMAIL);
                 
-                $data = [
-                    "id" => $id,
-                    "email" => $email,
-                    "pseudo" => $pseudo
-                ];
+                // vérifie si l'email ou le pseudo n'éxiste pas dans la BDD
+                if($pseudo && $email){
+                    $verifyPseudo = $userManager->findOneByPseudo($pseudo);
+                    $verifyEmail = $userManager->findOneByEmail($email);
 
-                $sqlUpdate = "pseudo = :pseudo, email = :email";
-                $userManager->updateUser($data, $sqlUpdate); 
-                unset($_SESSION['user']);
+                    // vérifie si un utilisateur avec cet e-mail existe en BDD et si l'ID de l'utilisateur trouvé n'est pas égal à l'ID de l'utilisateur actuel en cours de modification
+                    if($verifyEmail && $verifyEmail->getId() !== $id){
+                        Session::addFlash("error", "L'adresse e-mail est déjà utilisée par un autre utilisateur.");
+                        $this->redirectTo("forum", "viewProfil");
+                        exit;
+                    }
+        
+                    if($verifyPseudo && $verifyPseudo->getId() !== $id){
+                        Session::addFlash("error", "Le pseudo est déjà utilisé par un autre utilisateur.");
+                        $this->redirectTo("forum", "viewProfil");
+                        exit;
+                    }
+                    
+                    $data = [
+                        "id" => $id,
+                        "email" => $email,
+                        "pseudo" => $pseudo
+                    ];
+
+                    $sqlUpdate = "pseudo = :pseudo, email = :email";
+                    $userManager->updateUser($data, $sqlUpdate); 
+                    unset($_SESSION['user']);
+                    
+                    Session::addFlash("success", "Votre compte à été modifié !");
+                    $this -> redirectTo("forum", "update", "updateProfil", $id); exit;
                 
-                Session::addFlash("success", "Votre compte à été modifié !");
-                $this -> redirectTo("forum", "update", "updateProfil", $id); exit;
-            
-            } else {
-                Session::addFlash("error", "Une erreur est survenue, réessayez ou assurez vous d'avoir les droits.");
-                $this -> redirectTo("forum", "index"); exit;
+                } else {
+                    Session::addFlash("error", "Une erreur est survenue, réessayez ou assurez vous d'avoir les droits.");
+                    $this -> redirectTo("forum", "index"); exit;
+                }
             }
+        }else {
+            Session::addFlash("error", "Une erreur est survenue, réessayez ou assurez vous d'avoir les droits.");
+            $this -> redirectTo("forum", "index"); exit;
         }
     }
 
     // modifier le mot de passe($id)----------------------------------------------------
     public function updatePassword($id){
-        $userManager = new UserManager();
-        // Si l'utilisateur connecté = à l'user en session ou si l'admin est connecté alors
-        if((Session::getUser()->getId()) || Session::isAdmin()){
-            $pass1 = filter_input(INPUT_POST, "pass1", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-            $pass2 = filter_input(INPUT_POST, "pass2", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-            
-            if($pass1 && $pass2){
-                // éxige au minimum: 8 caractères, une minuscule, une majuscule, un chiffre, un caractère spécial dans le mot de passe
-                $regexPassword = preg_match("/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/", $pass1);
-                
-                //insertion du password en BDD si les deux mdp match
-                if($pass1 == $pass2 && $regexPassword) {//ici je vérifie si les deux mdp sont identiques et donne les conditions du mdp (regex ...)
-                    //tableau attendu par la fonction dans app\Manager add($data)
-                $data = [
-                    "id" => $id,
-                    "password" => password_hash($pass1, PASSWORD_DEFAULT)
-                ];
 
-                $sqlUpdate = "password = :password";
-                $userManager->updatePassword($data, $sqlUpdate);      
-                // var_dump($userManager);die;
-                    unset($_SESSION['user']);
-                }
+        //permet de le pas injecter autre chose qu'un entier dans l'url
+        $id = filter_input(INPUT_GET, "id", FILTER_VALIDATE_INT);
+        //si l'id dans l'url n'éxiste pas alors
+        if(!$id) {
+            Session::addFlash("error", "Erreur");
+            $this -> redirectTo("forum", "index"); exit;
+        }
+
+        $userManager = new UserManager();
+        if($user){
+            // Si l'utilisateur connecté = à l'user en session ou si l'admin est connecté alors
+            if((Session::getUser()->getId()) || Session::isAdmin()){
+                $pass1 = filter_input(INPUT_POST, "pass1", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+                $pass2 = filter_input(INPUT_POST, "pass2", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
                 
-                Session::addFlash("success", "Votre mot de passe à été modifié !");
-                $this -> redirectTo("forum", "update", "updateProfil", $id); exit;
-            
-            } else {
-                Session::addFlash("error", "Une erreur est survenue, réessayez ou assurez vous d'avoir les droits.");
-                $this -> redirectTo("forum", "index"); exit;
+                if($pass1 && $pass2){
+                    // éxige au minimum: 8 caractères, une minuscule, une majuscule, un chiffre, un caractère spécial dans le mot de passe
+                    $regexPassword = preg_match("/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/", $pass1);
+                    
+                    //insertion du password en BDD si les deux mdp match
+                    if($pass1 == $pass2 && $regexPassword) {//ici je vérifie si les deux mdp sont identiques et donne les conditions du mdp (regex ...)
+                        //tableau attendu par la fonction dans app\Manager add($data)
+                    $data = [
+                        "id" => $id,
+                        "password" => password_hash($pass1, PASSWORD_DEFAULT)
+                    ];
+
+                    $sqlUpdate = "password = :password";
+                    $userManager->updatePassword($data, $sqlUpdate);      
+                    // var_dump($userManager);die;
+                        unset($_SESSION['user']);
+                    }
+                    
+                    Session::addFlash("success", "Votre mot de passe à été modifié !");
+                    $this -> redirectTo("forum", "update", "updateProfil", $id); exit;
+                
+                } else {
+                    Session::addFlash("error", "Une erreur est survenue, réessayez ou assurez vous d'avoir les droits.");
+                    $this -> redirectTo("forum", "index"); exit;
+                }
             }
+        }else {
+            Session::addFlash("error", "Une erreur est survenue, réessayez ou assurez vous d'avoir les droits.");
+            $this -> redirectTo("forum", "index"); exit;
         }
     }
 
     //suppression d'un user($id)----------------------------------------------------
     public function deleteAccount($id){
+        //permet de le pas injecter autre chose qu'un entier dans l'url
+        $id = filter_input(INPUT_GET, "id", FILTER_VALIDATE_INT);
+        //si l'id dans l'url n'éxiste pas alors
+        if(!$id) {
+            Session::addFlash("error", "Erreur");
+            $this -> redirectTo("forum", "index"); exit;
+        }
+
         $userManager = new UserManager();
 
-        // Si l'utilisateur connecté = à l'user en session ou si l'admin est connecté alors
-        if((Session::getUser()->getId()) || Session::isAdmin()){
-            $userManager->delete($id);
-            unset($_SESSION['user']);
+        if($user){
+            // Si l'utilisateur connecté = à l'user en session ou si l'admin est connecté alors
+            if((Session::getUser()->getId()) || Session::isAdmin()){
+                $userManager->delete($id);
+                unset($_SESSION['user']);
 
-            Session::addFlash("success", "Votre compte  à été supprimé !");
-            $this -> redirectTo("forum", "index"); exit;
-        } else {
+                Session::addFlash("success", "Votre compte  à été supprimé !");
+                $this -> redirectTo("forum", "index"); exit;
+            } else {
+                Session::addFlash("error", "Une erreur est survenue, réessayez ou assurez vous d'avoir les droits.");
+                $this -> redirectTo("forum", "index"); exit;
+            }
+        }else {
             Session::addFlash("error", "Une erreur est survenue, réessayez ou assurez vous d'avoir les droits.");
             $this -> redirectTo("forum", "index"); exit;
         }

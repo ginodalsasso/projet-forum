@@ -38,7 +38,7 @@ class CategoryManager extends Manager{
     public function findAllCategories(){
         $sql = "SELECT   c.name, c.id_category , COUNT(t.id_topic) AS nbTopics
                 FROM category c
-                INNER JOIN topic t ON c.id_category = t.category_id
+                LEFT JOIN topic t ON c.id_category = t.category_id
                 GROUP BY c.id_category
                 ORDER BY c.name";
 

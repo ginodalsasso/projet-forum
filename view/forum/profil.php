@@ -1,6 +1,5 @@
 <?php
 $user = $result["data"]['user'];
-// var_dump($user);die;
 ?>
 
 <h1><?= $user->getPseudo() ?></h1>
@@ -18,7 +17,7 @@ $user = $result["data"]['user'];
 </section>
 <div class="button_container_container">
 <div class="button_container">
-    <a class="button" href="index.php?ctrl=security&action=viewUpdateProfil&id=<?= $user->getId() ?>">Modifier</a>
+    <a class="button" href="index.php?ctrl=security&action=viewUpdateProfil&id=<?= $user->getId() ?>">Modifier mon profil</a>
     <a class="button" href="index.php?ctrl=security&action=viewUpdatePassword&id=<?= $user->getId() ?>">Modifier mon mot de passe</a>
     <a class="button_delete" href="index.php?ctrl=security&action=deleteAccount&id=<?= $user->getId() ?>">Suprimer mon compte</a>
 </div>

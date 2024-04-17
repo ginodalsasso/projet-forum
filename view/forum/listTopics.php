@@ -47,9 +47,8 @@ $topics = $result["data"]['topics'];
 <!----------------- Ajouter un topic ----------------->
 <div class="form_display">
     <form action="index.php?ctrl=forum&action=addTopic&id=<?= $category->getId() ?>" method="POST">
-        <label for="title">Titre du topic</label>
-        <input type="text" name="title" id="title" required><br>
-        <textarea id="text" name="text" rows="5" cols="33"></textarea>
+        <input type="text" name="title" id="title" placeholder="Titre du topic" required><br>
+        <textarea id="text" name="text" placeholder="Mon message" rows="5" cols="33"></textarea>
         <input type="submit" name="submit" value="Envoyer">
     </form>
 </div>
