@@ -18,19 +18,31 @@ $topics = $result["data"]['topics'];
                 <div class="titles_container">
                     <div class="titles_container_left">
                         <?php
-                        // si le topic est closed alors propose de l'unlock
-                        if ($topic->getClosed()) {
-                            $statut = "<i class='fa-solid fa-unlock'></i>";
-                            $action = "<a href='index.php?ctrl=forum&action=unlockedTopics&id=" . $topic->getId() . "' class='topic-update'><i class='fa-solid fa-lock'></i></a>";
-                        } else {
-                            $statut = "<i class='fa-solid fa-lock'></i>";
-                            $action = "<a href='index.php?ctrl=forum&action=lockedTopics&id=" . $topic->getId() . "' class='topic-update'><i class='fa-solid fa-unlock'></i></a>";
-                        } ?>
-                        <!-- $action récupère la méthode à appliquer si le topic doit être lock ou unlock -->
-                        <?= $action ?>
-                        <a href="index.php?ctrl=forum&action=viewUpdateTopic&id=<?= $topic->getId() ?>"><i class="fa-solid fa-pen-to-square"></i></a>
+                        //si l'admin est connecté alors
+                        if (app\Session::isAdmin()) {
+                            // si le topic est closed alors propose de l'unlock
+                            if ($topic->getClosed()) {
+                                $statut = "<i class='fa-solid fa-unlock'></i>";
+                                $action = "<a href='index.php?ctrl=forum&action=unlockedTopics&id=" . $topic->getId() . "' class='topic-update'><i class='fa-solid fa-lock'></i></a>";
+                            } else {
+                                $statut = "<i class='fa-solid fa-lock'></i>";
+                                $action = "<a href='index.php?ctrl=forum&action=lockedTopics&id=" . $topic->getId() . "' class='topic-update'><i class='fa-solid fa-unlock'></i></a>";
+                            } 
+                            //$action récupère la méthode à appliquer si le topic doit être lock ou unlock
+                            $action;
+                        }
+                        //si l'utilisateur est connecté qui à écrit le post OU si l'admin est connecté alors
+                        if (($topic->getUser()->getId() === app\Session::getUser()->getId()) || app\Session::isAdmin()) {
+                        ?>
+                            <a href="index.php?ctrl=forum&action=viewUpdateTopic&id=<?= $topic->getId() ?>"><i class="fa-solid fa-pen-to-square"></i></a>
+                        <?php } ?>
                         <a href="index.php?ctrl=forum&action=listPostsByTopics&id=<?= $topic->getId() ?>"><?= $topic ?></a>
-                        <a href="index.php?ctrl=forum&action=deleteTopic&id=<?= $topic->getId() ?>"><i class="fa-solid fa-trash"></i></a>
+                        <?php
+                        //si l'utilisateur est connecté qui à écrit le post OU si l'admin est connecté alors
+                        if (($topic->getUser()->getId() === app\Session::getUser()->getId()) || app\Session::isAdmin()) {
+                        ?>
+                            <a href="index.php?ctrl=forum&action=deleteTopic&id=<?= $topic->getId() ?>"><i class="fa-solid fa-trash"></i></a>
+                        <?php } ?>
                         <br>par <?= ($topic->getUser()) ? $topic->getUser() : "Anonymous" ?> le <?= $topic->getCreationDate() ?>
                     </div>
 

@@ -18,14 +18,24 @@ $posts = $result["data"]['posts'];
 foreach ($posts as $post) { ?>
     <section class="card_container_container">
         <div class="card_list">
-            <h2 class="user_post"><?= ($post->getUser()) ? $post->getUser() : "Anonymous" ?><br><?= $post->getCreationDate() ?></h2> 
+            <h2 class="user_post"><?= ($post->getUser()) ? $post->getUser() : "Anonymous" ?><br><?= $post->getCreationDate() ?></h2>
             <div class="titles_container">
                 <div class="titles_container_left">
-                    <a href="index.php?ctrl=forum&action=viewUpdatePost&id=<?= $post->getId() ?>"><i class="fa-solid fa-pen-to-square"></i></a>
+                    <?php
+                    //si l'utilisateur est connecté qui à écrit le post OU si l'admin est connecté alors
+                    if (($post->getUser()->getId() === app\Session::getUser()->getId()) || app\Session::isAdmin()) {
+                    ?>
+                        <a href="index.php?ctrl=forum&action=viewUpdatePost&id=<?= $post->getId() ?>"><i class="fa-solid fa-pen-to-square"></i></a>
+                    <?php } ?>
                     <?= $post->getText() ?>
                 </div>
                 <div class="titles_container_right">
-                    <a href="index.php?ctrl=forum&action=deletePost&id=<?= $post->getId() ?>"><i class="fa-solid fa-trash"></i></a>
+                    <?php
+                    //si l'utilisateur est connecté qui à écrit le post OU si l'admin est connecté alors
+                    if (($post->getUser()->getId() === app\Session::getUser()->getId()) || app\Session::isAdmin()) {
+                    ?>
+                        <a href="index.php?ctrl=forum&action=deletePost&id=<?= $post->getId() ?>"><i class="fa-solid fa-trash"></i></a>
+                    <?php } ?>
                 </div>
             </div>
         </div>
