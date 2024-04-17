@@ -80,12 +80,13 @@ body{
     text-shadow: 0 0 20px #ffffff;
 }
 
-.button{   
+.button, input[type="submit"]{   
     text-decoration: none;
     border: none;
     color: var(--font-color);
     font-weight: 500;
     padding: 8px 16px;
+    cursor: pointer;
     background:linear-gradient(to left, #130208, #5454C5);
     border-radius: 4px;
     filter: drop-shadow(0 0 10px #342056);
@@ -120,7 +121,7 @@ body{
     margin: 0 10px;
 }
 
-.button:hover, .button_deco:hover{
+.button:hover, input[type="submit"]:hover, .button_deco:hover{
     filter: drop-shadow(0 0 30px #5454C5);
     padding: 8px 20px;;
 }
@@ -213,18 +214,15 @@ hr{
 .form_display{
     display: flex;
     justify-content: center;
-    /* align-items: center; */
-    /* flex-direction: column */
 }
 
-form{
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-}
+    form{
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+    }
 
-input, textarea{
-    /* display: inline-block; */
+    input[type="text"], input[type=email], input[type=password], textarea{
     width: 80vw;
     padding: 12px 20px;
     margin: 8px 0;
@@ -247,8 +245,8 @@ input[type=text]:focus, textarea:focus{
 
 footer{
     width: 100%;
-    /* position: absolute; */
     bottom: 0px;
+    margin-top: 200px;
     left: 0px;
     background-color: rgba(31, 17, 40, 1);
     filter: drop-shadow(0 0 15px rgba(84, 84, 197, 0.3));
