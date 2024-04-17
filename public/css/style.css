@@ -82,6 +82,7 @@ body{
 
 .button{   
     text-decoration: none;
+    border: none;
     color: var(--font-color);
     font-weight: 500;
     padding: 8px 16px;
@@ -93,6 +94,7 @@ body{
 
 .button_delete{   
     text-decoration: none;
+    border: none;
     color: var(--font-color);
     font-weight: 500;
     padding: 8px 16px;
@@ -104,6 +106,7 @@ body{
 
 .button_deco{   
     text-decoration: none;
+    border: none;
     color: var(--font-color);
     font-weight: 500;
     padding: 8px 16px;
@@ -181,15 +184,15 @@ h2{
     border-radius: 8px;
 }
 
-.card_list p{
-    /* padding: 10px 10px 5px 10px; */
-}
-
 .card_list a{
     color: var(--font-color);
     padding: 20px 5px;
     text-decoration: none;
 
+}
+
+.card_list_profil p{
+    padding: 10px 10px 5px 10px;
 }
 
 .titles_container{
@@ -202,7 +205,36 @@ h2{
 
 
 hr{
-    color: rgba(38, 26, 58, 0.2);
+    /* color: rgb(38, 26, 58); */
+    /* border-top: 2px solid  #3a1a1a33; */
+}
+
+/* ---------------------------formulaires--------------------------- */
+.form_display{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column
+}
+
+input, textarea{
+    display: inline-block;
+    width: 80vw;
+    padding: 12px 20px;
+    margin: 8px 0;
+    background-color: var(--card-colour);
+    font-family: "Lexend";
+    font-weight: 500;
+    color: var(--font-color);
+    border: none;
+    border-radius: 4px;
+    transition: 0.5s;
+    outline: none;
+}
+
+input[type=text]:focus, textarea:focus{
+    background-color: var(--font-color);
+    color: #342056;
 }
 
 /* ---------------------------footer--------------------------- */

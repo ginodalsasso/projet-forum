@@ -8,10 +8,12 @@ $user = $result["data"]['user'];
 <section class="card_container_container">
     <div class="card_list">
         <h2>Votre profil:</h2>
-        <p>Pseudo: <?= $user->getPseudo() ?></p>
-        <p>Email: <?= $user->getEmail() ?></p>
-        <p>Rôle: <?= $user->getRole() ?></p>
-        <p>Date de création: <?= $user->getCreationDate() ?></p>
+        <div class="card_list_profil">
+            <p>Pseudo: <?= $user->getPseudo() ?></p>
+            <p>Email: <?= $user->getEmail() ?></p>
+            <p>Rôle: <?= $user->getRole() ?></p>
+            <p>Date de création: <?= $user->getCreationDate() ?></p>
+        </div>
     </div>
 </section>
 <div class="button_container_container">
