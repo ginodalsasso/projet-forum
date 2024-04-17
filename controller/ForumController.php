@@ -1,4 +1,5 @@
 <?php
+
 namespace Controller;
 
 use App\Session;
@@ -10,16 +11,19 @@ use Model\Managers\TopicManager;
 use Model\Managers\PostManager;
 use Model\Managers\UserManager;
 
-class ForumController extends AbstractController implements ControllerInterface{
+class ForumController extends AbstractController implements ControllerInterface
+{
 
     //----------------------------------------------------Affichage----------------------------------------------------
 
     //affichage de l'index soit la liste des catégories)----------------------------------------------------
-    public function index() {
+    public function index()
+    {
         //si l'utilisateur n'est pas connecté alors
-        if(!Session::getUser()){
+        if (!Session::getUser()) {
             Session::addFlash("error", "Veuillez vous connecter ou vous inscrire !");
-            $this -> redirectTo("home", "index"); exit;
+            $this->redirectTo("home", "index");
+            exit;
         }
 
         // créer une nouvelle instance de CategoryManager
@@ -30,7 +34,7 @@ class ForumController extends AbstractController implements ControllerInterface{
 
         // le controller communique avec la vue "listCategories" (view) pour lui envoyer la liste des catégories (data)
         return [
-            "view" => VIEW_DIR."forum/listCategory.php",
+            "view" => VIEW_DIR . "forum/listCategory.php",
             "meta_description" => "Liste des catégories du forum",
             "data" => [
                 "categories" => $categories,
@@ -39,18 +43,21 @@ class ForumController extends AbstractController implements ControllerInterface{
     }
 
     //affichage de la liste des topics par catégorie ($id))----------------------------------------------------
-    public function listTopicsByCategory($id) {
+    public function listTopicsByCategory($id)
+    {
         //permet de le pas injecter autre chose qu'un entier dans l'url
         $id = filter_input(INPUT_GET, "id", FILTER_VALIDATE_INT);
         //si l'id dans l'url n'éxiste pas alors
-        if(!$id) {
+        if (!$id) {
             Session::addFlash("error", "Erreur");
-            $this -> redirectTo("home", "index"); exit;
+            $this->redirectTo("home", "index");
+            exit;
         }
 
-        if(!Session::getUser()){
+        if (!Session::getUser()) {
             Session::addFlash("error", "Veuillez vous connecter ou vous inscrire !");
-            $this -> redirectTo("forum", "index"); exit;
+            $this->redirectTo("forum", "index");
+            exit;
         }
 
         $topicManager = new TopicManager();
@@ -58,12 +65,12 @@ class ForumController extends AbstractController implements ControllerInterface{
         $category = $categoryManager->findOneById($id);
         $topics = $topicManager->findTopicsByCategory($id);
 
-        if(Session::getUser()){
+        if (Session::getUser()) {
 
-            if($category) {
+            if ($category) {
                 return [
-                    "view" => VIEW_DIR."forum/listTopics.php",
-                    "meta_description" => "Liste des topics par catégorie : ".$category,
+                    "view" => VIEW_DIR . "forum/listTopics.php",
+                    "meta_description" => "Liste des topics par catégorie : " . $category,
                     "data" => [
                         "category" => $category,
                         "topics" => $topics
@@ -71,29 +78,33 @@ class ForumController extends AbstractController implements ControllerInterface{
                 ];
             } else {
                 Session::addFlash("error", "Cette catégorie n'éxiste pas !");
-                $this -> redirectTo("forum", "index"); exit;
-            }   
-
-        }else{
+                $this->redirectTo("forum", "index");
+                exit;
+            }
+        } else {
             Session::addFlash("error", "Veuillez vous inscrire ou vous connecter pour accéder au contenu du forum !");
-            $this -> redirectTo("forum", "index"); exit;
+            $this->redirectTo("forum", "index");
+            exit;
         }
     }
 
     //affichage de la liste des posts d'un topic($id))----------------------------------------------------
-    public function listPostsByTopics($id) {
+    public function listPostsByTopics($id)
+    {
         //permet de le pas injecter autre chose qu'un entier dans l'url
         $id = filter_input(INPUT_GET, "id", FILTER_VALIDATE_INT);
         //si l'id dans l'url n'éxiste pas alors
-        if(!$id) {
+        if (!$id) {
             Session::addFlash("error", "Erreur");
-            $this -> redirectTo("forum", "index"); exit;
-        }        
+            $this->redirectTo("forum", "index");
+            exit;
+        }
 
         //si l'utilisateur n'est pas connecté alors
-        if(!Session::getUser()){
+        if (!Session::getUser()) {
             Session::addFlash("error", "Veuillez vous connecter ou vous inscrire !");
-            $this -> redirectTo("home", "index"); exit;
+            $this->redirectTo("home", "index");
+            exit;
         }
 
         $categoryManager = new CategoryManager();
@@ -104,50 +115,55 @@ class ForumController extends AbstractController implements ControllerInterface{
         $category = $topic->getCategory();
         //appel une méthode de postManager ($id topic)
         $posts = $postManager->findPostsByTopic($id);
-        
-        if(Session::getUser()){
-            if($topic) {
+
+        if (Session::getUser()) {
+            if ($topic) {
                 return [
-                    "view" => VIEW_DIR."forum/listPosts.php",
-                    "meta_description" => "Liste des posts par topic : ".$topic,
+                    "view" => VIEW_DIR . "forum/listPosts.php",
+                    "meta_description" => "Liste des posts par topic : " . $topic,
                     "data" => [
                         "category" => $category,
                         "topic" => $topic,
                         "posts" => $posts
                     ]
                 ];
-            }else{
+            } else {
                 Session::addFlash("error", "Ce topic n'éxiste pas !");
-                $this -> redirectTo("forum", "index"); exit;
+                $this->redirectTo("forum", "index");
+                exit;
             }
             Session::addFlash("error", "Veuillez vous inscrire ou vous connecter pour accéder au contenu du forum !");
-            $this -> redirectTo("forum", "index"); exit;
+            $this->redirectTo("forum", "index");
+            exit;
         }
     }
 
     //affichage de la vue update d'un post($id))----------------------------------------------------
-    public function viewUpdatePost($id){
+    public function viewUpdatePost($id)
+    {
         //permet de le pas injecter autre chose qu'un entier dans l'url
         $id = filter_input(INPUT_GET, "id", FILTER_VALIDATE_INT);
         //si l'id dans l'url n'éxiste pas alors
-        if(!$id) {
+        if (!$id) {
             Session::addFlash("error", "Erreur");
-            $this -> redirectTo("forum", "index"); exit;
+            $this->redirectTo("forum", "index");
+            exit;
         }
 
         //si l'utilisateur n'est pas connecté alors
-        if(!Session::getUser()){
+        if (!Session::getUser()) {
             Session::addFlash("error", "Veuillez vous connecter ou vous inscrire !");
-            $this -> redirectTo("home", "index"); exit;
+            $this->redirectTo("home", "index");
+            exit;
         }
 
         $postManager = new PostManager();
         $post = $postManager->findOneById($id);
 
-        if($post){
-            if(($post->getUser()->getId() === Session::getUser()->getId()) || Session::isAdmin()){
+        if ($post) {
+            if (($post->getUser()->getId() === Session::getUser()->getId()) || Session::isAdmin()) {
                 return [
-                    "view" => VIEW_DIR."forum/update/updatePost.php",
+                    "view" => VIEW_DIR . "forum/update/updatePost.php",
                     "meta_description" => "Modifier un post",
                     "data" => [
                         "post" => $post
@@ -155,38 +171,43 @@ class ForumController extends AbstractController implements ControllerInterface{
                 ];
             } else {
                 Session::addFlash("error", "Une erreur est survenue, réessayez ou assurez vous d'avoir les droits.");
-                $this -> redirectTo("forum", "index"); exit;
+                $this->redirectTo("forum", "index");
+                exit;
             }
-        }else {
+        } else {
             Session::addFlash("error", "Une erreur est survenue, réessayez ou assurez vous d'avoir les droits.");
-            $this -> redirectTo("forum", "index"); exit;
+            $this->redirectTo("forum", "index");
+            exit;
         }
-    }  
+    }
 
     //affichage de la vue update d'un topic($id))----------------------------------------------------
-    public function viewUpdateTopic($id){
+    public function viewUpdateTopic($id)
+    {
         //permet de le pas injecter autre chose qu'un entier dans l'url
         $id = filter_input(INPUT_GET, "id", FILTER_VALIDATE_INT);
         //si l'id dans l'url est juste et est un entier
-                //si l'id dans l'url n'éxiste pas alors
-        if(!$id) {
+        //si l'id dans l'url n'éxiste pas alors
+        if (!$id) {
             Session::addFlash("error", "Erreur");
-            $this -> redirectTo("forum", "index"); exit;
+            $this->redirectTo("forum", "index");
+            exit;
         }
 
         //si l'utilisateur n'est pas connecté alors
-        if(!Session::getUser()){
+        if (!Session::getUser()) {
             Session::addFlash("error", "Veuillez vous connecter ou vous inscrire !");
-            $this -> redirectTo("home", "index"); exit;
+            $this->redirectTo("home", "index");
+            exit;
         }
 
         $topicManager = new TopicManager();
         $topic = $topicManager->findOneById($id);
 
-        if($topic){
-            if(($topic->getUser()->getId() === Session::getUser()->getId()) || Session::isAdmin()){
+        if ($topic) {
+            if (($topic->getUser()->getId() === Session::getUser()->getId()) || Session::isAdmin()) {
                 return [
-                    "view" => VIEW_DIR."forum/update/updateTopic.php",
+                    "view" => VIEW_DIR . "forum/update/updateTopic.php",
                     "meta_description" => "Modifier un topic",
                     "data" => [
                         "topic" => $topic
@@ -194,37 +215,42 @@ class ForumController extends AbstractController implements ControllerInterface{
                 ];
             } else {
                 Session::addFlash("error", "Une erreur est survenue, réessayez ou assurez vous d'avoir les droits.");
-                $this -> redirectTo("forum", "index"); exit;
+                $this->redirectTo("forum", "index");
+                exit;
             }
-        }else {
+        } else {
             Session::addFlash("error", "Une erreur est survenue, réessayez ou assurez vous d'avoir les droits.");
-            $this -> redirectTo("forum", "index"); exit;
+            $this->redirectTo("forum", "index");
+            exit;
         }
-    }    
+    }
 
     //affichage de la vue update d'une categorie($id))----------------------------------------------------
-    public function viewUpdateCategory($id){
+    public function viewUpdateCategory($id)
+    {
         //permet de le pas injecter autre chose qu'un entier dans l'url
         $id = filter_input(INPUT_GET, "id", FILTER_VALIDATE_INT);
         //si l'id dans l'url n'éxiste pas alors
-        if(!$id) {
+        if (!$id) {
             Session::addFlash("error", "Erreur");
-            $this -> redirectTo("forum", "index"); exit;
+            $this->redirectTo("forum", "index");
+            exit;
         }
 
         //si l'utilisateur n'est pas connecté alors
-        if(!Session::getUser()){
+        if (!Session::getUser()) {
             Session::addFlash("error", "Veuillez vous connecter ou vous inscrire !");
-            $this -> redirectTo("home", "index"); exit;
+            $this->redirectTo("home", "index");
+            exit;
         }
 
         $categoryManager = new CategoryManager();
         $category = $categoryManager->findOneById($id);
 
-        if($category){
-            if(Session::isAdmin()){
+        if ($category) {
+            if (Session::isAdmin()) {
                 return [
-                    "view" => VIEW_DIR."forum/update/updateCategory.php",
+                    "view" => VIEW_DIR . "forum/update/updateCategory.php",
                     "meta_description" => "Modifier un topic",
                     "data" => [
                         "category" => $category
@@ -232,125 +258,150 @@ class ForumController extends AbstractController implements ControllerInterface{
                 ];
             } else {
                 Session::addFlash("error", "Une erreur est survenue, réessayez ou assurez vous d'avoir les droits.");
-                $this -> redirectTo("forum", "index"); exit;
+                $this->redirectTo("forum", "index");
+                exit;
             }
-        }else {
+        } else {
             Session::addFlash("error", "Une erreur est survenue, réessayez ou assurez vous d'avoir les droits.");
-            $this -> redirectTo("forum", "index"); exit;
+            $this->redirectTo("forum", "index");
+            exit;
         }
-    }   
-    
-    
+    }
+
+
 
     //----------------------------------------------------Category----------------------------------------------------
 
     //ajout d'une catégorie----------------------------------------------------
-    public function addCategory(){
-        if(Session::isAdmin()){
-            if($_POST['submit']){
-                    $name = filter_input(INPUT_POST, "name", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-                    if($name){
-                        $categoryManager = new CategoryManager();
-                        //tableau attendu par la fonction dans app\Manager add($data) pour l'ajout des données en BDD
-                        //$data = ['username' => 'Squalli', 'password' => 'dfsyfshfbzeifbqefbq', 'email' => 'sql@gmail.com'];
-                        $data = ['name' => $name];
-                        $categoryManager->add($data);
-                        $this -> redirectTo("forum", "index"); exit;
-                    }else{
-                        Session::addFlash("error", "Une erreur est survenue, réessayez.");
-                        $this -> redirectTo("forum", "index"); exit;
-                    }
-                } else{
-                    Session::addFlash("error", "Veuillez vous inscrire ou vous connecter pour accéder au contenu du forum !");
-                    $this -> redirectTo("forum", "index"); exit;
+    public function addCategory()
+    {
+        if (Session::isAdmin()) {
+            if ($_POST['submit']) {
+                $name = filter_input(INPUT_POST, "name", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+                if ($name) {
+                    $categoryManager = new CategoryManager();
+                    //tableau attendu par la fonction dans app\Manager add($data) pour l'ajout des données en BDD
+                    //$data = ['username' => 'Squalli', 'password' => 'dfsyfshfbzeifbqefbq', 'email' => 'sql@gmail.com'];
+                    $data = ['name' => $name];
+                    $categoryManager->add($data);
+                    $this->redirectTo("forum", "index");
+                    exit;
+                } else {
+                    Session::addFlash("error", "Une erreur est survenue, réessayez.");
+                    $this->redirectTo("forum", "index");
+                    exit;
                 }
-            } else{
-                Session::addFlash("error", "Une erreur est survenue, réessayez ou assurez vous d'avoir les droits.");
-                $this -> redirectTo("forum", "index"); exit;
+            } else {
+                Session::addFlash("error", "Veuillez vous inscrire ou vous connecter pour accéder au contenu du forum !");
+                $this->redirectTo("forum", "index");
+                exit;
             }
+        } else {
+            Session::addFlash("error", "Une erreur est survenue, réessayez ou assurez vous d'avoir les droits.");
+            $this->redirectTo("forum", "index");
+            exit;
+        }
     }
 
     //suppression d'une catégorie($id)----------------------------------------------------
-    public function deleteCategory($id){
+    public function deleteCategory($id)
+    {
         //permet de le pas injecter autre chose qu'un entier dans l'url
         $id = filter_input(INPUT_GET, "id", FILTER_VALIDATE_INT);
         //si l'id dans l'url n'éxiste pas alors
-        if(!$id) {
+        if (!$id) {
             Session::addFlash("error", "Erreur");
-            $this -> redirectTo("forum", "index"); exit;
+            $this->redirectTo("forum", "index");
+            exit;
         }
-        
+
         //si l'utilisateur n'est pas connecté alors
-        if(!Session::getUser()){
+        if (!Session::getUser()) {
             Session::addFlash("error", "Veuillez vous connecter ou vous inscrire !");
-            $this -> redirectTo("home", "index"); exit;
+            $this->redirectTo("home", "index");
+            exit;
         }
 
         $categoryManager = new CategoryManager();
         $category = $categoryManager->findOneById($id);
 
         // si l'admin est connecté alors
-        if(Session::isAdmin()){
+        if (Session::isAdmin()) {
 
             $categoryManager->delete($id);
 
             Session::addFlash("success", "La catégorie est supprimée !");
-            $this -> redirectTo("forum", "index"); exit;
+            $this->redirectTo("forum", "index");
+            exit;
         } else {
             Session::addFlash("error", "Une erreur est survenue, réessayez ou assurez vous d'avoir les droits.");
-            $this -> redirectTo("forum", "index"); exit;
+            $this->redirectTo("forum", "index");
+            exit;
         }
     }
 
     // modification d'une catégorie($id)----------------------------------------------------
-    public function updateCategory($id){
+    public function updateCategory($id)
+    {
         //permet de le pas injecter autre chose qu'un entier dans l'url
         $id = filter_input(INPUT_GET, "id", FILTER_VALIDATE_INT);
         //si l'id dans l'url n'éxiste pas alors
-        if(!$id) {
+        if (!$id) {
             Session::addFlash("error", "Erreur");
-            $this -> redirectTo("forum", "index"); exit;
+            $this->redirectTo("forum", "index");
+            exit;
         }
 
         $categoryManager = new CategoryManager();
-        $category = $categoryManager->findOneById($id);  
-    
+        $category = $categoryManager->findOneById($id);
+
         // si l'user associé au topic est identique à l'user actuellement connecté à la session ou si l'admin est connecté alors
-        if(Session::isAdmin()){
+        if (Session::isAdmin()) {
             $name = filter_input(INPUT_POST, "name", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
-            if($name){
+            if ($name) {
 
-                $data = "name = '". $name ."'";
+                $data = "name = '" . $name . "'";
                 $categoryManager->updateCategory($data, $id);
 
                 Session::addFlash("success", "La catégorie est modifiée !");
-                $this -> redirectTo("forum", "index"); exit;
+                $this->redirectTo("forum", "index");
+                exit;
             } else {
                 Session::addFlash("error", "Une erreur est survenue, réessayez ou assurez vous d'avoir les droits.");
-                $this -> redirectTo("forum", "index"); exit;
+                $this->redirectTo("forum", "index");
+                exit;
             }
         }
     }
     //----------------------------------------------------Topic----------------------------------------------------
 
     //ajout d'un topic dans une catégorie($id))----------------------------------------------------
-    public function addTopic($id){
+    public function addTopic($id)
+    {
         //permet de le pas injecter autre chose qu'un entier dans l'url
         $id = filter_input(INPUT_GET, "id", FILTER_VALIDATE_INT);
         //si l'id dans l'url n'éxiste pas alors
-        if(!$id) {
+        if (!$id) {
             Session::addFlash("error", "Erreur");
-            $this -> redirectTo("forum", "index"); exit;
+            $this->redirectTo("forum", "index");
+            exit;
         }
 
-        if($_POST['submit']){
-            if(Session::getUser()){
+        //si l'utilisateur n'est pas connecté alors
+        if (!Session::getUser()) {
+            Session::addFlash("error", "Veuillez vous connecter ou vous inscrire !");
+            $this->redirectTo("home", "index");
+            exit;
+        }
+
+        if ($_POST['submit']) {
+            if (Session::getUser()) {
                 $title = filter_input(INPUT_POST, "title", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
                 $text = filter_input(INPUT_POST, "text", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-                if($title && $text){
+                if ($title && $text) {
                     // récupère l'id de l'user ayant créé le topic et du coup le post aussi
-                    $idUser = Session::getUser() -> getId();
+                    $idUser = Session::getUser()->getId();
                     $topicManager = new TopicManager();
                     //tableau attendu par la fonction dans app\Manager add($data) pour l'ajout des données en BDD
                     //$data = ['username' => 'Squalli', 'password' => 'dfsyfshfbzeifbqefbq', 'email' => 'sql@gmail.com'];
@@ -361,283 +412,330 @@ class ForumController extends AbstractController implements ControllerInterface{
                     //insertion du nouveau poste en BDD
                     $dataPost = ['text' => $text, 'user_id' => $idUser, 'topic_id' => $idTopic];
                     $postManager->add($dataPost);
-                    $this -> redirectTo("forum", "listTopicsByCategory", $id); exit;
-                }else{
+                    $this->redirectTo("forum", "listTopicsByCategory", $id);
+                    exit;
+                } else {
                     Session::addFlash("error", "Une erreur est survenue, réessayez.");
-                    $this -> redirectTo("forum", "listTopicsByCategory", $id); exit;
+                    $this->redirectTo("forum", "listTopicsByCategory", $id);
+                    exit;
                 }
-            } else{
+            } else {
                 Session::addFlash("error", "Veuillez vous inscrire ou vous connecter pour accéder au contenu du forum !");
-                $this -> redirectTo("forum", "listTopicsByCategory", $id); exit;
+                $this->redirectTo("forum", "listTopicsByCategory", $id);
+                exit;
             }
-        }else {
+        } else {
             Session::addFlash("error", "Une erreur est survenue, réessayez ou assurez vous d'avoir les droits.");
-            $this -> redirectTo("forum", "index"); exit;
+            $this->redirectTo("forum", "index");
+            exit;
         }
     }
 
     //suppression d'un topic($id)----------------------------------------------------
-    public function deleteTopic($id){
+    public function deleteTopic($id)
+    {
         //permet de le pas injecter autre chose qu'un entier dans l'url
         $id = filter_input(INPUT_GET, "id", FILTER_VALIDATE_INT);
         //si l'id dans l'url n'éxiste pas alors
-        if(!$id) {
+        if (!$id) {
             Session::addFlash("error", "Erreur");
-            $this -> redirectTo("forum", "index"); exit;
+            $this->redirectTo("forum", "index");
+            exit;
         }
 
         $topicManager = new TopicManager();
         $topic = $topicManager->findOneById($id);
         $postManager = new postManager();
         $posts = $postManager->findPostsByTopic($id);
-    
-        if($topic){
+
+        if ($topic) {
             // si l'admin est connecté alors
-            if(($topic->getUser()->getId() === Session::getUser()->getId()) || Session::isAdmin()){  
+            if (($topic->getUser()->getId() === Session::getUser()->getId()) || Session::isAdmin()) {
                 //boucle sur chaque post du topic, récupère l'id du post puis le supprime (grace à l'action (lors d'un DELETE) sur heidiSQL en "Cascade" permet d'éviter de boucler comme suit)
-                foreach($posts as $post) {
+                foreach ($posts as $post) {
                     $idPost = $post->getId();
-                    $postManager->delete($idPost); 
+                    $postManager->delete($idPost);
                 }
                 $topicManager->delete($id);
                 Session::addFlash("success", "Le topic est supprimé !");
                 //récupère getCategory de l'entité Topic et son ID
-                $this -> redirectTo("forum", "listTopicsByCategory", $topic->getCategory()->getId()); exit;
+                $this->redirectTo("forum", "listTopicsByCategory", $topic->getCategory()->getId());
+                exit;
             } else {
                 Session::addFlash("error", "Une erreur est survenue, réessayez ou assurez vous d'avoir les droits.");
-                $this -> redirectTo("forum", "index"); exit;
+                $this->redirectTo("forum", "index");
+                exit;
             }
-        }else {
+        } else {
             Session::addFlash("error", "Une erreur est survenue, réessayez ou assurez vous d'avoir les droits.");
-            $this -> redirectTo("forum", "index"); exit;
+            $this->redirectTo("forum", "index");
+            exit;
         }
     }
-    
-    
+
+
     //vérouillage d'un topic($id) par l'utilisateur créateur ou l'admin)----------------------------------------------------
-    public function lockedTopics($id){
+    public function lockedTopics($id)
+    {
         //permet de le pas injecter autre chose qu'un entier dans l'url
         $id = filter_input(INPUT_GET, "id", FILTER_VALIDATE_INT);
         //si l'id dans l'url n'éxiste pas alors
-        if(!$id) {
+        if (!$id) {
             Session::addFlash("error", "Erreur");
-            $this -> redirectTo("forum", "index"); exit;
+            $this->redirectTo("forum", "index");
+            exit;
         }
 
         $topicManager = new TopicManager();
         $topic = $topicManager->findOneById($id);
-        
-        if($topic){
+
+        if ($topic) {
             // si l'user associé au topic est identique à l'user actuellement connecté à la session ou si l'admin est connecté alors
-            if(($topic->getUser()->getId() === Session::getUser()->getId()) || Session::isAdmin()){
+            if (($topic->getUser()->getId() === Session::getUser()->getId()) || Session::isAdmin()) {
                 $topicManager->lockedTopic($id);
                 Session::addFlash("success", "Le topic est vérouillé !");
-                $this -> redirectTo("forum", "listTopicsByCategory", $topic->getCategory()->getId()); exit;
+                $this->redirectTo("forum", "listTopicsByCategory", $topic->getCategory()->getId());
+                exit;
             } else {
                 Session::addFlash("error", "Une erreur est survenue, réessayez ou assurez vous d'avoir les droits.");
-                $this -> redirectTo("forum", "index"); exit;
+                $this->redirectTo("forum", "index");
+                exit;
             }
-        }else {
+        } else {
             Session::addFlash("error", "Une erreur est survenue, réessayez ou assurez vous d'avoir les droits.");
-            $this -> redirectTo("forum", "index"); exit;
+            $this->redirectTo("forum", "index");
+            exit;
         }
     }
 
-        
+
     //devérouillage d'un topic($id) par l'utilisateur créateur ou l'admin)----------------------------------------------------
-    public function unlockedTopics($id){
+    public function unlockedTopics($id)
+    {
         //permet de le pas injecter autre chose qu'un entier dans l'url
         $id = filter_input(INPUT_GET, "id", FILTER_VALIDATE_INT);
         //si l'id dans l'url n'éxiste pas alors
-        if(!$id) {
+        if (!$id) {
             Session::addFlash("error", "Erreur");
-            $this -> redirectTo("forum", "index"); exit;
+            $this->redirectTo("forum", "index");
+            exit;
         }
 
         $topicManager = new TopicManager();
         $topic = $topicManager->findOneById($id);
-        
-        if($topic){
+
+        if ($topic) {
             // si l'user associé au topic est identique à l'user actuellement connecté à la session ou si l'admin est connecté alors
-            if(($topic->getUser()->getId() === Session::getUser()->getId()) || Session::isAdmin()){
+            if (($topic->getUser()->getId() === Session::getUser()->getId()) || Session::isAdmin()) {
                 $topicManager->unlockedTopic($id);
                 Session::addFlash("success", "Le topic est devérouillé !");
-                $this -> redirectTo("forum", "listTopicsByCategory", $topic->getCategory()->getId()); exit;
+                $this->redirectTo("forum", "listTopicsByCategory", $topic->getCategory()->getId());
+                exit;
             } else {
                 Session::addFlash("error", "Une erreur est survenue, réessayez ou assurez vous d'avoir les droits.");
-                $this -> redirectTo("forum", "index"); exit;
+                $this->redirectTo("forum", "index");
+                exit;
             }
-        }else {
+        } else {
             Session::addFlash("error", "Une erreur est survenue, réessayez ou assurez vous d'avoir les droits.");
-            $this -> redirectTo("forum", "index"); exit;
+            $this->redirectTo("forum", "index");
+            exit;
         }
-        
     }
 
     // modification d'un topic($id)----------------------------------------------------
-    public function updateTopic($id){
+    public function updateTopic($id)
+    {
         //permet de le pas injecter autre chose qu'un entier dans l'url
         $id = filter_input(INPUT_GET, "id", FILTER_VALIDATE_INT);
         //si l'id dans l'url n'éxiste pas alors
-        if(!$id) {
+        if (!$id) {
             Session::addFlash("error", "Erreur");
-            $this -> redirectTo("forum", "index"); exit;
+            $this->redirectTo("forum", "index");
+            exit;
         }
 
         $topicManager = new TopicManager();
-        $topic = $topicManager->findOneById($id);  
-    
-        if($topic){
+        $topic = $topicManager->findOneById($id);
+
+        if ($topic) {
             // si l'user associé au topic est identique à l'user actuellement connecté à la session ou si l'admin est connecté alors
-            if(($topic->getUser()->getId() === Session::getUser()->getId()) || Session::isAdmin()){
+            if (($topic->getUser()->getId() === Session::getUser()->getId()) || Session::isAdmin()) {
                 $title = filter_input(INPUT_POST, "title", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
-                if($title){
+                if ($title) {
 
-                    $data = "title = '". $title ."'";
+                    $data = "title = '" . $title . "'";
                     // var_dump($data);die;
                     $topicManager->updateTopic($data, $id);
 
                     Session::addFlash("success", "Le topic est modifié !");
-                    $this -> redirectTo("forum", "listPostsByTopics", $id); exit;
+                    $this->redirectTo("forum", "listPostsByTopics", $id);
+                    exit;
                 } else {
                     Session::addFlash("error", "Une erreur est survenue, réessayez ou assurez vous d'avoir les droits.");
-                    $this -> redirectTo("forum", "index"); exit;
+                    $this->redirectTo("forum", "index");
+                    exit;
                 }
-                
-            }else {
+            } else {
                 Session::addFlash("error", "Une erreur est survenue, réessayez ou assurez vous d'avoir les droits.");
-                $this -> redirectTo("forum", "index"); exit;
+                $this->redirectTo("forum", "index");
+                exit;
             }
         }
     }
 
-        //----------------------------------------------------Post----------------------------------------------------
-    
-        //ajout d'un post dans un topic($id)----------------------------------------------------
-        public function addPost($id){
+    //----------------------------------------------------Post----------------------------------------------------
 
-            //permet de le pas injecter autre chose qu'un entier dans l'url
-            $id = filter_input(INPUT_GET, "id", FILTER_VALIDATE_INT);
-            //si l'id dans l'url n'éxiste pas alors
-            if(!$id) {
-                Session::addFlash("error", "Erreur");
-                $this -> redirectTo("forum", "index"); exit;
-            }
+    //ajout d'un post dans un topic($id)----------------------------------------------------
+    public function addPost($id)
+    {
 
-            $topicManager = new TopicManager();
-            $topic = $topicManager->findOneById($id);
-
-            if($topic) {                   
-                if($_POST['submit']){
-                    //si l'utilisateur est connecté
-                    if(Session::getUser()){          
-                        $text = filter_input(INPUT_POST, "text", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-                        
-                        if($text){
-                            $postManager = new PostManager();
-                            // récupère l'id de l'user ayant créé le post
-                            $idUser = Session::getUser() -> getId();
-                            //tableau attendu par la fonction dans app\Manager add($data) pour l'ajout des données en BDD
-                            //$data = ['username' => 'Squalli', 'password' => 'dfsyfshfbzeifbqefbq', 'email' => 'sql@gmail.com'];
-                            $data = ['text' => $text, 'user_id' => $idUser, 'topic_id' => $id];
-                            $postManager->add($data);
-                            $this -> redirectTo("forum", "listPostsByTopics", $id); exit;
-                        } else {
-                            Session::addFlash("error", "Une erreur est survenue, réessayez.");
-                            $this -> redirectTo("forum", "listPostsByTopics", $id); exit;
-                        }
-                    } else{
-                        Session::addFlash("error", "Veuillez vous inscrire ou vous connecter pour écrire un message.");
-                        $this -> redirectTo("forum", "index"); exit;
-                    }
-                }else{
-                    Session::addFlash("error", "Veuillez vous inscrire ou vous connecter pour écrire un message.");
-                    $this -> redirectTo("forum", "index"); exit;
-                }
-            } 
+        //permet de le pas injecter autre chose qu'un entier dans l'url
+        $id = filter_input(INPUT_GET, "id", FILTER_VALIDATE_INT);
+        //si l'id dans l'url n'éxiste pas alors
+        if (!$id) {
+            Session::addFlash("error", "Erreur");
+            $this->redirectTo("forum", "index");
+            exit;
         }
 
-        // modification d'un post($id)----------------------------------------------------
-        public function updatePost($id){
+        //si l'utilisateur n'est pas connecté alors
+        if (!Session::getUser()) {
+            Session::addFlash("error", "Veuillez vous connecter ou vous inscrire !");
+            $this->redirectTo("home", "index");
+            exit;
+        }
 
-            //permet de le pas injecter autre chose qu'un entier dans l'url
-            $id = filter_input(INPUT_GET, "id", FILTER_VALIDATE_INT);
-            //si l'id dans l'url n'éxiste pas alors
-            if(!$id) {
-                Session::addFlash("error", "Erreur");
-                $this -> redirectTo("forum", "index"); exit;
-            }
+        $topicManager = new TopicManager();
+        $topic = $topicManager->findOneById($id);
 
-            $postManager = new postManager();
-            $post = $postManager->findOneById($id);
-            
-            //si l'utilisateur est connecté alors
-            if(Session::getUser()) {
-                if($post){
-                    // si l'user associé au topic est identique à l'user actuellement connecté à la session ou si l'admin est connecté alors
-                    if(($post->getUser()->getId() === Session::getUser()->getId()) || Session::isAdmin()){
-                        
-                        $text = filter_input(INPUT_POST, "text", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-                        
-                        if($text){
-                            $data = "text = '". $text ."'";
-                            $postManager->updatePost($data, $id);
-                            // var_dump($postManager);die;
-                            Session::addFlash("success", "Le message est modifié !");
-                            //récupère getTopic de l'entité Post et son ID
-                            $this -> redirectTo("forum", "listPostsByTopics", $post->getTopic()->getId()); exit;
-                        } else {
-                            Session::addFlash("error", "Une erreur est survenue, réessayez ou assurez vous d'avoir les droits.");
-                            $this -> redirectTo("forum", "index"); exit;
-                        }
-                    }else {
-                        Session::addFlash("error", "Une erreur est survenue, réessayez ou assurez vous d'avoir les droits.");
-                        $this -> redirectTo("forum", "index"); exit;
+        if ($topic) {
+            if ($_POST['submit']) {
+                //si l'utilisateur est connecté
+                if (Session::getUser()) {
+                    $text = filter_input(INPUT_POST, "text", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+
+                    if ($text) {
+                        $postManager = new PostManager();
+                        // récupère l'id de l'user ayant créé le post
+                        $idUser = Session::getUser()->getId();
+                        //tableau attendu par la fonction dans app\Manager add($data) pour l'ajout des données en BDD
+                        //$data = ['username' => 'Squalli', 'password' => 'dfsyfshfbzeifbqefbq', 'email' => 'sql@gmail.com'];
+                        $data = ['text' => $text, 'user_id' => $idUser, 'topic_id' => $id];
+                        $postManager->add($data);
+                        $this->redirectTo("forum", "listPostsByTopics", $id);
+                        exit;
+                    } else {
+                        Session::addFlash("error", "Une erreur est survenue, réessayez.");
+                        $this->redirectTo("forum", "listPostsByTopics", $id);
+                        exit;
                     }
                 } else {
-                    Session::addFlash("error", "Post inexistant");
-                    $this -> redirectTo("forum", "index"); exit;
+                    Session::addFlash("error", "Veuillez vous inscrire ou vous connecter pour écrire un message.");
+                    $this->redirectTo("forum", "index");
+                    exit;
                 }
-            }else {
-                Session::addFlash("error", "Connexion requise");
-                $this -> redirectTo("forum", "index"); exit;
+            } else {
+                Session::addFlash("error", "Veuillez vous inscrire ou vous connecter pour écrire un message.");
+                $this->redirectTo("forum", "index");
+                exit;
             }
         }
+    }
 
-        //suppression d'un post($id)----------------------------------------------------
-        public function deletePost($id){
-            //permet de le pas injecter autre chose qu'un entier dans l'url
-            $id = filter_input(INPUT_GET, "id", FILTER_VALIDATE_INT);
-            //si l'id dans l'url n'éxiste pas alors
-            if(!$id) {
-                Session::addFlash("error", "Erreur");
-                $this -> redirectTo("forum", "index"); exit;
-            }
+    // modification d'un post($id)----------------------------------------------------
+    public function updatePost($id)
+    {
 
-            $postManager = new postManager();
-            $post = $postManager->findOneById($id);
-            //si l'utilisateur est connecté alors
-            if(Session::getUser()) {
-                if($post){
-                    // si l'user associé au topic est identique à l'user actuellement connecté à la session ou si l'admin est connecté alors
-                    if(($post->getUser()->getId() === Session::getUser()->getId()) || Session::isAdmin()){
-                        $postManager->delete($id);
-                        Session::addFlash("success", "Le message est supprimé !");
+        //permet de le pas injecter autre chose qu'un entier dans l'url
+        $id = filter_input(INPUT_GET, "id", FILTER_VALIDATE_INT);
+        //si l'id dans l'url n'éxiste pas alors
+        if (!$id) {
+            Session::addFlash("error", "Erreur");
+            $this->redirectTo("forum", "index");
+            exit;
+        }
+
+        $postManager = new postManager();
+        $post = $postManager->findOneById($id);
+
+        //si l'utilisateur est connecté alors
+        if (Session::getUser()) {
+            if ($post) {
+                // si l'user associé au topic est identique à l'user actuellement connecté à la session ou si l'admin est connecté alors
+                if (($post->getUser()->getId() === Session::getUser()->getId()) || Session::isAdmin()) {
+
+                    $text = filter_input(INPUT_POST, "text", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+
+                    if ($text) {
+                        $data = "text = '" . $text . "'";
+                        $postManager->updatePost($data, $id);
+                        // var_dump($postManager);die;
+                        Session::addFlash("success", "Le message est modifié !");
                         //récupère getTopic de l'entité Post et son ID
-                        $this -> redirectTo("forum", "listPostsByTopics", $post->getTopic()->getId()); exit;
+                        $this->redirectTo("forum", "listPostsByTopics", $post->getTopic()->getId());
+                        exit;
                     } else {
                         Session::addFlash("error", "Une erreur est survenue, réessayez ou assurez vous d'avoir les droits.");
-                        $this -> redirectTo("forum", "index"); exit;
+                        $this->redirectTo("forum", "index");
+                        exit;
                     }
-                }else {
+                } else {
                     Session::addFlash("error", "Une erreur est survenue, réessayez ou assurez vous d'avoir les droits.");
-                    $this -> redirectTo("forum", "index"); exit;
+                    $this->redirectTo("forum", "index");
+                    exit;
                 }
-            }else {
-                Session::addFlash("error", "Connexion requise");
-                $this -> redirectTo("forum", "index"); exit;
+            } else {
+                Session::addFlash("error", "Post inexistant");
+                $this->redirectTo("forum", "index");
+                exit;
             }
+        } else {
+            Session::addFlash("error", "Connexion requise");
+            $this->redirectTo("forum", "index");
+            exit;
         }
     }
 
+    //suppression d'un post($id)----------------------------------------------------
+    public function deletePost($id)
+    {
+        //permet de le pas injecter autre chose qu'un entier dans l'url
+        $id = filter_input(INPUT_GET, "id", FILTER_VALIDATE_INT);
+        //si l'id dans l'url n'éxiste pas alors
+        if (!$id) {
+            Session::addFlash("error", "Erreur");
+            $this->redirectTo("forum", "index");
+            exit;
+        }
+
+        $postManager = new postManager();
+        $post = $postManager->findOneById($id);
+        //si l'utilisateur est connecté alors
+        if (Session::getUser()) {
+            if ($post) {
+                // si l'user associé au topic est identique à l'user actuellement connecté à la session ou si l'admin est connecté alors
+                if (($post->getUser()->getId() === Session::getUser()->getId()) || Session::isAdmin()) {
+                    $postManager->delete($id);
+                    Session::addFlash("success", "Le message est supprimé !");
+                    //récupère getTopic de l'entité Post et son ID
+                    $this->redirectTo("forum", "listPostsByTopics", $post->getTopic()->getId());
+                    exit;
+                } else {
+                    Session::addFlash("error", "Une erreur est survenue, réessayez ou assurez vous d'avoir les droits.");
+                    $this->redirectTo("forum", "index");
+                    exit;
+                }
+            } else {
+                Session::addFlash("error", "Une erreur est survenue, réessayez ou assurez vous d'avoir les droits.");
+                $this->redirectTo("forum", "index");
+                exit;
+            }
+        } else {
+            Session::addFlash("error", "Connexion requise");
+            $this->redirectTo("forum", "index");
+            exit;
+        }
+    }
+}
