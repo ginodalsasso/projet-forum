@@ -16,6 +16,12 @@ class ForumController extends AbstractController implements ControllerInterface{
 
     //affichage de l'index soit la liste des catégories)----------------------------------------------------
     public function index() {
+        //si l'utilisateur n'est pas connecté alors
+        if(!Session::getUser()){
+            Session::addFlash("error", "Veuillez vous connecter ou vous inscrire !");
+            $this -> redirectTo("home", "index"); exit;
+        }
+
         // créer une nouvelle instance de CategoryManager
         $categoryManager = new CategoryManager();
         $postManager = new PostManager();
@@ -39,6 +45,11 @@ class ForumController extends AbstractController implements ControllerInterface{
         //si l'id dans l'url n'éxiste pas alors
         if(!$id) {
             Session::addFlash("error", "Erreur");
+            $this -> redirectTo("home", "index"); exit;
+        }
+
+        if(!Session::getUser()){
+            Session::addFlash("error", "Veuillez vous connecter ou vous inscrire !");
             $this -> redirectTo("forum", "index"); exit;
         }
 
@@ -77,8 +88,15 @@ class ForumController extends AbstractController implements ControllerInterface{
         if(!$id) {
             Session::addFlash("error", "Erreur");
             $this -> redirectTo("forum", "index"); exit;
-        }        $categoryManager = new CategoryManager();
+        }        
 
+        //si l'utilisateur n'est pas connecté alors
+        if(!Session::getUser()){
+            Session::addFlash("error", "Veuillez vous connecter ou vous inscrire !");
+            $this -> redirectTo("home", "index"); exit;
+        }
+
+        $categoryManager = new CategoryManager();
         $postManager = new PostManager();
         $topicManager = new TopicManager();
         $topic = $topicManager->findOneById($id);
@@ -116,6 +134,13 @@ class ForumController extends AbstractController implements ControllerInterface{
             Session::addFlash("error", "Erreur");
             $this -> redirectTo("forum", "index"); exit;
         }
+
+        //si l'utilisateur n'est pas connecté alors
+        if(!Session::getUser()){
+            Session::addFlash("error", "Veuillez vous connecter ou vous inscrire !");
+            $this -> redirectTo("home", "index"); exit;
+        }
+
         $postManager = new PostManager();
         $post = $postManager->findOneById($id);
 
@@ -148,6 +173,13 @@ class ForumController extends AbstractController implements ControllerInterface{
             Session::addFlash("error", "Erreur");
             $this -> redirectTo("forum", "index"); exit;
         }
+
+        //si l'utilisateur n'est pas connecté alors
+        if(!Session::getUser()){
+            Session::addFlash("error", "Veuillez vous connecter ou vous inscrire !");
+            $this -> redirectTo("home", "index"); exit;
+        }
+
         $topicManager = new TopicManager();
         $topic = $topicManager->findOneById($id);
 
@@ -178,6 +210,12 @@ class ForumController extends AbstractController implements ControllerInterface{
         if(!$id) {
             Session::addFlash("error", "Erreur");
             $this -> redirectTo("forum", "index"); exit;
+        }
+
+        //si l'utilisateur n'est pas connecté alors
+        if(!Session::getUser()){
+            Session::addFlash("error", "Veuillez vous connecter ou vous inscrire !");
+            $this -> redirectTo("home", "index"); exit;
         }
 
         $categoryManager = new CategoryManager();
@@ -240,6 +278,12 @@ class ForumController extends AbstractController implements ControllerInterface{
         if(!$id) {
             Session::addFlash("error", "Erreur");
             $this -> redirectTo("forum", "index"); exit;
+        }
+        
+        //si l'utilisateur n'est pas connecté alors
+        if(!Session::getUser()){
+            Session::addFlash("error", "Veuillez vous connecter ou vous inscrire !");
+            $this -> redirectTo("home", "index"); exit;
         }
 
         $categoryManager = new CategoryManager();
