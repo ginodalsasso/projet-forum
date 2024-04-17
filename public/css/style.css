@@ -206,8 +206,7 @@ h2{
 
 
 hr{
-    /* color: rgb(38, 26, 58); */
-    /* border-top: 2px solid  #3a1a1a33; */
+    border-color:#3a1a1a33;
 }
 
 /* ---------------------------formulaires--------------------------- */

@@ -215,7 +215,7 @@ class SecurityController extends AbstractController{
         }
 
         $userManager = new UserManager();
-        if($user){
+        if(Session::getUser()){
             // Si l'utilisateur connecté = à l'user en session ou si l'admin est connecté alors
             if((Session::getUser()->getId()) || Session::isAdmin()){
                 $pseudo = filter_input(INPUT_POST, "pseudo", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
@@ -275,7 +275,7 @@ class SecurityController extends AbstractController{
         }
 
         $userManager = new UserManager();
-        if($user){
+        if(Session::getUser()){
             // Si l'utilisateur connecté = à l'user en session ou si l'admin est connecté alors
             if((Session::getUser()->getId()) || Session::isAdmin()){
                 $pass1 = filter_input(INPUT_POST, "pass1", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
@@ -325,7 +325,7 @@ class SecurityController extends AbstractController{
 
         $userManager = new UserManager();
 
-        if($user){
+        if(Session::getUser() || Session::isAdmin()){
             // Si l'utilisateur connecté = à l'user en session ou si l'admin est connecté alors
             if((Session::getUser()->getId()) || Session::isAdmin()){
                 $userManager->delete($id);
