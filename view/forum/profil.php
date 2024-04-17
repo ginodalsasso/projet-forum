@@ -17,6 +17,7 @@ $user = $result["data"]['user'];
 <div class="button_container_container">
 <div class="button_container">
     <a class="button" href="index.php?ctrl=security&action=viewUpdateProfil&id=<?= $user->getId() ?>">Modifier</a>
+    <a class="button" href="index.php?ctrl=security&action=viewUpdatePassword&id=<?= $user->getId() ?>">Modifier mon mot de passe</a>
     <a class="button_delete" href="index.php?ctrl=security&action=deleteAccount&id=<?= $user->getId() ?>">Suprimer mon compte</a>
 </div>
 </div>

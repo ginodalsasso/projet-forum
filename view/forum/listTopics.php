@@ -31,7 +31,7 @@ $topics = $result["data"]['topics'];
                         <a href="index.php?ctrl=forum&action=viewUpdateTopic&id=<?= $topic->getId() ?>"><i class="fa-solid fa-pen-to-square"></i></a>
                         <a href="index.php?ctrl=forum&action=listPostsByTopics&id=<?= $topic->getId() ?>"><?= $topic ?></a>
                         <a href="index.php?ctrl=forum&action=deleteTopic&id=<?= $topic->getId() ?>"><i class="fa-solid fa-trash"></i></a>
-                        <br>par <?= $topic->getUser() ?> le <?= $topic->getCreationDate() ?>
+                        <br>par <?= ($topic->getUser()) ? $topic->getUser() : "Anonymous" ?> le <?= $topic->getCreationDate() ?>
                     </div>
 
                     <div class="titles_container_right">

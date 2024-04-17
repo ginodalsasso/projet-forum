@@ -53,13 +53,29 @@ class UserManager extends Manager{
         );
     }
 
-    public function updateUser($data, $id)
+    public function updateUser($data, $sqlUpdate)
     {
         $sql = "UPDATE user u
-                SET ". $data ."
+                SET ". $sqlUpdate ."
                 WHERE u.id_user = :id
         ";
-        return DAO::update($sql, ['id' => $id]);
+        return DAO::update($sql, [
+            'id' => $data["id"], 
+            'email' => $data["email"], 
+            'pseudo' => $data["pseudo"], 
+        ]);
+    }
+
+    public function updatePassword($data, $sqlUpdate)
+    {
+        $sql = "UPDATE user u
+                SET ". $sqlUpdate ."
+                WHERE u.id_user = :id
+        ";
+        return DAO::update($sql, [
+            'id' => $data["id"], 
+            'password' => $data["password"], 
+        ]);
     }
 
 }

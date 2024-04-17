@@ -62,7 +62,13 @@ class SecurityController extends AbstractController{
                     if($pass1 == $pass2 && $regexPassword) {//ici je vérifie si les deux mdp sont identiques et donne les conditions du mdp (regex ...)
                         //tableau attendu par la fonction dans app\Manager add($data)
                         //$data = ['username' => 'Squalli', 'password' => 'dfsyfshfbzeifbqefbq', 'email' => 'sql@gmail.com'];
-                        $data = ['pseudo' => $pseudo, 'email' => $email, 'password' => password_hash($pass1, PASSWORD_DEFAULT), "role" => "ROLE_USER"];
+                        $data = [
+                            'pseudo' => $pseudo, 
+                            'email' => $email, 
+                            'password' => password_hash($pass1, PASSWORD_DEFAULT), 
+                            "role" => "ROLE_USER"
+                        ];
+
                         $userManager->add($data);
                         $this -> redirectTo("security", "login"); exit;
                     }
@@ -144,7 +150,7 @@ class SecurityController extends AbstractController{
         }
     }             
 
-    //affichage de la vue de profil d'un utilisateur($id))----------------------------------------------------
+    //affichage de la vue de modification de profil d'un utilisateur($id))----------------------------------------------------
     public function viewUpdateProfil(){
         $userManager = new UserManager();
         $user = Session::getUser();
@@ -153,6 +159,25 @@ class SecurityController extends AbstractController{
             return [
                 "view" => VIEW_DIR."forum/update/updateProfil.php",
                 "meta_description" => "Modifier mon profil",
+                "data" => [
+                    "user" => $user
+                ]
+            ];
+        } else {
+            Session::addFlash("error", "Une erreur est survenue, réessayez ou assurez vous d'avoir les droits.");
+            $this -> redirectTo("forum", "index"); exit;
+        }
+    }    
+
+    //affichage de la vue de modification de mot de passe d'un utilisateur($id))----------------------------------------------------
+    public function viewUpdatePassword(){
+        $userManager = new UserManager();
+        $user = Session::getUser();
+        
+        if(Session::getUser()->getId() || Session::isAdmin()){
+            return [
+                "view" => VIEW_DIR."forum/update/updatePassword.php",
+                "meta_description" => "Modifier mon mot de passe",
                 "data" => [
                     "user" => $user
                 ]
@@ -189,8 +214,14 @@ class SecurityController extends AbstractController{
                     exit;
                 }
                 
-                $data = "pseudo = '". $pseudo ."',email = '". $email ."'";
-                $userManager->updateUser($data, $id); 
+                $data = [
+                    "id" => $id,
+                    "email" => $email,
+                    "pseudo" => $pseudo
+                ];
+
+                $sqlUpdate = "pseudo = :pseudo, email = :email";
+                $userManager->updateUser($data, $sqlUpdate); 
                 unset($_SESSION['user']);
                 
                 Session::addFlash("success", "Votre compte à été modifié !");
@@ -203,7 +234,43 @@ class SecurityController extends AbstractController{
         }
     }
 
-    //suppression d'une catégorie($id)----------------------------------------------------
+    // modifier le mot de passe($id)----------------------------------------------------
+    public function updatePassword($id){
+        $userManager = new UserManager();
+        // Si l'utilisateur connecté = à l'user en session ou si l'admin est connecté alors
+        if((Session::getUser()->getId()) || Session::isAdmin()){
+            $pass1 = filter_input(INPUT_POST, "pass1", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+            $pass2 = filter_input(INPUT_POST, "pass2", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+            
+            if($pass1 && $pass2){
+                // éxige au minimum: 8 caractères, une minuscule, une majuscule, un chiffre, un caractère spécial dans le mot de passe
+                $regexPassword = preg_match("/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/", $pass1);
+                
+                //insertion du password en BDD si les deux mdp match
+                if($pass1 == $pass2 && $regexPassword) {//ici je vérifie si les deux mdp sont identiques et donne les conditions du mdp (regex ...)
+                    //tableau attendu par la fonction dans app\Manager add($data)
+                $data = [
+                    "id" => $id,
+                    "password" => password_hash($pass1, PASSWORD_DEFAULT)
+                ];
+
+                $sqlUpdate = "password = :password";
+                $userManager->updatePassword($data, $sqlUpdate);      
+                // var_dump($userManager);die;
+                    unset($_SESSION['user']);
+                }
+                
+                Session::addFlash("success", "Votre mot de passe à été modifié !");
+                $this -> redirectTo("forum", "update", "updateProfil", $id); exit;
+            
+            } else {
+                Session::addFlash("error", "Une erreur est survenue, réessayez ou assurez vous d'avoir les droits.");
+                $this -> redirectTo("forum", "index"); exit;
+            }
+        }
+    }
+
+    //suppression d'un user($id)----------------------------------------------------
     public function deleteAccount($id){
         $userManager = new UserManager();
 

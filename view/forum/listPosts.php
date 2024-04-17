@@ -18,7 +18,7 @@ $posts = $result["data"]['posts'];
 foreach ($posts as $post) { ?>
     <section class="card_container_container">
         <div class="card_list">
-            <h2 class="user_post"><?= $post->getUser() ?><br><?= $post->getCreationDate() ?></h2> 
+            <h2 class="user_post"><?= ($post->getUser()) ? $post->getUser() : "Anonymous" ?><br><?= $post->getCreationDate() ?></h2> 
             <div class="titles_container">
                 <div class="titles_container_left">
                     <a href="index.php?ctrl=forum&action=viewUpdatePost&id=<?= $post->getId() ?>"><i class="fa-solid fa-pen-to-square"></i></a>
