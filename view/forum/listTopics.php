@@ -4,7 +4,11 @@ $topics = $result["data"]['topics'];
 ?>
 <h1><?= $category->getName() ?></h1>
 
-<a href="index.php?ctrl=forum&action=listCategory">Catégories</a>
+<div class="card_list_ariane_container">
+    <div class="card_list_ariane">
+        <a href="index.php?ctrl=forum&action=listCategory">Retour aux catégories</a>
+    </div>
+</div>
 
 <!----------------- Liste des topics ----------------->
 <section class="card_container_container">
@@ -27,7 +31,7 @@ $topics = $result["data"]['topics'];
                             } else {
                                 $statut = "<i class='fa-solid fa-lock'></i>";
                                 $action = "<a href='index.php?ctrl=forum&action=lockedTopics&id=" . $topic->getId() . "' class='topic-update'><i class='fa-solid fa-unlock'></i></a>";
-                            } 
+                            }
                             //$action récupère la méthode à appliquer si le topic doit être lock ou unlock
                             $action;
                         }
@@ -56,11 +60,15 @@ $topics = $result["data"]['topics'];
     </div>
 </section>
 
-<!----------------- Ajouter un topic ----------------->
-<div class="form_display">
-    <form action="index.php?ctrl=forum&action=addTopic&id=<?= $category->getId() ?>" method="POST">
-        <input type="text" name="title" id="title" placeholder="Titre du topic" required><br>
-        <textarea id="text" name="text" placeholder="Mon message" rows="5" cols="33"></textarea>
-        <input type="submit" name="submit" value="Envoyer">
-    </form>
-</div>
+<?php
+if (!app\Session::isBanned()) {
+?>
+    <!----------------- Ajouter un topic ----------------->
+    <div class="form_display">
+        <form action="index.php?ctrl=forum&action=addTopic&id=<?= $category->getId() ?>" method="POST">
+            <input type="text" name="title" id="title" placeholder="Titre du topic" required><br>
+            <textarea id="text" name="text" placeholder="Mon message" rows="5" cols="33"></textarea>
+            <input type="submit" name="submit" value="Envoyer">
+        </form>
+    </div>
+<?php } ?>

@@ -3,7 +3,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Lexend+Zetta:wght@100..900&family=Lexend:wght@100..900&display=swap');
 
 /*=============== VARIABLES CSS ===============*/
-:root{
+:root {
     --bg-colour: #130208;
     --card-colour: #5454c5;
     --font-color: #FFF3E6;
@@ -21,9 +21,9 @@
     box-sizing: border-box;
 }
 
-body{
+body {
     background: linear-gradient(#130208, #261A3A);
-    font-family:var(--font-family);
+    font-family: var(--font-family);
     color: var(--font-color);
     display: flex;
     flex-direction: column;
@@ -34,12 +34,13 @@ body{
     position: relative; */
 /* } */
 
-#mainpage{
+#mainpage {
     /* height: 100vh; */
 }
+
 /* ---------------------------navbar--------------------------- */
 
-.header{
+.header {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -48,7 +49,7 @@ body{
     margin: 24px 24px;
 }
 
-.logo{
+.logo {
     text-decoration: none;
     color: var(--font-color);
     font-family: "Lexend Zetta";
@@ -57,16 +58,18 @@ body{
     text-shadow: 0 0 10px #5454C5;
     transition: 0.5s;
 }
-.logo:hover{
+
+.logo:hover {
     text-shadow: 0 0 30px #ffffff;
 }
 
-.nav_list{
+.nav_list {
     display: flex;
     list-style: none;
-} 
+}
 
-.nav_link, .footer_list li a{
+.nav_link,
+.footer_list li a {
     margin: 0 20px;
     text-decoration: none;
     color: var(--font-color);
@@ -76,36 +79,38 @@ body{
     transition: 0.5s;
 }
 
-.nav_link:hover, .footer_list li a:hover{
+.nav_link:hover,
+.footer_list li a:hover {
     text-shadow: 0 0 20px #ffffff;
 }
 
-.button, input[type="submit"]{   
+.button,
+input[type="submit"] {
     text-decoration: none;
     border: none;
     color: var(--font-color);
     font-weight: 500;
     padding: 8px 16px;
     cursor: pointer;
-    background:linear-gradient(to left, #130208, #5454C5);
+    background: linear-gradient(to left, #130208, #5454C5);
     border-radius: 4px;
     filter: drop-shadow(0 0 10px #342056);
-    transition:  0.5s;
+    transition: 0.5s;
 }
 
-.button_delete{   
+.button_delete {
     text-decoration: none;
     border: none;
     color: var(--font-color);
     font-weight: 500;
     padding: 8px 16px;
-    background:linear-gradient(to left, #130208, #6B0000);
+    background: linear-gradient(to left, #130208, #6B0000);
     border-radius: 4px;
     filter: drop-shadow(0 0 10px #342056);
-    transition:  0.5s;
+    transition: 0.5s;
 }
 
-.button_deco{   
+.button_deco {
     text-decoration: none;
     border: none;
     color: var(--font-color);
@@ -114,27 +119,33 @@ body{
     background: #5454C5;
     border-radius: 4px;
     filter: drop-shadow(0 0 10px #342056);
-    transition:  0.5s;
+    transition: 0.5s;
 }
 
-.button_nav{
+.button_nav {
     margin: 0 10px;
 }
 
-.button:hover, input[type="submit"]:hover, .button_deco:hover{
+.button:hover,
+input[type="submit"]:hover,
+.button_deco:hover {
     filter: drop-shadow(0 0 30px #5454C5);
-    padding: 8px 20px;;
+    padding: 8px 20px;
+    ;
 }
 
-.button_delete:hover{
+.button_delete:hover {
     filter: drop-shadow(0 0 30px #a50000);
-    padding: 8px 20px;;
+    padding: 8px 20px;
+    ;
 }
-.button_container_container{
+
+.button_container_container {
     display: flex;
     justify-content: center;
 }
-.button_container{
+
+.button_container {
     display: flex;
     justify-content: space-between;
     width: 80vw;
@@ -151,26 +162,26 @@ h1 {
     margin: 150px 0;
 }
 
-h2{
+h2 {
     padding: 10px;
     background: linear-gradient(to right, rgba(18, 2, 8, 0.7), #5454c5);
     font-weight: 300;
     border-radius: 8px 8px 0 0;
 }
 
-.user_post{
+.user_post {
     font-size: var(--normal-fontsize);
 }
 
-.card_container_container{
-    display:flex;
+.card_container_container {
+    display: flex;
     justify-content: center;
     filter: drop-shadow(0 0 10px #342056);
     margin: 20px;
 }
 
-.card_container_profil{
-    display:flex;
+.card_container_profil {
+    display: flex;
     justify-content: center;
     filter: drop-shadow(0 0 10px #342056);
     margin: 100px;
@@ -179,37 +190,54 @@ h2{
     border-radius: 8px;
 }
 
-.card_list{
+.card_list {
     width: 80vw;
     background-color: var(--card-colour);
     border-radius: 8px;
 }
 
-.card_list a{
+.card_list a {
     color: var(--font-color);
     padding: 20px 5px;
     text-decoration: none;
 
 }
 
-.card_list_ariane{
-    width: 80vw;
+.card_list_ariane_container {
     display: flex;
     justify-content: center;
 }
-.card_list_ariane a{
 
-}
-
-.card_list_profil p{
-    padding: 10px 10px 5px 10px;
-}
-
-.card_list_users{
+.card_list_ariane {
+    width: 80vw;
     display: flex;
 }
 
-.titles_container{
+.card_list_ariane a {
+    background-color: var(--card-colour);
+    color: var(--font-color);
+    padding: 5px 10px;
+    margin-right: 10px;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: 0.5s;
+}
+
+.card_list_ariane a:hover {
+    filter: drop-shadow(0 0 30px #5454C5);
+    padding: 5px 12px;
+}
+
+
+.card_list_profil p {
+    padding: 10px 10px 5px 10px;
+}
+
+.card_list_users {
+    display: flex;
+}
+
+.titles_container {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -218,23 +246,26 @@ h2{
 
 
 
-hr{
-    border-color:#3a1a1a33;
+hr {
+    border-color: #3a1a1a33;
 }
 
 /* ---------------------------formulaires--------------------------- */
-.form_display{
+.form_display {
     display: flex;
     justify-content: center;
 }
 
-    form{
-        display: flex;
-        justify-content: center;
-        flex-direction: column;
-    }
+form {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
 
-    input[type="text"], input[type=email], input[type=password], textarea{
+input[type="text"],
+input[type=email],
+input[type=password],
+textarea {
     width: 80vw;
     padding: 12px 20px;
     margin: 8px 0;
@@ -248,14 +279,15 @@ hr{
     outline: none;
 }
 
-input[type=text]:focus, textarea:focus{
+input[type=text]:focus,
+textarea:focus {
     background-color: var(--font-color);
     color: #342056;
 }
 
 /* ---------------------------footer--------------------------- */
 
-footer{
+footer {
     width: 100%;
     bottom: 0px;
     margin-top: 200px;
@@ -264,7 +296,7 @@ footer{
     filter: drop-shadow(0 0 15px rgba(84, 84, 197, 0.3));
 }
 
-.footer_list{
+.footer_list {
     width: 100%;
     display: flex;
     justify-content: center;
@@ -274,12 +306,12 @@ footer{
     position: relative;
 }
 
-.footer_list li a{
+.footer_list li a {
     padding: 60px 20px 20px 20px;
     text-shadow: 0 0 10px #5454C5;
 }
 
-.footer_social_list{
+.footer_social_list {
     width: 100%;
     display: flex;
     justify-content: center;
@@ -287,27 +319,40 @@ footer{
     text-shadow: 0 0 10px #5454C5;
 }
 
-.footer_social_list a{
+.footer_social_list a {
     padding: 40px 10px;
     color: var(--font-color);
 }
 
-#copy{
+#copy {
     text-align: center;
 }
 
-@media (max-width: 800px){
+@media (max-width: 800px) {
 
-    .header{
-        margin: 0 24px ;
+    .header {
+        margin: 0 24px;
     }
-    .nav_list{
+
+    .nav_list {
         flex-direction: column;
     }
-    .footer_list{
+
+    .button_container{
         flex-direction: column;
     }
-    .footer_list li{
+
+    .button_container a{
+        display:flex;
+        justify-content: center;
+        margin: 10px 0;
+    }
+
+    .footer_list {
+        flex-direction: column;
+    }
+
+    .footer_list li {
         padding: 10px 0;
     }
 }

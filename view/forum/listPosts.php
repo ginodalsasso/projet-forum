@@ -9,11 +9,12 @@ $posts = $result["data"]['posts'];
 
 <h1><?= $topic->getTitle() ?></h1>
 
-<div class="card_list_ariane">
-
-    <a href="index.php?ctrl=forum&action=listCategory">Catégories</a>
-    ><a href="index.php?ctrl=forum&action=listTopicsByCategory&id=<?= $category->getId() ?>"><?= $category->getName() ?></a>
-</div>       
+<div class="card_list_ariane_container">
+    <div class="card_list_ariane">
+        <a href="index.php?ctrl=forum&action=listCategory">Catégories</a>
+        <a href="index.php?ctrl=forum&action=listTopicsByCategory&id=<?= $category->getId() ?>"><?= $category->getName() ?></a>
+    </div>
+</div>
 
 <!----------------- Liste des posts ----------------->
 
@@ -47,16 +48,19 @@ foreach ($posts as $post) { ?>
 
 <!----------------- Ajouter un post ----------------->
 <?php
-// si le topic est verrouillé alors
-if ($topic->getClosed()) { ?>
-    <p>Le topic est verrouillé</p>
-<?php } else { ?>
-    <div class="form_display">
-        <form action="index.php?ctrl=forum&action=addPost&id=<?= $topic->getId() ?>" method="POST">
-            <label for="text"></label>
-            <textarea id="text" name="text" placeholder="Mon message" rows="5" cols="33"></textarea>
-            <input type="submit" name="submit" value="Envoyer">
-        </form>
-    </div>
+
+if (!app\Session::isBanned()) {
+    // si le topic est verrouillé alors
+    if ($topic->getClosed()) { ?>
+        <p>Le topic est verrouillé</p>
+    <?php } else { ?>
+        <div class="form_display">
+            <form action="index.php?ctrl=forum&action=addPost&id=<?= $topic->getId() ?>" method="POST">
+                <label for="text"></label>
+                <textarea id="text" name="text" placeholder="Mon message" rows="5" cols="33"></textarea>
+                <input type="submit" name="submit" value="Envoyer">
+            </form>
+        </div>
 
 <?php }
+}

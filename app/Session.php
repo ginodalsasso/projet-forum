@@ -35,6 +35,7 @@ class Session{
 
     public static function getUser(){
         return (isset($_SESSION['user'])) ? $_SESSION['user'] : false;
+
     }
 
     public static function isAdmin(){
@@ -44,4 +45,21 @@ class Session{
         }
         return false;
     }
+
+    // public static function isBanned(){
+    //     if(self::getUser() && self::getUser()->userIsBanned(1)){
+    //         return true;
+    //     }
+    //     return false;
+    // }
+    public static function isBanned(){
+        $user = self::getUser();
+
+        // Vérifier si l'utilisateur existe et s'il est banni
+        if($user && $user->userIsBanned(1)){
+            return true;
+        }
+        return false;
+    }
+    
 }

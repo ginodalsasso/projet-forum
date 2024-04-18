@@ -108,10 +108,9 @@ class ForumController extends AbstractController implements ControllerInterface
             exit;
         }
 
-// --------------------------------------------------------------------------------------------------------------------------------------------------
-        // var_dump(Session::getUser()->getBanned()); die;
-        //si l'utilisateur qui est connecté est bann alors
-        // if (Session::getUser()->getBanned() === 1) {
+        // var_dump(Session::getUser()); die;
+        // si l'utilisateur qui est connecté est bann alors
+        // if (Session::isBanned()) {
         //     Session::addFlash("error", "Vous êtes banni et ne pouvez plus accéder à cette partie du forum !");
         //     $this->redirectTo("forum", "index");
         //     exit;
@@ -198,8 +197,7 @@ class ForumController extends AbstractController implements ControllerInterface
             exit;
         }
 
-        //si l'utilisateur qui est connecté est bann alors
-        if (Session::getUser()->getBanned() === Session::getUser()) {
+        if (Session::isBanned()) {
             Session::addFlash("error", "Vous êtes banni et ne pouvez plus accéder à cette partie du forum !");
             $this->redirectTo("forum", "index");
             exit;
@@ -238,6 +236,12 @@ class ForumController extends AbstractController implements ControllerInterface
         //si l'id dans l'url n'éxiste pas alors
         if (!$id) {
             Session::addFlash("error", "Erreur");
+            $this->redirectTo("forum", "index");
+            exit;
+        }
+
+        if (Session::isBanned()) {
+            Session::addFlash("error", "Vous êtes banni et ne pouvez plus accéder à cette partie du forum !");
             $this->redirectTo("forum", "index");
             exit;
         }
@@ -437,6 +441,12 @@ class ForumController extends AbstractController implements ControllerInterface
             exit;
         }
 
+        if (Session::isBanned()) {
+            Session::addFlash("error", "Vous êtes banni et ne pouvez plus accéder à cette partie du forum !");
+            $this->redirectTo("forum", "index");
+            exit;
+        }
+
         //si l'utilisateur n'est pas connecté alors
         if (!Session::getUser()) {
             Session::addFlash("error", "Veuillez vous connecter ou vous inscrire !");
@@ -492,6 +502,12 @@ class ForumController extends AbstractController implements ControllerInterface
             exit;
         }
 
+        if (Session::isBanned()) {
+            Session::addFlash("error", "Vous êtes banni et ne pouvez plus accéder à cette partie du forum !");
+            $this->redirectTo("forum", "index");
+            exit;
+        }
+
         $topicManager = new TopicManager();
         $topic = $topicManager->findOneById($id);
         $postManager = new postManager();
@@ -535,6 +551,12 @@ class ForumController extends AbstractController implements ControllerInterface
             exit;
         }
 
+        if (Session::isBanned()) {
+            Session::addFlash("error", "Vous êtes banni et ne pouvez plus accéder à cette partie du forum !");
+            $this->redirectTo("forum", "index");
+            exit;
+        }
+
         $topicManager = new TopicManager();
         $topic = $topicManager->findOneById($id);
 
@@ -570,6 +592,12 @@ class ForumController extends AbstractController implements ControllerInterface
             exit;
         }
 
+        if (Session::isBanned()) {
+            Session::addFlash("error", "Vous êtes banni et ne pouvez plus accéder à cette partie du forum !");
+            $this->redirectTo("forum", "index");
+            exit;
+        }
+
         $topicManager = new TopicManager();
         $topic = $topicManager->findOneById($id);
 
@@ -600,6 +628,12 @@ class ForumController extends AbstractController implements ControllerInterface
         //si l'id dans l'url n'éxiste pas alors
         if (!$id) {
             Session::addFlash("error", "Erreur");
+            $this->redirectTo("forum", "index");
+            exit;
+        }
+
+        if (Session::isBanned()) {
+            Session::addFlash("error", "Vous êtes banni et ne pouvez plus accéder à cette partie du forum !");
             $this->redirectTo("forum", "index");
             exit;
         }
@@ -656,6 +690,12 @@ class ForumController extends AbstractController implements ControllerInterface
             exit;
         }
 
+        if (Session::isBanned()) {
+            Session::addFlash("error", "Vous êtes banni et ne pouvez plus accéder à cette partie du forum !");
+            $this->redirectTo("forum", "index");
+            exit;
+        }
+
         $topicManager = new TopicManager();
         $topic = $topicManager->findOneById($id);
 
@@ -702,6 +742,12 @@ class ForumController extends AbstractController implements ControllerInterface
         //si l'id dans l'url n'éxiste pas alors
         if (!$id) {
             Session::addFlash("error", "Erreur");
+            $this->redirectTo("forum", "index");
+            exit;
+        }
+
+        if (Session::isBanned()) {
+            Session::addFlash("error", "Vous êtes banni et ne pouvez plus accéder à cette partie du forum !");
             $this->redirectTo("forum", "index");
             exit;
         }
@@ -755,6 +801,12 @@ class ForumController extends AbstractController implements ControllerInterface
         //si l'id dans l'url n'éxiste pas alors
         if (!$id) {
             Session::addFlash("error", "Erreur");
+            $this->redirectTo("forum", "index");
+            exit;
+        }
+
+        if (Session::isBanned()) {
+            Session::addFlash("error", "Vous êtes banni et ne pouvez plus accéder à cette partie du forum !");
             $this->redirectTo("forum", "index");
             exit;
         }
