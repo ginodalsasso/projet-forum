@@ -16,7 +16,7 @@
 
 
 -- Listage de la structure de la base pour forummvc_v2
-CREATE DATABASE IF NOT EXISTS `forummvc_v2` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_bin */ /*!80016 DEFAULT ENCRYPTION='N' */;
+CREATE DATABASE IF NOT EXISTS `forummvc_v2` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 USE `forummvc_v2`;
 
 -- Listage de la structure de table forummvc_v2. category
@@ -78,7 +78,7 @@ CREATE TABLE IF NOT EXISTS `topic` (
   CONSTRAINT `FK_topic_membre` FOREIGN KEY (`user_id`) REFERENCES `user` (`id_user`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Listage des données de la table forummvc_v2.topic : ~6 rows (environ)
+-- Listage des données de la table forummvc_v2.topic : ~0 rows (environ)
 DELETE FROM `topic`;
 INSERT INTO `topic` (`id_topic`, `title`, `creationDate`, `closed`, `user_id`, `category_id`) VALUES
 	(30, 'Ras-le-bol 2023', '2024-04-15 13:46:35', 0, 10, 2),
@@ -96,18 +96,20 @@ CREATE TABLE IF NOT EXISTS `user` (
   `email` varchar(255) NOT NULL,
   `role` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `creationDate` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `banned` tinyint NOT NULL DEFAULT '0',
   PRIMARY KEY (`id_user`)
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Listage des données de la table forummvc_v2.user : ~6 rows (environ)
+-- Listage des données de la table forummvc_v2.user : ~7 rows (environ)
 DELETE FROM `user`;
-INSERT INTO `user` (`id_user`, `pseudo`, `password`, `email`, `role`, `creationDate`) VALUES
-	(6, 'gary', '$2y$10$a/HHyNhM4wi9SE9SgGcnueWFR1oC0I57ec.NB1fgMfM0ioKtK9YTa', 'gary@gmail.com', 'ROLE_USER', '2024-04-10 11:03:20'),
-	(7, 'romane', '$2y$10$ji2XkXGlneufexANLYQ2AOCtfQ0FY7if0CYgnZgIoXstXl0mTbm/2', 'romane@gmail.com', 'ROLE_ADMIN', '2024-04-10 11:03:20'),
-	(8, 'Gino67', '$2y$10$9Ny4xuudFOhbTSzaZiceK.IJXSINfDrWmkvtOia4WMklnn72x.P.K', 'gino67@gmail.com', 'ROLE_USER', '2024-04-10 11:25:08'),
-	(10, 'glad', '$2y$10$C.LElcGlGkotEUsaytNiFO256jfcv8SyPPod2w2LCjMiKFu66gzv6', 'glad@gmail.com', 'ROLE_ADMIN', '2024-04-10 11:33:56'),
-	(17, 'fred', '$2y$10$EQSq.vuWWzvloi1aOQcBZ.eVSsBgti9o1uqC3fmR23.PDDOsS1uxm', 'fred@gmail.com', 'ROLE_USER', '2024-04-16 13:53:39'),
-	(18, 'micka', '$2y$10$Z2S8NptEwzn5O.BRgFfQHOeLMwpls2vGtXzImlYMS2CwG42SmfN/e', 'micka@email.com', 'ROLE_USER', '2024-04-17 16:10:49');
+INSERT INTO `user` (`id_user`, `pseudo`, `password`, `email`, `role`, `creationDate`, `banned`) VALUES
+	(6, 'gary', '$2y$10$a/HHyNhM4wi9SE9SgGcnueWFR1oC0I57ec.NB1fgMfM0ioKtK9YTa', 'gary@gmail.com', 'ROLE_USER', '2024-04-10 11:03:20', 0),
+	(7, 'romane', '$2y$10$ji2XkXGlneufexANLYQ2AOCtfQ0FY7if0CYgnZgIoXstXl0mTbm/2', 'romane@gmail.com', 'ROLE_ADMIN', '2024-04-10 11:03:20', 0),
+	(8, 'Gino67', '$2y$10$9Ny4xuudFOhbTSzaZiceK.IJXSINfDrWmkvtOia4WMklnn72x.P.K', 'gino67@gmail.com', 'ROLE_USER', '2024-04-10 11:25:08', 0),
+	(10, 'glad', '$2y$10$C.LElcGlGkotEUsaytNiFO256jfcv8SyPPod2w2LCjMiKFu66gzv6', 'glad@gmail.com', 'ROLE_ADMIN', '2024-04-10 11:33:56', 0),
+	(17, 'fred', '$2y$10$EQSq.vuWWzvloi1aOQcBZ.eVSsBgti9o1uqC3fmR23.PDDOsS1uxm', 'fred@gmail.com', 'ROLE_USER', '2024-04-16 13:53:39', 0),
+	(18, 'micka', '$2y$10$Z2S8NptEwzn5O.BRgFfQHOeLMwpls2vGtXzImlYMS2CwG42SmfN/e', 'micka@email.com', 'ROLE_USER', '2024-04-17 16:10:49', 0),
+	(19, 'gigi', '$2y$10$ouUZz3VL5rkW1SfjD5hdE.qmCmKzal0VKmr/Iyfw94b9zuaMBxY36', 'gigi@gmail.com', 'ROLE_USER', '2024-04-18 10:48:01', 1);
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
