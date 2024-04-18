@@ -15,6 +15,8 @@ $users = $result["data"]['user'];
                 <p><?= $user->getRole() ?></p>
                 <p><?= $user->getCreationDate() ?></p>
                 <p><?= $user->getBanned() ?></p>
+                <a href="index.php?ctrl=security&action=userIsBanned&id=<?= $user->getId() ?>">Bannir</a>
+                <a href="index.php?ctrl=security&action=userIsNotBanned&id=<?= $user->getId() ?>">Débannir</a>
             </div>
             <hr>
         <?php

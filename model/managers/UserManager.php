@@ -83,4 +83,28 @@ class UserManager extends Manager
             'password' => $data["password"],
         ]);
     }
+
+
+    public function isBanned($id)
+    {
+        $sql = "UPDATE user SET banned = 1
+                WHERE id_user = :id";
+
+        return  $this->getOneOrNullResult(
+            DAO::select($sql, ['id' => $id]),
+            $this->className
+        );
+    }
+
+    public function isNotBanned($id)
+    {
+        $sql = "UPDATE user SET banned = 0
+                WHERE id_user = :id";
+
+        return  $this->getOneOrNullResult(
+            DAO::select($sql, ['id' => $id]),
+            $this->className
+        );
+    }
+
 }
