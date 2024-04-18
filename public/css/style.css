@@ -196,6 +196,10 @@ h2{
     padding: 10px 10px 5px 10px;
 }
 
+.card_list_users{
+    display: flex;
+}
+
 .titles_container{
     display: flex;
     justify-content: space-between;

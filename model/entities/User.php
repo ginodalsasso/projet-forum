@@ -15,6 +15,7 @@ final class User extends Entity{
     private $email;
     private $role;
     private $creationDate;
+    private $banned;
 
     public function __construct($data){         
         $this->hydrate($data);        
@@ -148,7 +149,38 @@ final class User extends Entity{
     }
 
     
+    /**
+     * Get the value of banned
+     */ 
+    public function getBanned()
+    {
+        return $this->banned;
+    }
+    
+    /**
+     * Set the value of banned
+     *
+     * @return  self
+     */ 
+    public function setBanned($banned)
+    {
+        $this->banned = $banned;
+        
+        return $this;
+    }
+
+    // check le statut de l'utilisateur 
+    public function isBanned($banned){
+    
+        if ($this->getBanned() === $banned){
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
     public function __toString() {
         return $this->pseudo;
     }
+
 }

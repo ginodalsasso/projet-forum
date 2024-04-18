@@ -33,7 +33,7 @@
                         </li>
                         <li>
                             <?php if (App\Session::isAdmin()) { ?>
-                                <a class="nav_link" href="index.php?ctrl=home&action=users">Voir la liste des gens</a>
+                                <a class="nav_link" href="index.php?ctrl=forum&action=viewListUser">Voir la liste des membres</a>
                             <?php } ?>
                         </li>
                         <li>

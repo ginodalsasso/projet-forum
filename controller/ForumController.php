@@ -14,11 +14,12 @@ use Model\Managers\UserManager;
 class ForumController extends AbstractController implements ControllerInterface
 {
 
-    //----------------------------------------------------Affichage----------------------------------------------------
+    //)--------------------------------------------------------------------------------------------------------Affichage Listes----------------------------------------------------
 
-    //affichage de l'index soit la liste des catégories)----------------------------------------------------
+    //)----------------------------------------------------affichage de l'index soit la liste des catégories)----------------------------------------------------
     public function index()
     {
+
         //si l'utilisateur n'est pas connecté alors
         if (!Session::getUser()) {
             Session::addFlash("error", "Veuillez vous connecter ou vous inscrire !");
@@ -42,7 +43,7 @@ class ForumController extends AbstractController implements ControllerInterface
         ];
     }
 
-    //affichage de la liste des topics par catégorie ($id))----------------------------------------------------
+    //)----------------------------------------------------affichage de la liste des topics par catégorie ($id))----------------------------------------------------
     public function listTopicsByCategory($id)
     {
         //permet de le pas injecter autre chose qu'un entier dans l'url
@@ -88,7 +89,7 @@ class ForumController extends AbstractController implements ControllerInterface
         }
     }
 
-    //affichage de la liste des posts d'un topic($id))----------------------------------------------------
+    //)----------------------------------------------------affichage de la liste des posts d'un topic($id))----------------------------------------------------
     public function listPostsByTopics($id)
     {
         //permet de le pas injecter autre chose qu'un entier dans l'url
@@ -138,7 +139,38 @@ class ForumController extends AbstractController implements ControllerInterface
         }
     }
 
-    //affichage de la vue update d'un post($id))----------------------------------------------------
+    //)----------------------------------------------------affichage de la liste des membres du forum----------------------------------------------------
+
+    public function viewListUser()
+    {
+        //si l'utilisateur connecté à la session n'est pas admin alors
+        if (!Session::isAdmin()) {
+            Session::addFlash("error", "Vous n'avez pas les droits d'accès à cette page !");
+            $this->redirectTo("home", "index");
+            exit;
+        }
+
+        // créer une nouvelle instance de CategoryManager
+        $userManager = new UserManager();
+        // récupérer la liste de tout les users grâce à la méthode findAll de Manager.php (triés par nom)
+        $users = $userManager->findAll();
+        // var_dump($userManager); die;
+
+        // le controller communique avec la vue "listUsers" (view) pour lui envoyer la liste des membres (data)
+        return [
+            "view" => VIEW_DIR . "forum/listUsers.php",
+            "meta_description" => "Liste des membres du forum",
+            "data" => [
+                "user" => $users,
+            ]
+        ];
+    }
+
+
+    //---------------)-----------------------------------------------------------------------------------------Affichage update----------------------------------------------------
+
+
+    //)----------------------------------------------------affichage de la vue update d'un post($id))----------------------------------------------------
     public function viewUpdatePost($id)
     {
         //permet de le pas injecter autre chose qu'un entier dans l'url
@@ -154,6 +186,13 @@ class ForumController extends AbstractController implements ControllerInterface
         if (!Session::getUser()) {
             Session::addFlash("error", "Veuillez vous connecter ou vous inscrire !");
             $this->redirectTo("home", "index");
+            exit;
+        }
+
+        //si l'utilisateur qui est connecté est bann alors
+        if (Session::getUser()->getBanned() === Session::getUser()) {
+            Session::addFlash("error", "Vous êtes banni et ne pouvez plus accéder à cette partie du forum !");
+            $this->redirectTo("forum", "index");
             exit;
         }
 
@@ -181,7 +220,7 @@ class ForumController extends AbstractController implements ControllerInterface
         }
     }
 
-    //affichage de la vue update d'un topic($id))----------------------------------------------------
+    //)----------------------------------------------------affichage de la vue update d'un topic($id))----------------------------------------------------
     public function viewUpdateTopic($id)
     {
         //permet de le pas injecter autre chose qu'un entier dans l'url
@@ -225,7 +264,7 @@ class ForumController extends AbstractController implements ControllerInterface
         }
     }
 
-    //affichage de la vue update d'une categorie($id))----------------------------------------------------
+    //)----------------------------------------------------affichage de la vue update d'une categorie($id))----------------------------------------------------
     public function viewUpdateCategory($id)
     {
         //permet de le pas injecter autre chose qu'un entier dans l'url
@@ -270,9 +309,9 @@ class ForumController extends AbstractController implements ControllerInterface
 
 
 
-    //----------------------------------------------------Category----------------------------------------------------
+    //------)--------------------------------------------------------------------------------------------------Category----------------------------------------------------
 
-    //ajout d'une catégorie----------------------------------------------------
+    //)----------------------------------------------------ajout d'une catégorie----------------------------------------------------
     public function addCategory()
     {
         if (Session::isAdmin()) {
@@ -303,7 +342,7 @@ class ForumController extends AbstractController implements ControllerInterface
         }
     }
 
-    //suppression d'une catégorie($id)----------------------------------------------------
+    //)----------------------------------------------------suppression d'une catégorie($id)----------------------------------------------------
     public function deleteCategory($id)
     {
         //permet de le pas injecter autre chose qu'un entier dans l'url
@@ -340,7 +379,7 @@ class ForumController extends AbstractController implements ControllerInterface
         }
     }
 
-    // modification d'une catégorie($id)----------------------------------------------------
+    // )----------------------------------------------------modification d'une catégorie($id)----------------------------------------------------
     public function updateCategory($id)
     {
         //permet de le pas injecter autre chose qu'un entier dans l'url
@@ -374,9 +413,10 @@ class ForumController extends AbstractController implements ControllerInterface
             }
         }
     }
-    //----------------------------------------------------Topic----------------------------------------------------
 
-    //ajout d'un topic dans une catégorie($id))----------------------------------------------------
+    //--------)------------------------------------------------------------------------------------------------Topic----------------------------------------------------
+
+    //)----------------------------------------------------ajout d'un topic dans une catégorie($id))----------------------------------------------------
     public function addTopic($id)
     {
         //permet de le pas injecter autre chose qu'un entier dans l'url
@@ -431,7 +471,7 @@ class ForumController extends AbstractController implements ControllerInterface
         }
     }
 
-    //suppression d'un topic($id)----------------------------------------------------
+    //)----------------------------------------------------suppression d'un topic($id)----------------------------------------------------
     public function deleteTopic($id)
     {
         //permet de le pas injecter autre chose qu'un entier dans l'url
@@ -474,7 +514,7 @@ class ForumController extends AbstractController implements ControllerInterface
     }
 
 
-    //vérouillage d'un topic($id) par l'utilisateur créateur ou l'admin)----------------------------------------------------
+    //)----------------------------------------------------vérouillage d'un topic($id) par l'utilisateur créateur ou l'admin)----------------------------------------------------
     public function lockedTopics($id)
     {
         //permet de le pas injecter autre chose qu'un entier dans l'url
@@ -509,7 +549,7 @@ class ForumController extends AbstractController implements ControllerInterface
     }
 
 
-    //devérouillage d'un topic($id) par l'utilisateur créateur ou l'admin)----------------------------------------------------
+    //)----------------------------------------------------devérouillage d'un topic($id) par l'utilisateur créateur ou l'admin)----------------------------------------------------
     public function unlockedTopics($id)
     {
         //permet de le pas injecter autre chose qu'un entier dans l'url
@@ -543,7 +583,7 @@ class ForumController extends AbstractController implements ControllerInterface
         }
     }
 
-    // modification d'un topic($id)----------------------------------------------------
+    // )----------------------------------------------------modification d'un topic($id)----------------------------------------------------
     public function updateTopic($id)
     {
         //permet de le pas injecter autre chose qu'un entier dans l'url
@@ -585,9 +625,9 @@ class ForumController extends AbstractController implements ControllerInterface
         }
     }
 
-    //----------------------------------------------------Post----------------------------------------------------
+    //---------------------------------------)-----------------------------------------------------------------Post----------------------------------------------------
 
-    //ajout d'un post dans un topic($id)----------------------------------------------------
+    //)----------------------------------------------------ajout d'un post dans un topic($id)----------------------------------------------------
     public function addPost($id)
     {
 
@@ -644,7 +684,7 @@ class ForumController extends AbstractController implements ControllerInterface
         }
     }
 
-    // modification d'un post($id)----------------------------------------------------
+    //)---------------------------------------------------- modification d'un post($id)----------------------------------------------------
     public function updatePost($id)
     {
 
@@ -698,7 +738,7 @@ class ForumController extends AbstractController implements ControllerInterface
         }
     }
 
-    //suppression d'un post($id)----------------------------------------------------
+    //)----------------------------------------------------suppression d'un post($id)----------------------------------------------------
     public function deletePost($id)
     {
         //permet de le pas injecter autre chose qu'un entier dans l'url
