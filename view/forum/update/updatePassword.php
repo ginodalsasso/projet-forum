@@ -2,6 +2,8 @@
 $user = $result["data"]['user'];
 ?>
 
+<h1>Modifier mon mot de passe</h1>
+
 <div class="form_display">
     <form action="index.php?ctrl=security&action=updatePassword&id=<?= $user->getId() ?>" method="POST" enctype="multipart/form-data">
 

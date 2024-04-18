@@ -9,8 +9,11 @@ $posts = $result["data"]['posts'];
 
 <h1><?= $topic->getTitle() ?></h1>
 
-<a href="index.php?ctrl=forum&action=listCategory">Catégories</a>
-><a href="index.php?ctrl=forum&action=listTopicsByCategory&id=<?= $category->getId() ?>"><?= $category->getName() ?></a>
+<div class="card_list_ariane">
+
+    <a href="index.php?ctrl=forum&action=listCategory">Catégories</a>
+    ><a href="index.php?ctrl=forum&action=listTopicsByCategory&id=<?= $category->getId() ?>"><?= $category->getName() ?></a>
+</div>       
 
 <!----------------- Liste des posts ----------------->
 

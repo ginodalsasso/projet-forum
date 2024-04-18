@@ -2,7 +2,7 @@
     //récupère les posts
     $post = $result["data"]['post']; 
 ?>
-
+<h1>Modifier le message</h1>
 
 <div class="form_display">
     <form action="index.php?ctrl=forum&action=updatePost&id=<?=$post->getId()?>" method="POST" >

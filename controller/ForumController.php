@@ -108,6 +108,15 @@ class ForumController extends AbstractController implements ControllerInterface
             exit;
         }
 
+// --------------------------------------------------------------------------------------------------------------------------------------------------
+        // var_dump(Session::getUser()->getBanned()); die;
+        //si l'utilisateur qui est connecté est bann alors
+        // if (Session::getUser()->getBanned() === 1) {
+        //     Session::addFlash("error", "Vous êtes banni et ne pouvez plus accéder à cette partie du forum !");
+        //     $this->redirectTo("forum", "index");
+        //     exit;
+        // }
+
         $categoryManager = new CategoryManager();
         $postManager = new PostManager();
         $topicManager = new TopicManager();

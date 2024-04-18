@@ -35,7 +35,7 @@ body{
 /* } */
 
 #mainpage{
-    height: 100vh;
+    /* height: 100vh; */
 }
 /* ---------------------------navbar--------------------------- */
 
@@ -192,6 +192,15 @@ h2{
 
 }
 
+.card_list_ariane{
+    width: 80vw;
+    display: flex;
+    justify-content: center;
+}
+.card_list_ariane a{
+
+}
+
 .card_list_profil p{
     padding: 10px 10px 5px 10px;
 }
@@ -263,7 +272,6 @@ footer{
     align-items: center;
     list-style: none;
     position: relative;
-    
 }
 
 .footer_list li a{
@@ -286,4 +294,20 @@ footer{
 
 #copy{
     text-align: center;
+}
+
+@media (max-width: 800px){
+
+    .header{
+        margin: 0 24px ;
+    }
+    .nav_list{
+        flex-direction: column;
+    }
+    .footer_list{
+        flex-direction: column;
+    }
+    .footer_list li{
+        padding: 10px 0;
+    }
 }

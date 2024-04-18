@@ -1,4 +1,5 @@
 <?php
+
 namespace Model\Entities;
 
 use App\Entity;
@@ -7,7 +8,8 @@ use App\Entity;
     En programmation orientée objet, une classe finale (final class) est une classe que vous ne pouvez pas étendre, c'est-à-dire qu'aucune autre classe ne peut hériter de cette classe. En d'autres termes, une classe finale ne peut pas être utilisée comme classe parente.
 */
 
-final class Topic extends Entity{
+final class Topic extends Entity
+{
 
     private $id;
     private $title;
@@ -17,14 +19,16 @@ final class Topic extends Entity{
     private $closed;
     private $nbPosts;
 
-    public function __construct($data){         
-        $this->hydrate($data);        
+    public function __construct($data)
+    {
+        $this->hydrate($data);
     }
 
     /**
      * Get the value of id
-     */ 
-    public function getId(){
+     */
+    public function getId()
+    {
         return $this->id;
     }
 
@@ -32,16 +36,18 @@ final class Topic extends Entity{
      * Set the value of id
      *
      * @return  self
-     */ 
-    public function setId($id){
+     */
+    public function setId($id)
+    {
         $this->id = $id;
         return $this;
     }
 
     /**
      * Get the value of title
-     */ 
-    public function getTitle(){
+     */
+    public function getTitle()
+    {
         return $this->title;
     }
 
@@ -49,16 +55,18 @@ final class Topic extends Entity{
      * Set the value of title
      *
      * @return  self
-     */ 
-    public function setTitle($title){
+     */
+    public function setTitle($title)
+    {
         $this->title = $title;
         return $this;
     }
 
     /**
      * Get the value of user
-     */ 
-    public function getUser(){
+     */
+    public function getUser()
+    {
         return $this->user;
     }
 
@@ -66,15 +74,16 @@ final class Topic extends Entity{
      * Set the value of user
      *
      * @return  self
-     */ 
-    public function setUser($user){
+     */
+    public function setUser($user)
+    {
         $this->user = $user;
         return $this;
     }
 
     /**
      * Get the value of category
-     */ 
+     */
     public function getCategory()
     {
         return $this->category;
@@ -84,7 +93,7 @@ final class Topic extends Entity{
      * Set the value of category
      *
      * @return  self
-     */ 
+     */
     public function setCategory($category)
     {
         $this->category = $category;
@@ -94,7 +103,7 @@ final class Topic extends Entity{
 
     /**
      * Get the value of creationDate
-     */ 
+     */
     public function getCreationDate()
     {
         $date = new \DateTime($this->creationDate);
@@ -105,7 +114,7 @@ final class Topic extends Entity{
      * Set the value of creationDate
      *
      * @return  self
-     */ 
+     */
     public function setCreationDate($creationDate)
     {
         $this->creationDate = $creationDate;
@@ -115,47 +124,46 @@ final class Topic extends Entity{
 
     /**
      * Get the value of closed
-     */ 
+     */
     public function getClosed()
     {
         return $this->closed;
     }
 
-    
-    
-    /**
-     * Get the value of nbPosts
-     */ 
-    public function getNbPosts()
-    {
-        return $this->nbPosts;
-    }
-    
-    /**
-     * Set the value of nbPosts
-     *
-     * @return  self
-     */ 
-    public function setNbPosts($nbPosts)
-    {
-        $this->nbPosts = $nbPosts;
-        
-        return $this;
-    }
-    
     /**
      * Set the value of closed
      *
      * @return  self
-     */ 
+     */
     public function setClosed($closed)
     {
         $this->closed = $closed;
 
         return $this;
     }
-    
-    public function __toString(){
+
+    /**
+     * Get the value of nbPosts
+     */
+    public function getNbPosts()
+    {
+        return $this->nbPosts;
+    }
+
+    /**
+     * Set the value of nbPosts
+     *
+     * @return  self
+     */
+    public function setNbPosts($nbPosts)
+    {
+        $this->nbPosts = $nbPosts;
+
+        return $this;
+    }
+
+    public function __toString()
+    {
         return $this->title;
     }
 }

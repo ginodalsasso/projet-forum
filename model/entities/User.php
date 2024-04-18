@@ -170,14 +170,14 @@ final class User extends Entity{
     }
 
     // check le statut de l'utilisateur 
-    public function isBanned($banned){
+    // public function isBanned($banned){
     
-        if ($this->getBanned() === $banned){
-            return true;
-        } else {
-            return false;
-        }
-    }
+    //     if ($this->getBanned() === $banned){
+    //         return true;
+    //     } else {
+    //         return false;
+    //     }
+    // }
     
     public function __toString() {
         return $this->pseudo;
