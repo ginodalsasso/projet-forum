@@ -46,12 +46,7 @@ class Session{
         return false;
     }
 
-    // public static function isBanned(){
-    //     if(self::getUser() && self::getUser()->userIsBanned(1)){
-    //         return true;
-    //     }
-    //     return false;
-    // }
+    
     public static function isBanned(){
         $user = self::getUser();
 
