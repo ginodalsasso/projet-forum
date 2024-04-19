@@ -68,6 +68,10 @@ body {
     list-style: none;
 }
 
+.close{
+    display: none;
+}
+
 .nav_link,
 .footer_list li a {
     margin: 0 20px;
@@ -328,7 +332,7 @@ footer {
     text-align: center;
 }
 
-@media (max-width: 800px) {
+@media (max-width: 850px) {
 
     .header {
         margin: 0 24px;
@@ -338,14 +342,96 @@ footer {
         flex-direction: column;
     }
 
+    .sidenav{
+        height: 100%;
+        width: 350px;
+        position: fixed;
+        z-index: 1;
+        top:0;
+        left: -350px;
+        background-color: var(--card-colour);
+        padding-top: 60px;
+        transition: left 0.5s ease;
+    }
+    
+    .sidenav.active{
+        left: 0;
+    }
+    
+    .nav_list li a{
+        display: block;
+        margin: 20px;
+    }
+
+    .sidenav .close{
+        display: block;
+        text-decoration: none;
+        color: white;
+        position:absolute;
+        top: 0;
+        right: 25px;
+        font-size: 36px;
+    }
+
+    .burger-icon{
+        margin: 15px;
+    }
+
+    .burger-icon span{
+        display: block;
+        width: 30px;
+        height: 4px;
+        background-color: var(--font-color);
+        margin: 6px 0;
+        filter: drop-shadow(0 0 10px #5454C5);
+    }
+
     .button_container{
         flex-direction: column;
+    }
+
+    .button:hover{
+        text-decoration: none;
+        border: none;
+        color: var(--font-color);
+        font-weight: 500;
+        padding: 8px 16px;
+        cursor: pointer;
+        background: linear-gradient(to left, #130208, #5454C5);
+        border-radius: 4px;
+        filter: drop-shadow(0 0 10px #342056);
+        transition: 0.5s;
+    }
+
+
+    .button_deco {
+        text-decoration: none;
+        border: none;
+        color: var(--font-color);
+        font-weight: 500;
+        padding: 8px 16px;
+        background: #5454C5;
+        border-radius: 4px;
+        filter: drop-shadow(0 0 10px #342056);
+        transition: 0.5s;
+    }
+
+
+    .button,
+    .button_deco:hover {
+        filter: drop-shadow(0 0 30px #5454C5);
+        padding: 8px 20px;
+        ;
     }
 
     .button_container a{
         display:flex;
         justify-content: center;
         margin: 10px 0;
+    }
+
+    .card_list_users, .titles_container_left {
+        flex-wrap: wrap;
     }
 
     .footer_list {

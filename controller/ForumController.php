@@ -161,7 +161,7 @@ class ForumController extends AbstractController implements ControllerInterface
         // créer une nouvelle instance de CategoryManager
         $userManager = new UserManager();
         // récupérer la liste de tout les users grâce à la méthode findAll de Manager.php (triés par nom)
-        $users = $userManager->findAll();
+        $users = $userManager->findOnlyUsers();
         // var_dump($userManager); die;
 
         // le controller communique avec la vue "listUsers" (view) pour lui envoyer la liste des membres (data)

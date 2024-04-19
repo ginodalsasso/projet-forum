@@ -59,6 +59,21 @@ class UserManager extends Manager
         );
     }
 
+    public function findOnlyUsers()
+    {
+
+        $sql = "SELECT u.pseudo, u.email, u.creationDate, u.banned
+                FROM user u
+                WHERE u.role = 'ROLE_USER'"
+                ;
+
+        // la requête renvoie plusieurs enregistrements --> getMultipleResults
+        return  $this->getMultipleResults(
+            DAO::select($sql),
+            $this->className
+        );
+    }
+
     public function updateUser($data, $sqlUpdate)
     {
         $sql = "UPDATE user u

@@ -31,7 +31,7 @@ foreach ($posts as $post) { ?>
                     ?>
                         <a href="index.php?ctrl=forum&action=viewUpdatePost&id=<?= $post->getId() ?>"><i class="fa-solid fa-pen-to-square"></i></a>
                     <?php } ?>
-                    <?= $post->getText() ?>
+                    <p><?= $post->getText() ?></p>
                 </div>
                 <div class="titles_container_right">
                     <?php

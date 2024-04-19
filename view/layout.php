@@ -27,33 +27,44 @@
                     <a href="index.php?ctrl=forum&action=index" class="logo">ZINO</a>
                 </span>
                 <nav>
-                    <ul class="nav_list">
-                        <li>
-                            <a class="nav_link" href="index.php?ctrl=forum&action=listCategory">Catégories</a>
-                        </li>
-                        <li>
-                            <?php if (App\Session::isAdmin()) { ?>
-                                <a class="nav_link" href="index.php?ctrl=forum&action=viewListUser">Voir la liste des membres</a>
-                            <?php } ?>
-                        </li>
-                        <li>
-                            <?php
-                            if (App\Session::getUser()) { ?>
-                                <a class="nav_link" href="index.php?ctrl=security&action=viewProfil"><span class="fas fa-user"></span>&nbsp;<?= App\Session::getUser() ?></a>
-                        </li>
-                        <li>
-                            <a class="button button_nav" href="index.php?ctrl=security&action=logout">Déconnexion</a>
-                        </li>
-                    <?php
-                            } else { ?>
-                        <li>
-                            <a class="button button_nav" href="index.php?ctrl=security&action=login">Connexion</a>
-                        </li>
-                        <li>
-                            <a class="button_deco button_nav" href="index.php?ctrl=security&action=register">Inscription</a>
-                        </li>
-                    <?php } ?>
-                    </ul>
+                    <div id="mySidenav" class="sidenav">
+                        <a href="#" id="closeBtn" class="close">x</a>
+                        <ul class="nav_list">
+                            <li>
+                                <a class="nav_link" href="index.php?ctrl=forum&action=listCategory">Catégories</a>
+                            </li>
+                            <li>
+                                <?php if (App\Session::isAdmin()) { ?>
+                                    <a class="nav_link" href="index.php?ctrl=forum&action=viewListUser">Voir la liste des membres</a>
+                                <?php } ?>
+                            </li>
+                            <li>
+                                <?php
+                                if (App\Session::getUser()) { ?>
+                                    <a class="nav_link" href="index.php?ctrl=security&action=viewProfil"><span class="fas fa-user"></span>&nbsp;<?= App\Session::getUser() ?></a>
+                            </li>
+                            <li>
+                                <a class="button button_nav" href="index.php?ctrl=security&action=logout">Déconnexion</a>
+                            </li>
+                        <?php
+                                } else { ?>
+                            <li>
+                                <a class="button button_nav" href="index.php?ctrl=security&action=login">Connexion</a>
+                            </li>
+                            <li>
+                                <a class="button_deco button_nav" href="index.php?ctrl=security&action=register">Inscription</a>
+                            </li>
+                        <?php } ?>
+                        </ul>
+                    </div>
+
+                    <a href="#" id="openBtn">
+                        <span class="burger-icon">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </span>
+                    </a>
                 </nav>
             </header>
             <main id="forum">
