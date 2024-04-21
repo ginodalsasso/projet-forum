@@ -54,12 +54,17 @@ if (!app\Session::isBanned()) {
     if ($topic->getClosed()) { ?>
         <p>Le topic est verrouillé</p>
     <?php } else { ?>
-        <div class="form_display">
-            <form action="index.php?ctrl=forum&action=addPost&id=<?= $topic->getId() ?>" method="POST">
-                <label for="text"></label>
-                <textarea id="text" name="text" placeholder="Mon message" rows="5" cols="33"></textarea>
-                <input type="submit" name="submit" value="Envoyer">
-            </form>
+        <div class='card_list_ariane_container'>
+            <button class="button toogle_button">Ecrire un message</button>
+        </div>
+        <div class="toggle_display">
+            <div class="form_display">
+                <form action="index.php?ctrl=forum&action=addPost&id=<?= $topic->getId() ?>" method="POST">
+                    <label for="text"></label>
+                    <textarea id="text" name="text" placeholder="Mon message" rows="5" cols="33"></textarea>
+                    <input type="submit" name="submit" value="Envoyer">
+                </form>
+            </div>
         </div>
 
 <?php }

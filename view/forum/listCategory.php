@@ -36,11 +36,16 @@ $categories = $result["data"]['categories'];
 if (app\Session::isAdmin()) {
 ?>
     <!----------------- Ajouter une catégorie ----------------->
-    <div class="form_display">
-        <form class="form" action="index.php?ctrl=forum&action=addCategory" method="POST">
-            <!-- <label for="title">Titre de la catégorie</label> -->
-            <input type="text" name="name" id="title" placeholder="Titre de la catégorie" required><br>
-            <input class="button" type="submit" name="submit" value="Envoyer">
-        </form>
+    <div class='card_list_ariane_container'>
+        <button class="button toogle_button">Créer une catégorie</button>
+    </div>
+    <div class="toggle_display">
+        <div class="form_display">
+            <form class="form" action="index.php?ctrl=forum&action=addCategory" method="POST">
+                <!-- <label for="title">Titre de la catégorie</label> -->
+                <input type="text" name="name" id="title" placeholder="Titre de la catégorie" required><br>
+                <input class="button" type="submit" name="submit" value="Envoyer">
+            </form>
+        </div>
     </div>
 <?php } ?>

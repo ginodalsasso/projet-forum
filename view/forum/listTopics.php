@@ -64,11 +64,16 @@ $topics = $result["data"]['topics'];
 if (!app\Session::isBanned()) {
 ?>
     <!----------------- Ajouter un topic ----------------->
-    <div class="form_display">
-        <form action="index.php?ctrl=forum&action=addTopic&id=<?= $category->getId() ?>" method="POST">
-            <input type="text" name="title" id="title" placeholder="Titre du topic" required><br>
-            <textarea id="text" name="text" placeholder="Mon message" rows="5" cols="33"></textarea>
-            <input type="submit" name="submit" value="Envoyer">
-        </form>
+    <div class='card_list_ariane_container'>
+        <button class="button toogle_button">Créer un topic</button>
+    </div>
+    <div class="toggle_display">
+        <div class="form_display">
+            <form action="index.php?ctrl=forum&action=addTopic&id=<?= $category->getId() ?>" method="POST">
+                <input type="text" name="title" id="title" placeholder="Titre du topic" required><br>
+                <textarea id="text" name="text" placeholder="Mon message" rows="5" cols="33"></textarea>
+                <input type="submit" name="submit" value="Envoyer">
+            </form>
+        </div>
     </div>
 <?php } ?>

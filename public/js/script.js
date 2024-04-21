@@ -14,3 +14,10 @@ function openNav(){
 function closeNav(){
     sidenav.classList.remove('active');
 }
+
+const btn = document.querySelector('.toogle_button');
+const form = document.querySelector('.toggle_display');
+
+btn.addEventListener('click', () =>{
+    form.classList.toggle('is-visible');
+});

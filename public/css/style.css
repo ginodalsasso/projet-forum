@@ -89,9 +89,10 @@ body {
 }
 
 .button,
-input[type="submit"] {
+input[type="submit"], button {
     text-decoration: none;
     border: none;
+    font-family: var(--font-family);
     color: var(--font-color);
     font-weight: 500;
     padding: 8px 16px;
@@ -259,6 +260,19 @@ hr {
     display: flex;
     justify-content: center;
 }
+
+.toggle_display{
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
+}
+
+.is-visible{
+    opacity: 1;
+    visibility: visible;
+}
+
+
 
 form {
     display: flex;
