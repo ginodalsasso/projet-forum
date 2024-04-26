@@ -383,7 +383,7 @@ class SecurityController extends AbstractController
 
     public function userIsBanned($id)
     {
-        //permet de le pas injecter autre chose qu'un entier dans l'url
+        // permet de le pas injecter autre chose qu'un entier dans l'url
         $id = filter_input(INPUT_GET, "id", FILTER_VALIDATE_INT);
         //si l'id dans l'url n'éxiste pas alors
         if (!$id) {
@@ -396,9 +396,9 @@ class SecurityController extends AbstractController
         $user = $userManager->findOneById($id);
 
         if ($user) {
-            // si l'user associé au topic est identique à l'user actuellement connecté à la session ou si l'admin est connecté alors
+            // si l'admin est connecté alors
             if (Session::isAdmin()) {
-                $userManager->isBanned($id);
+                $user->isBanned($id);
                 Session::addFlash("success", "Le membre est banni !");
                 $this->redirectTo("forum", "viewListUser");
                 exit;

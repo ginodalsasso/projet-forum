@@ -8,7 +8,7 @@ $users = $result["data"]['user'];
     <div class="card_list">
         <?php
         foreach ($users as $user) {
-        ?>
+            ?>
             <div class="card_list_profil card_list_users">
                 <p><?= $user->getPseudo() ?></p>
                 <p><?= $user->getEmail() ?></p>

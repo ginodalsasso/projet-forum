@@ -6,7 +6,7 @@
         <input type="text" name="pseudo" id="pseudo" required><br>
 
         <label for="password">Mot de passe</label>
-        <input type="password" name="password" id="password" value="Goku67540//!" required><br>
+        <input type="password" name="password" id="password" required><br>
 
         <input type="submit" name="submit" value="Se connecter">
     </form>
