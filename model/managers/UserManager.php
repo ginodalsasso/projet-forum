@@ -62,7 +62,7 @@ class UserManager extends Manager
     public function findOnlyUsers()
     {
 
-        $sql = "SELECT u.pseudo, u.email, u.creationDate, u.banned
+        $sql = "SELECT u.id_user, u.pseudo, u.email, u.creationDate, u.banned
                 FROM user u
                 WHERE u.role = 'ROLE_USER'"
                 ;
@@ -100,7 +100,7 @@ class UserManager extends Manager
     }
 
 
-    public function isBanned($id)
+    public function banned($id)
     {
         $sql = "UPDATE user SET banned = 1
                 WHERE id_user = :id";

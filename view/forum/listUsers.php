@@ -1,5 +1,6 @@
 <?php
 $users = $result["data"]['user'];
+
 ?>
 
 <h1>Liste des membres du forum</h1>
@@ -14,7 +15,6 @@ $users = $result["data"]['user'];
                 <p><?= $user->getEmail() ?></p>
                 <p><?= $user->getRole() ?></p>
                 <p><?= $user->getCreationDate() ?></p>
-                <p><?= $user->getBanned() ?></p>
                 <a href="index.php?ctrl=security&action=userIsBanned&id=<?= $user->getId() ?>">Bannir</a>
                 <a href="index.php?ctrl=security&action=userIsNotBanned&id=<?= $user->getId() ?>">Débannir</a>
             </div>

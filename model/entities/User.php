@@ -170,7 +170,7 @@ final class User extends Entity{
     }
 
     // check le statut de l'utilisateur 
-    public function userIsBanned($banned){
+    public function isBanned($banned){
     
         if ($this->getBanned() === $banned){
             return true;

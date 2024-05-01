@@ -46,12 +46,12 @@ class Session{
         return false;
     }
 
-    
+   
     public static function isBanned(){
         $user = self::getUser();
 
         // Vérifier si l'utilisateur existe et s'il est banni
-        if($user && $user->userIsBanned(1)){
+        if($user && $user->isBanned(1)){
             return true;
         }
         return false;
