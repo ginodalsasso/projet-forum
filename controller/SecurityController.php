@@ -70,6 +70,7 @@ class SecurityController extends AbstractController
                         $data = [
                             'pseudo' => $pseudo,
                             'email' => $email,
+                            // password_hash — Crée une clé de hachage pour un mot de passe
                             'password' => password_hash($pass1, PASSWORD_DEFAULT),
                             "role" => "ROLE_USER"
                         ];
@@ -114,7 +115,7 @@ class SecurityController extends AbstractController
                     //je récupère le mot de passe en BDD suite à la requête précédente
                     $hash = $user->getPassword();
 
-                    //compare le mot de passe saisi à  l'emprunte numérique en BDD si ok alors
+                    //compare le mot de passe saisi à  l'emprunte numérique en BDD si ok alors, hash_equals serait pour comparé deux hash simple (surtout pas un password)
                     if (password_verify($password, $hash)) {
                         $_SESSION["user"] = $user; // stock en session l'intégralité de notre tableau $user (nous pourrions en stocker qu'une partie)
                     } else {
